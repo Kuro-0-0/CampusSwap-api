@@ -24,7 +24,7 @@ public class Usuario {
 
     private String nombre;
     private String email;
-    private String constrasena;
+    private String contrasena;
     private String fotoPerfil;
     private String descripcion;
     private double reputacionMedia;
