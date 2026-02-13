@@ -17,13 +17,14 @@ import java.time.LocalDateTime;
 @Builder
 public class Anuncio {
 
-    @Id @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titulo;
     private String descripcion;
     private Double precio;
     @Enumerated(EnumType.STRING)
     private TipoOperacion tipoOperacion;
+    @Enumerated(EnumType.STRING)
     private Estado estado;
     private Condicion condicion;
 
