@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Valoracion {
