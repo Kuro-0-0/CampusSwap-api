@@ -21,11 +21,11 @@ public class Favorito {
     private LocalDateTime fecha;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "evaluador_id")
     private Usuario evaluador;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "evaluado_id")
     private Usuario evaluado;
 
     @ManyToOne
