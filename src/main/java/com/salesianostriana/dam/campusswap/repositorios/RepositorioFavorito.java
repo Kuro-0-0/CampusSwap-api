@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RepositorioFavorito extends JpaRepository<Favorito,Long>, JpaSpecificationExecutor<Favorito> {
+public interface RepositorioFavorito extends JpaRepository<Favorito, Long>, JpaSpecificationExecutor<Favorito> {
 }
