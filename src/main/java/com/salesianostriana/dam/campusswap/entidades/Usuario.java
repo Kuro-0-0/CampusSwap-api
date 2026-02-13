@@ -47,6 +47,9 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Favorito> favoritos = new ArrayList<>();
 
-
+    public void agregarAnuncio(Anuncio anuncio) {
+        anuncios.add(anuncio);
+        anuncio.setUsuario(this);
+    }
 
 }
