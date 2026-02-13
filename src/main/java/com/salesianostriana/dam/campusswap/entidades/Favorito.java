@@ -20,16 +20,11 @@ public class Favorito {
     @CreatedDate
     private LocalDateTime fecha;
 
-    @ManyToOne
-    @JoinColumn(name = "evaluador_id")
-    private Usuario evaluador;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
-    @ManyToOne
-    @JoinColumn(name = "evaluado_id")
-    private Usuario evaluado;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "anuncio_id")
     private Anuncio anuncio;
-
 }
