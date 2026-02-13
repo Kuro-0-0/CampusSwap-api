@@ -6,16 +6,17 @@ import com.salesianostriana.dam.campusswap.entidades.extras.Condicion;
 import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
 import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
 
+import java.util.UUID;
+
 public record AnuncioRequestDto(
         String titulo,
         String descripcion,
         double precio,
-        Long categoriaId,
         String imagen,
         TipoOperacion tipoOperacion,
-        Estado estado,
         Condicion condicion,
         String usuarioId,
+        Long categoriaId
 ) {
 
     public Anuncio toAnuncio() {
@@ -24,9 +25,8 @@ public record AnuncioRequestDto(
                 .descripcion(descripcion)
                 .precio(precio)
                 .tipoOperacion(tipoOperacion)
-                .estado(estado)
                 .condicion(condicion)
-                .usuario(Usuario.builder().id(usuarioId).build())
+                .usuario(Usuario.builder().id(UUID.fromString(usuarioId)).build())
                 .build();
     }
 }
