@@ -23,6 +23,7 @@ public record CrearAnuncioRequestDto(
                 .titulo(titulo)
                 .descripcion(descripcion)
                 .precio(precio)
+                .imagen(imagen)
                 .tipoOperacion(tipoOperacion)
                 .condicion(condicion)
                 .usuario(Usuario.builder().id(UUID.fromString(usuarioId)).build())
