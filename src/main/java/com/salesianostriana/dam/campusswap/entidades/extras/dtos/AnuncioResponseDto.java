@@ -12,8 +12,7 @@ public record AnuncioResponseDto(
         String tipoOperacion,
         String estado,
         String condicion,
-        String usuarioId,
-        Long categoriaId
+        String usuarioId
 ) {
         public static AnuncioResponseDto of(Anuncio anuncio) {
             return new AnuncioResponseDto(
@@ -21,13 +20,12 @@ public record AnuncioResponseDto(
                     anuncio.getTitulo(),
                     anuncio.getDescripcion(),
                     anuncio.getPrecio(),
-                    anuncio.getUsuario().getNombre(),
-                    null, // Aquí deberías mapear la imagen si la tienes en tu entidad Anuncio
+                    "sin categoria",
+                    anuncio.getImage(),
                     anuncio.getTipoOperacion().name(),
                     anuncio.getEstado().name(),
                     anuncio.getCondicion().name(),
-                    anuncio.getUsuario().getId().toString(),
-                    null // Aquí deberías mapear el ID de la categoría si la tienes en tu entidad Anuncio
+                    anuncio.getUsuario().getId().toString()
             );
         }
 }
