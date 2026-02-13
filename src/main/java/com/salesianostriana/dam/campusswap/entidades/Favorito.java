@@ -20,4 +20,16 @@ public class Favorito {
     @CreatedDate
     private LocalDateTime fecha;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario evaluador;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario evaluado;
+
+    @ManyToOne
+    @JoinColumn(name = "anuncio_id")
+    private Anuncio anuncio;
+
 }
