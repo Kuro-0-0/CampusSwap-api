@@ -25,4 +25,16 @@ public class Valoracion {
 
     @CreatedDate
     private LocalDateTime fecha;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "evaluador_id")
+    private Usuario evaluador;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "evaluado_id")
+    private Usuario evaluado;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "anuncio_id")
+    private Anuncio anuncio;
 }
