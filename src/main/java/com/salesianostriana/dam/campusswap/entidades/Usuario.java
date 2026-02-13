@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.expression.spel.ast.BooleanLiteral;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -17,7 +16,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Usuario {
