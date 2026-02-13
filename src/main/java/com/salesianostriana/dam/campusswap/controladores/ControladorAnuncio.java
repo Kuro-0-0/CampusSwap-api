@@ -3,14 +3,13 @@ package com.salesianostriana.dam.campusswap.controladores;
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.crear.CrearAnuncioRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioResponseDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.editar.EditarAnuncioRequestDto;
 import com.salesianostriana.dam.campusswap.servicios.ServicioAnuncio;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,9 +26,12 @@ public class ControladorAnuncio {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AnuncioResponseDto> editarAnuncio(Long id, CrearAnuncioRequestDto dto){
+    public ResponseEntity<AnuncioResponseDto> editarAnuncio(
+            @PathVariable Long id,
+            @Valid @RequestBody EditarAnuncioRequestDto dto
+    ){
         return ResponseEntity.status(HttpStatus.OK).body(AnuncioResponseDto.of(
-            servicio.editarAnuncio(id, dto.toAnuncio())
+            servicio.editarAnuncio(id, dto.toAnuncio(), dto.usuarioId())
         ));
     }
 
