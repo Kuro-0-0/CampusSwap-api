@@ -54,18 +54,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return pd;
     }
 
-
-    @Override
-    protected @Nullable ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        ProblemDetail pb = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Hay errores de validación en la petición");
-        pb.setType(URI.create("about:blank"));
-        pb.setTitle("Error de validación");
-
-        pb.setProperty("invalid-params", ex.getAllErrors().stream()
-                .map(ApiValidationSubError::from)
-                .toList());
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(pb);
-    }
-
 }
