@@ -6,25 +6,16 @@ import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor @NoArgsConstructor
 @ToString @Getter @Setter
+@EntityListeners(AuditingEntityListener.class)
 @Builder
 public class Anuncio {
-
-    /*
-    * id
-    * titulo
-    * descripcion
-    * precio (nullable si es intercambio o cesión)
-    * tipoOperacion (VENTA / INTERCAMBIO / CESION)
-    * estado (ACTIVO / PAUSADO / CERRADO)
-    * condicion (NUEVO / COMO_NUEVO / USADO / DETERIORADO)
-    * fechaPublicacion
-    * */
 
     @Id @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
@@ -38,6 +29,5 @@ public class Anuncio {
 
     @CreatedDate
     private LocalDateTime fechaPublicacion;
-
 
 }
