@@ -7,22 +7,17 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @Entity
+@AllArgsConstructor @NoArgsConstructor
+@Getter @Setter
 @EntityListeners(AuditingEntityListener.class)
-public class Valoracion {
+@Builder
+public class Favorito {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Double puntuacion;
-    private String comentario;
 
     @CreatedDate
     private LocalDateTime fecha;
+
 }
