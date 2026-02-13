@@ -38,10 +38,15 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Anuncio> anuncios = new ArrayList<>();
 
-    @OneToMany(mappedBy = "usuario", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Valoracion> valoraciones = new ArrayList<>();
+    @OneToMany(mappedBy = "evaluador", orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Valoracion> valoracionesEnviadas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "evaluado", orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Valoracion> valoracionesRecibidas = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuario", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Favorito> favoritos = new ArrayList<>();
+
+
 
 }
