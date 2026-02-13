@@ -28,7 +28,13 @@ public class Anuncio {
     private Estado estado;
     private Condicion condicion;
 
+    private String image;
+
     @CreatedDate
     private LocalDateTime fechaPublicacion;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
 }
