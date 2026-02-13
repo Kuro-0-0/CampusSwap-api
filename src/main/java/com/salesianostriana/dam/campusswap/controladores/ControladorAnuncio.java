@@ -26,5 +26,6 @@ public class ControladorAnuncio {
     @PutMapping("/{id}")
     public ResponseEntity<AnuncioResponseDto> editarAnuncio(Long id, AnuncioRequestDto dto){
         return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 
 }
