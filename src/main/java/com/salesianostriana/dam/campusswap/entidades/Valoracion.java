@@ -34,7 +34,8 @@ public class Valoracion {
     @JoinColumn(name = "evaluado_id")
     private Usuario evaluado;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "anuncio_id")
     private Anuncio anuncio;
+
 }
