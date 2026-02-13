@@ -31,7 +31,9 @@ public class ControladorAnuncio {
             @Valid @RequestBody EditarAnuncioRequestDto dto
     ){
         return ResponseEntity.status(HttpStatus.OK).body(AnuncioResponseDto.of(
-            servicio.editarAnuncio(id, dto.toAnuncio(), dto.usuarioId())
+            servicio.editarAnuncio(id, dto.toAnuncio(),
+                    dto.usuarioId() // Cuando haya seguridad se deberá obtener el ID del usuario autenticado en lugar de recibirlo en el DTO
+            )
         ));
     }
 
