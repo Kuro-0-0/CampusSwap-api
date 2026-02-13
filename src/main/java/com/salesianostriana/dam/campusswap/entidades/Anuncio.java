@@ -31,4 +31,8 @@ public class Anuncio {
     @CreatedDate
     private LocalDateTime fechaPublicacion;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
 }
