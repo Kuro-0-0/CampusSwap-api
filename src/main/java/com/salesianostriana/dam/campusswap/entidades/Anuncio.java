@@ -28,6 +28,8 @@ public class Anuncio {
     private Estado estado;
     private Condicion condicion;
 
+    private String image;
+
     @CreatedDate
     private LocalDateTime fechaPublicacion;
 
