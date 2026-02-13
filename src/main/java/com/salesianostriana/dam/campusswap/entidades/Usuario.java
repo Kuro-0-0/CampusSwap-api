@@ -39,9 +39,9 @@ public class Usuario {
     private List<Anuncio> anuncios = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuario", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Valoracion> valoracions = new ArrayList<>();
+    private List<Valoracion> valoraciones = new ArrayList<>();
 
-    @OneToMany(mappedBy = "usuario", orphanRemoval = true)
+    @OneToMany(mappedBy = "usuario", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Favorito> favoritos = new ArrayList<>();
 
 }
