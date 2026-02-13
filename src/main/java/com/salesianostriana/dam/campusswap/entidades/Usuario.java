@@ -1,14 +1,13 @@
 package com.salesianostriana.dam.campusswap.entidades;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -35,5 +34,19 @@ public class Usuario {
     private LocalDateTime fechaRegistro;
 
     private Boolean activo;
+
+    @OneToMany(mappedBy = "usuario", orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Anuncio> anuncios = new ArrayList<>();
+
+    @OneToMany(mappedBy = "evaluador", orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Valoracion> valoracionesEnviadas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "evaluado", orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Valoracion> valoracionesRecibidas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Favorito> favoritos = new ArrayList<>();
+
+
 
 }
