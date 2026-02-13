@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.EditarAnuncioRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +15,7 @@ public class ControladorAnuncio {
     @PutMapping("/anuncios/{id}")
     public ResponseEntity<Object> editarAnuncio(
             @PathVariable Long id,
-            @RequestBody Object anuncioDto
+            @RequestBody EditarAnuncioRequestDTO anuncioDto
     ) {
         return null;
     }
