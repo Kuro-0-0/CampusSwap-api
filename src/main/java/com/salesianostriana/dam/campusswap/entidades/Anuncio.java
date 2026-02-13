@@ -28,7 +28,7 @@ public class Anuncio {
     private Estado estado;
     private Condicion condicion;
 
-    private String image;
+    private String imagen;
 
     @CreatedDate
     private LocalDateTime fechaPublicacion;
@@ -48,7 +48,7 @@ public class Anuncio {
                 .precio(anuncio.getPrecio())
                 .tipoOperacion(anuncio.getTipoOperacion())
                 .condicion(anuncio.getCondicion())
-                .image(anuncio.getImage())
+                .imagen(anuncio.getImagen())
                 .estado(this.estado)
                 .usuario(this.usuario)
                 .valoracion(this.valoracion)
