@@ -1,9 +1,8 @@
-package com.salesianostriana.dam.campusswap.entidades.extras.dtos;
+package com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.crear;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.Condicion;
-import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
 import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
 
 import java.util.UUID;
