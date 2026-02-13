@@ -1,9 +1,12 @@
 package com.salesianostriana.dam.campusswap.entidades;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.expression.spel.ast.BooleanLiteral;
 
 import java.time.LocalDateTime;
@@ -16,6 +19,7 @@ import java.util.UUID;
 @Setter
 @ToString
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Usuario {
 
     @Id
@@ -28,7 +32,10 @@ public class Usuario {
     private String fotoPerfil;
     private String descripcion;
     private double reputacionMedia;
+
+    @CreatedDate
     private LocalDateTime fechaRegistro;
+
     private Boolean activo;
 
 }
