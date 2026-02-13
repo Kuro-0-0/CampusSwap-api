@@ -37,4 +37,7 @@ public class Anuncio {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
+    @OneToOne(mappedBy = "anuncio", orphanRemoval = true, fetch = FetchType.LAZY)
+    private Valoracion valoracion;
+
 }
