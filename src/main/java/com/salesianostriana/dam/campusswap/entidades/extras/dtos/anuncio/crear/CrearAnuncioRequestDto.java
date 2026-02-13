@@ -7,7 +7,7 @@ import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
 
 import java.util.UUID;
 
-public record AnuncioRequestDto(
+public record CrearAnuncioRequestDto(
         String titulo,
         String descripcion,
         double precio,
