@@ -22,6 +22,7 @@ public class CheckUserExistValidator implements ConstraintValidator<CheckUserExi
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
+        System.out.println("Validando existencia de usuario con ID: " + s);
         return StringUtils.hasText(s) && repositorio.existsById(UUID.fromString(s));
     }
 }
