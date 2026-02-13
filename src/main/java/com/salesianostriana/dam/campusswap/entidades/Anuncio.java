@@ -40,4 +40,18 @@ public class Anuncio {
     @OneToOne(mappedBy = "anuncio", orphanRemoval = true, fetch = FetchType.LAZY)
     private Valoracion valoracion;
 
+    public Anuncio modificar(Anuncio anuncio) {
+        return Anuncio.builder()
+                .id(this.id)
+                .titulo(anuncio.getTitulo())
+                .descripcion(anuncio.getDescripcion())
+                .precio(anuncio.getPrecio())
+                .tipoOperacion(anuncio.getTipoOperacion())
+                .condicion(anuncio.getCondicion())
+                .image(anuncio.getImage())
+                .estado(this.estado)
+                .usuario(this.usuario)
+                .valoracion(this.valoracion)
+                .build();
+    }
 }
