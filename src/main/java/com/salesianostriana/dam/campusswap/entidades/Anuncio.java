@@ -39,6 +39,10 @@ public class Anuncio {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
+
     @OneToOne(mappedBy = "anuncio", orphanRemoval = true, fetch = FetchType.LAZY)
     private Valoracion valoracion;
 
