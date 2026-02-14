@@ -28,9 +28,10 @@ public class Anuncio {
     private TipoOperacion tipoOperacion;
     @Enumerated(EnumType.STRING)
     private Estado estado;
+    @Enumerated(EnumType.STRING)
     private Condicion condicion;
 
-    private String image;
+    private String imagen;
 
     @CreatedDate
     private LocalDateTime fechaPublicacion;

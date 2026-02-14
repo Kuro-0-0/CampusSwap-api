@@ -11,7 +11,7 @@ import java.util.UUID;
 public record AnuncioRequestDto(
         String titulo,
         String descripcion,
-        double precio,
+        Double precio,
         String imagen,
         TipoOperacion tipoOperacion,
         Condicion condicion,
@@ -24,6 +24,7 @@ public record AnuncioRequestDto(
                 .titulo(titulo)
                 .descripcion(descripcion)
                 .precio(precio)
+                .imagen(imagen)
                 .tipoOperacion(tipoOperacion)
                 .condicion(condicion)
                 .usuario(Usuario.builder().id(UUID.fromString(usuarioId)).build())
