@@ -10,11 +10,13 @@ import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 @Log
+@Profile("dev")
 class TestDataInitializer {
 
     private final RepositorioAnuncio repositorioAnuncio;
