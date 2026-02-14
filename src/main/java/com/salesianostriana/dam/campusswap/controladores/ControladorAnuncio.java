@@ -129,11 +129,11 @@ public class ControladorAnuncio {
                                                     {
                                                         "titulo": "Producto de Prueba2",
                                                         "descripcion": "Una descripción detallada del producto",
-                                                        "precio": "25.5",
+                                                        "precio": 25.5,
                                                         "imagen": "producto.jpg",
                                                         "tipoOperacion": "VENTA",
-                                                        "condicion": "0",
-                                                        "categoriaId": "",
+                                                        "condicion": "NUEVO",
+                                                        "categoriaId": 1,
                                                         "usuarioId":"6ac890d0-8ee2-4967-8bb7-cfa8b84376bc"
                                                     }
                                                     """
