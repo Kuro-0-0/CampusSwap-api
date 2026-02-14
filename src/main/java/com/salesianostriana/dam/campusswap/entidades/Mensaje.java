@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import jakarta.persistence.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Builder
-@ToString
+@EntityListeners(AuditingEntityListener.class)
 public class Mensaje {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +26,12 @@ public class Mensaje {
 
     @CreatedDate
     private LocalDateTime fechaEnvio;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "anuncio_id")
+    private Anuncio anuncio;
+
+
 
 
 
