@@ -14,7 +14,6 @@ import java.util.Objects;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Builder
-@ToString
 public class Categoria {
 
 
