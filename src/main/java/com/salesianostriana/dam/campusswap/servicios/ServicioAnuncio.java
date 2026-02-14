@@ -20,8 +20,11 @@ public class ServicioAnuncio {
     public Anuncio crearAnuncio(Anuncio anuncio) {
         Usuario usuario = repositorioUsuario.findById(anuncio.getUsuario().getId()).orElseThrow(() -> new NoSuchElementException("Usuario con ID " + anuncio.getUsuario().getId() + " no encontrado"));
 
-        if((anuncio.getTipoOperacion().equals(TipoOperacion.CESION) || anuncio.getTipoOperacion().equals(TipoOperacion.INTERCAMBIO)) && anuncio.getPrecio() != null) {
-            throw new IllegalArgumentException("El precio debe ser 0 para cesión e intercambio");
+        if (anuncio.getTipoOperacion().equals(TipoOperacion.CESION)
+                || anuncio.getTipoOperacion().equals(TipoOperacion.INTERCAMBIO)) {
+            if (anuncio.getPrecio() == null || anuncio.getPrecio() != 0) {
+                throw new IllegalArgumentException("El precio debe ser 0 para cesión e intercambio");
+            }
         }
 
         anuncio.setUsuario(usuario);
