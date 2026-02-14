@@ -45,6 +45,6 @@ public class Anuncio {
 
     @OneToMany(mappedBy = "anuncio",orphanRemoval = true,fetch = FetchType.LAZY)
     @Builder.Default
-    private List<Mensaje> anuncio = new ArrayList<>();
+    private List<Mensaje> mensajes = new ArrayList<>();
 
 }
