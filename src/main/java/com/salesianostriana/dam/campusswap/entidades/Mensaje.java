@@ -1,10 +1,7 @@
 package com.salesianostriana.dam.campusswap.entidades;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -24,6 +21,12 @@ public class Mensaje {
 
     @CreatedDate
     private LocalDateTime fechaEnvio;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "anuncio_id")
+    private Anuncio anuncio;
+
+
 
 
 
