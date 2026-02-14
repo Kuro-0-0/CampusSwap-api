@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Log
-public class mainMentira {
+class TestDataInitializer {
 
     private final RepositorioAnuncio repositorioAnuncio;
     private final RepositorioUsuario repositorioUsuario;
