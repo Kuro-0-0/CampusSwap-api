@@ -9,6 +9,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor @NoArgsConstructor
@@ -43,5 +45,10 @@ public class Anuncio {
 
     @OneToOne(mappedBy = "anuncio", orphanRemoval = true, fetch = FetchType.LAZY)
     private Valoracion valoracion;
+
+
+    @OneToMany(mappedBy = "anuncio",orphanRemoval = true,fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Mensaje> mensajes = new ArrayList<>();
 
 }

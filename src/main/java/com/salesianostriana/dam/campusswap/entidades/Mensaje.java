@@ -23,4 +23,12 @@ public class Mensaje {
     @CreatedDate
     private LocalDateTime fechaEnvio;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "anuncio_id")
+    private Anuncio anuncio;
+
+
+
+
+
 }
