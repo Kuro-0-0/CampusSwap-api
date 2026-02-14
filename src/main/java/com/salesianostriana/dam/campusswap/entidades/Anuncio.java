@@ -42,17 +42,13 @@ public class Anuncio {
     private Valoracion valoracion;
 
     public Anuncio modificar(Anuncio anuncio) {
-        return Anuncio.builder()
-                .id(this.id)
-                .titulo(anuncio.getTitulo())
-                .descripcion(anuncio.getDescripcion())
-                .precio(anuncio.getPrecio())
-                .tipoOperacion(anuncio.getTipoOperacion())
-                .condicion(anuncio.getCondicion())
-                .imagen(anuncio.getImagen())
-                .estado(this.estado)
-                .usuario(this.usuario)
-                .valoracion(this.valoracion)
-                .build();
+        this.titulo = anuncio.getTitulo();
+        this.descripcion = anuncio.getDescripcion();
+        this.precio = anuncio.getPrecio();
+        this.tipoOperacion = anuncio.getTipoOperacion();
+        this.condicion = anuncio.getCondicion();
+        this.imagen = anuncio.getImagen();
+        return this;
+
     }
 }

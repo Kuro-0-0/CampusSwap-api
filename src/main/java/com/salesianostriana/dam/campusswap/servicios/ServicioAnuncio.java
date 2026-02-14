@@ -26,12 +26,12 @@ public class ServicioAnuncio {
 
         Usuario usuario = repositorioUsuario.findById(UUID.fromString(usuarioId)).orElseThrow(() -> new NoSuchElementException("No se ha encontrado el usuario con id: " + usuarioId));
 
-        if (original.getUsuario() == null || original.getUsuario() != usuario)
+        if (original.getUsuario() == null || !original.getUsuario().equals(usuario))
             throw new NotOwnedException("No puedes modificar un anuncio que no es tuyo");
 
         if (original.getEstado().equals(Estado.CERRADO))
             throw new IllegalStateException("No se pueden modificar anuncios cerrados");
 
-        return original.modificar(anuncio);
+        return repositorio.save(original.modificar(anuncio));
     }
 }

@@ -4,12 +4,9 @@ package com.salesianostriana.dam.campusswap.errores;
 import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.java.Log;
-import org.jspecify.annotations.Nullable;
 import org.springframework.http.*;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.net.URI;
