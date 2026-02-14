@@ -3,16 +3,19 @@ package com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.editar
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.extras.Condicion;
 import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
 public record EditarAnuncioRequestDto(
-    String titulo,
-    String descripcion,
-    double precio,
+    @NotBlank String titulo,
+    @NotBlank String descripcion,
+    @Nullable  Double precio,
     String imagen,
-    TipoOperacion tipoOperacion,
-    Condicion condicion,
-    Long categoriaId,
-    String usuarioId
+    @NotBlank TipoOperacion tipoOperacion,
+    @NotBlank Condicion condicion,
+    @NotEmpty Long categoriaId,
+    @NotBlank String usuarioId
 ) {
 
     public Anuncio toAnuncio() {
