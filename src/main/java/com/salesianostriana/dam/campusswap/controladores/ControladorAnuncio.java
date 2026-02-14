@@ -66,8 +66,8 @@ public class ControladorAnuncio {
             )
     )
     @ApiResponse(
-            responseCode = "400",
-            description = "Solicitud invalida",
+            responseCode = "403",
+            description = "Solicitud prohibida",
             content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(implementation = ProblemDetail.class),
@@ -77,8 +77,8 @@ public class ControladorAnuncio {
                                             {
                                                 "detail": "No puedes modificar un anuncio que no es tuyo",
                                                 "instance": "/api/v1/anuncios/1",
-                                                "status": 400,
-                                                "title": "Argumento no válido"
+                                                "status": 403,
+                                                "title": "Recurso no perteneciente al usuario"
                                             }
                                             """
                             )

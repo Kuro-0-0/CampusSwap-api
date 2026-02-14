@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.campusswap.errores;
 
 
+import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.java.Log;
 import org.jspecify.annotations.Nullable;
@@ -25,6 +26,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.warning(ex.getMessage());
 
         pd.setTitle("Recurso no encontrado");
+        pd.setInstance(URI.create(request.getRequestURI()));
+
+        return pd;
+    }
+
+    @ExceptionHandler(NotOwnedException.class)
+    public ProblemDetail handleNotOwnedException(NotOwnedException ex, HttpServletRequest request) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
+
+        log.warning(ex.getMessage());
+
+        pd.setTitle("Recurso no perteneciente al usuario");
         pd.setInstance(URI.create(request.getRequestURI()));
 
         return pd;

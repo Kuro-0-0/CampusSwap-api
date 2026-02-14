@@ -3,6 +3,7 @@ package com.salesianostriana.dam.campusswap.servicios;
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
+import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class ServicioAnuncio {
         Usuario usuario = repositorioUsuario.findById(UUID.fromString(usuarioId)).orElseThrow(() -> new NoSuchElementException("No se ha encontrado el usuario con id: " + usuarioId));
 
         if (original.getUsuario() == null || original.getUsuario() != usuario)
-            throw new IllegalArgumentException("No puedes modificar un anuncio que no es tuyo");
+            throw new NotOwnedException("No puedes modificar un anuncio que no es tuyo");
 
         if (original.getEstado().equals(Estado.CERRADO))
             throw new IllegalStateException("No se pueden modificar anuncios cerrados");
