@@ -9,6 +9,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor @NoArgsConstructor
@@ -38,8 +40,17 @@ public class Anuncio {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
+
     @OneToOne(mappedBy = "anuncio", orphanRemoval = true, fetch = FetchType.LAZY)
     private Valoracion valoracion;
+
+
+    @OneToMany(mappedBy = "anuncio",orphanRemoval = true,fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Mensaje> mensajes = new ArrayList<>();
 
     public Anuncio modificar(Anuncio anuncio) {
         this.titulo = anuncio.getTitulo();
