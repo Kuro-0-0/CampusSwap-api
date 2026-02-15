@@ -4,9 +4,7 @@ import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Favorito;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
-import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioFavorito;
-import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
