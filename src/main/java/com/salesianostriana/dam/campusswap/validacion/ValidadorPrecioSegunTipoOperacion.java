@@ -10,10 +10,6 @@ public class ValidadorPrecioSegunTipoOperacion implements ConstraintValidator<Pr
 
     @Override
     public boolean isValid(AnuncioRequestDto anuncioRequestDto, ConstraintValidatorContext constraintValidatorContext) {
-        if(anuncioRequestDto.tipoOperacion() == null) {
-            return true;
-        }
-
         boolean esVenta = anuncioRequestDto.tipoOperacion().equals(TipoOperacion.VENTA);
         boolean tienePrecio = anuncioRequestDto.precio() != null && anuncioRequestDto.precio() > 0;
 
