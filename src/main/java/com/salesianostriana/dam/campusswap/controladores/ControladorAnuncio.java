@@ -283,4 +283,148 @@ public class ControladorAnuncio {
         ));
     }
 
+
+    @Operation(
+            summary = "Alternar el estado de un anuncio",
+            description = "Permite alternar el estado de un anuncio entre ACTIVO y CERRADO. " +
+                    "Solo el propietario del anuncio puede alternar su estado, y el anuncio no puede estar pausado."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Estado del anuncio alternado correctamente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = AnuncioResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "id": 1,
+                                                "titulo": "Producto de Prueba2",
+                                                "descripcion": "Una descripción detallada del producto",
+                                                "precio": 25.5,
+                                                "categoria": "sin categoria",
+                                                "imagen": "producto.jpg",
+                                                "tipoOperacion": "VENTA",
+                                                "estado": "CERRADO",
+                                                "condicion": "NUEVO",
+                                                "usuarioId": "6e44a229-0400-4903-9f58-11c63a1dc31a"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Solicitud prohibida",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No puedes modificar un anuncio que no es tuyo",
+                                                "instance": "/api/v1/anuncios/2/alternar-estado",
+                                                "status": 403,
+                                                "title": "Recurso no perteneciente al usuario"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Recurso no encontrado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se ha encontrado el usuario con id: 1",
+                                                "instance": "/api/v1/anuncios/1/alternar-estado",
+                                                "status": 404,
+                                                "title": "Recurso no encontrado"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "409",
+            description = "Estado inválido para alternar",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se pueden modificar anuncios con estado: PAUSADO",
+                                                "instance": "/api/v1/anuncios/1/alternar-estado",
+                                                "status": 409,
+                                                "title": "Solicitud inválida"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Ha ocurrido un error inesperado",
+                                                "instance": "/api/v1/anuncios/1/alternar-estado",
+                                                "status": 500,
+                                                "title": "Error inesperado."
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @PutMapping("/{id}/alternar-estado")
+    public ResponseEntity<AnuncioResponseDto> alternarEstado(
+            @Parameter(
+                    description = "ID del anuncio al que se le quiere alternar el estado",
+                    example = "1",
+                    required = true
+            )
+            @PathVariable Long id,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "ID del usuario propietario del anuncio (en futuras implementaciones se obtendrá del token de autenticación)",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(type = "string"),
+                            examples = {
+                                    @ExampleObject(
+                                            value = """
+                                                    "6ac890d0-8ee2-4967-8bb7-cfa8b84376bc"
+                                                    """
+                                    )
+                            }
+                    )
+            )
+            @RequestBody String usuarioId // Cuando haya seguridad se deberá obtener el ID del usuario autenticado en lugar de recibirlo en el cuerpo de la petición
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                AnuncioResponseDto.of(
+                        servicio.alternarEstado(id, usuarioId)
+                )
+        );
+    }
+
 }

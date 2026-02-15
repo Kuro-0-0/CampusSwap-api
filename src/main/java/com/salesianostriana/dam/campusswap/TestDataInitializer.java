@@ -69,6 +69,7 @@ class TestDataInitializer {
                 .estado(Estado.ACTIVO)
                 .condicion(Condicion.NUEVO)
                 .imagen("producto.jpg")
+                .categoria(c)
                 .usuario(u)
                 .build());
 
@@ -81,6 +82,7 @@ class TestDataInitializer {
                 .estado(Estado.ACTIVO)
                 .condicion(Condicion.USADO)
                 .imagen("bici.jpg")
+                .categoria(c)
                 .usuario(u2)
                 .build());
 
@@ -94,6 +96,7 @@ class TestDataInitializer {
                 .condicion(Condicion.NUEVO)
                 .imagen("libro.jpg")
                 .usuario(u)
+                .categoria(c)
                 .build());
 
 
