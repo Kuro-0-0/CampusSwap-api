@@ -3,7 +3,6 @@ package com.salesianostriana.dam.campusswap.entidades.extras.dtos;
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.Condicion;
-import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
 import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
 
 import java.util.UUID;
@@ -11,7 +10,7 @@ import java.util.UUID;
 public record AnuncioRequestDto(
         String titulo,
         String descripcion,
-        double precio,
+        Double precio,
         String imagen,
         TipoOperacion tipoOperacion,
         Condicion condicion,
@@ -24,6 +23,7 @@ public record AnuncioRequestDto(
                 .titulo(titulo)
                 .descripcion(descripcion)
                 .precio(precio)
+                .imagen(imagen)
                 .tipoOperacion(tipoOperacion)
                 .condicion(condicion)
                 .usuario(Usuario.builder().id(UUID.fromString(usuarioId)).build())

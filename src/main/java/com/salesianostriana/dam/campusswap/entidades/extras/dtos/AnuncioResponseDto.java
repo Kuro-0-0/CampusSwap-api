@@ -21,7 +21,7 @@ public record AnuncioResponseDto(
                     anuncio.getDescripcion(),
                     anuncio.getPrecio(),
                     "sin categoria",
-                    anuncio.getImage(),
+                    anuncio.getImagen(),
                     anuncio.getTipoOperacion().name(),
                     anuncio.getEstado().name(),
                     anuncio.getCondicion().name(),

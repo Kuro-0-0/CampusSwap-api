@@ -3,6 +3,7 @@ package com.salesianostriana.dam.campusswap.servicios;
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
+import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
 import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
@@ -16,13 +17,24 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ServicioAnuncio {
 
-    private final RepositorioAnuncio repositorio;
-
+    private final RepositorioAnuncio repositorioAnuncio;
     private final RepositorioUsuario repositorioUsuario;
 
+    public Anuncio crearAnuncio(Anuncio anuncio) {
+        Usuario usuario = repositorioUsuario.findById(anuncio.getUsuario().getId()).orElseThrow(() -> new NoSuchElementException("Usuario con ID " + anuncio.getUsuario().getId() + " no encontrado"));
+
+        if((anuncio.getTipoOperacion().equals(TipoOperacion.CESION) || anuncio.getTipoOperacion().equals(TipoOperacion.INTERCAMBIO)) && anuncio.getPrecio() != null) {
+            throw new IllegalArgumentException("Un anuncio de cesión o intercambio no puede tener un precio establecido");
+        }
+
+        anuncio.setUsuario(usuario);
+        anuncio.setEstado(Estado.ACTIVO);
+        usuario.agregarAnuncio(anuncio);
+        return repositorioAnuncio.save(anuncio);
+    }
 
     public Anuncio editarAnuncio(Long id, Anuncio anuncio, String usuarioId) {
-        Anuncio original = repositorio.findById(id).orElseThrow(() -> new NoSuchElementException("No se ha encontrado el anuncio con id: " + id));
+        Anuncio original = repositorioAnuncio.findById(id).orElseThrow(() -> new NoSuchElementException("No se ha encontrado el anuncio con id: " + id));
 
         Usuario usuario = repositorioUsuario.findById(UUID.fromString(usuarioId)).orElseThrow(() -> new NoSuchElementException("No se ha encontrado el usuario con id: " + usuarioId));
 
@@ -32,6 +44,8 @@ public class ServicioAnuncio {
         if (original.getEstado().equals(Estado.CERRADO))
             throw new IllegalStateException("No se pueden modificar anuncios cerrados");
 
-        return repositorio.save(original.modificar(anuncio));
+        return repositorioAnuncio.save(original.modificar(anuncio));
     }
+
+
 }
