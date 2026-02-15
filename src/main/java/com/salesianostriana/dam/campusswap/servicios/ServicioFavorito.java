@@ -1,7 +1,6 @@
 package com.salesianostriana.dam.campusswap.servicios;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
-import com.salesianostriana.dam.campusswap.entidades.Categoria;
 import com.salesianostriana.dam.campusswap.entidades.Favorito;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;

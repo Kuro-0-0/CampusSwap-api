@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
+
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.favorito.FavoritoRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.favorito.FavoritoResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.ServicioFavorito;
@@ -39,6 +40,26 @@ public class ControladorFavorito {
                                                 "nombreUsuario": "juanperez",
                                                 "tituloAnuncio": "Libro de matemáticas",
                                                 "fechaFavorito": "2024-06-15T14:30:00"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "Solicitud incorrecta",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Ya has marcado este anuncio como favorito",
+                                                "instance": "/api/v1/favoritos",
+                                                "status": 400,
+                                                "title": "Argumento no válido"
                                             }
                                             """
                             )
@@ -89,7 +110,7 @@ public class ControladorFavorito {
             summary = "Crear un nuevo favorito",
             description = "Permite a un usuario marcar un anuncio como favorito. Se requiere el ID del usuario y el ID del anuncio."
     )
-    public ResponseEntity<FavoritoResponseDto> crearAnuncio(@Valid @RequestBody() FavoritoRequestDto favoritoRequestDto) {
+    public ResponseEntity<FavoritoResponseDto> crearFavorito(@Valid @RequestBody() FavoritoRequestDto favoritoRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(FavoritoResponseDto.of(servicioFavorito.crearFavorito(favoritoRequestDto.anuncioId(), favoritoRequestDto.usuarioId())));
     }
 
