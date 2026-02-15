@@ -1,103 +1,177 @@
 package com.salesianostriana.dam.campusswap;
 
-import com.salesianostriana.dam.campusswap.entidades.Anuncio;
-import com.salesianostriana.dam.campusswap.entidades.Categoria;
-import com.salesianostriana.dam.campusswap.entidades.Usuario;
+import com.salesianostriana.dam.campusswap.entidades.*;
 import com.salesianostriana.dam.campusswap.entidades.extras.Condicion;
 import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
 import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
-import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
-import com.salesianostriana.dam.campusswap.repositorios.RepositorioCategoria;
-import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
+import com.salesianostriana.dam.campusswap.repositorios.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 @Log
 @Profile("dev")
-class TestDataInitializer {
+public class TestDataInitializer {
 
-    private final RepositorioAnuncio repositorioAnuncio;
-    private final RepositorioUsuario repositorioUsuario;
+    private final RepositorioAnuncio repoAnuncio;
+    private final RepositorioUsuario repoUsuario;
     private final RepositorioCategoria repoCategoria;
+    private final RepositorioMensaje repoMensaje;
+    private final RepositorioFavorito repoFavorito;
+    private final RepositorioValoracion repoValoracion;
 
     @PostConstruct
+    @Transactional
     public void init() {
-        log.info("Creando usuarios de prueba...");
+        log.info("INICIANDO CARGA DE DATOS DE PRUEBA...");
 
-        // Primer usuario (u)
-        Usuario u = repositorioUsuario.save(Usuario.builder()
-                .nombre("Usuario de Prueba")
-                .email("test@salesianos.edu")
-                .contrasena("1234")
-                .fotoPerfil("avatar.png")
-                .descripcion("Descripción de prueba")
-                .reputacionMedia(5.0)
-                .activo(true)
-                .build());
+        repoMensaje.deleteAll();
+        repoFavorito.deleteAll();
+        repoValoracion.deleteAll();
+        repoAnuncio.deleteAll();
+        repoCategoria.deleteAll();
+        repoUsuario.deleteAll();
 
-        // 1. Usuario extra (u2 != u)
-        Usuario u2 = repositorioUsuario.save(Usuario.builder()
-                .nombre("Segundo Usuario")
-                .email("segundo@salesianos.edu")
-                .contrasena("abcd")
-                .fotoPerfil("perfil2.png")
-                .descripcion("Soy el segundo usuario para pruebas")
-                .reputacionMedia(4.0)
-                .activo(true)
-                .build());
+        Categoria catLibros = crearCategoria("Libros y Apuntes", "Libros de texto, apuntes de ciclos y material didáctico.");
+        Categoria catElectronica = crearCategoria("Electrónica e Informática", "Portátiles, tablets, calculadoras y periféricos.");
+        Categoria catRopa = crearCategoria("Ropa y Merch", "Sudaderas del centro, ropa deportiva y accesorios.");
+        Categoria catTransporte = crearCategoria("Transporte", "Bicicletas, patinetes y accesorios de movilidad.");
+        Categoria catMuebles = crearCategoria("Mobiliario", "Sillas de escritorio, flexos y estanterías.");
 
-        log.info("Usuarios creados: " + u.getId() + " y " + u2.getId());
+        repoCategoria.saveAll(List.of(catLibros, catElectronica, catRopa, catTransporte, catMuebles));
 
-        Categoria c = repoCategoria.save(Categoria.builder()
-                .nombre("Categoria de Prueba")
-                .descripcion("Descripción de la categoría de prueba")
-                .build());
+        Usuario uAdmin = crearUsuario("Admin User", "admin@salesianos.edu", "1234", "admin_avatar.png", "Administrador del sistema y moderador.", 5.0);
+        Usuario uVendedor = crearUsuario("Carlos Vendedor", "carlos@salesianos.edu", "1234", "carlos.jpg", "Vendo todo lo que ya no uso del ciclo de DAM. ¡Precios negociables!", 4.8);
+        Usuario uComprador = crearUsuario("Laura Compradora", "laura@salesianos.edu", "1234", "laura.jpg", "Busco material para 1º de DAM.", 0.0);
+        Usuario uNuevo = crearUsuario("Pepe Novato", "pepe@salesianos.edu", "1234", null, "Nuevo en el campus.", 0.0);
 
-        log.info("Creando anuncios de prueba...");
+        List<Usuario> usuarios = repoUsuario.saveAll(List.of(uAdmin, uVendedor, uComprador, uNuevo));
+        uAdmin = usuarios.get(0);
+        uVendedor = usuarios.get(1);
+        uComprador = usuarios.get(2);
+        uNuevo = usuarios.get(3);
 
-        // Anuncio original de u
-        Anuncio a = repositorioAnuncio.save(Anuncio.builder()
-                .titulo("Producto de Prueba")
-                .descripcion("Una descripción detallada del producto")
-                .precio(25.50)
+        Anuncio aPortatil = Anuncio.builder()
+                .titulo("Portátil HP Victus 16GB RAM")
+                .descripcion("Lo vendo porque me he comprado un Mac. Ideal para programar en IntelliJ.")
+                .precio(650.00) // Venta lleva precio
                 .tipoOperacion(TipoOperacion.VENTA)
                 .estado(Estado.ACTIVO)
-                .condicion(Condicion.NUEVO)
-                .imagen("producto.jpg")
-                .usuario(u)
-                .build());
+                .condicion(Condicion.COMO_NUEVO)
+                .imagen("hp_victus.jpg")
+                .usuario(uVendedor)
+                .categoria(catElectronica)
+                .fechaPublicacion(LocalDateTime.now().minusDays(2))
+                .build();
 
-        // 2. Anuncio de usuario != u (pertenece a u2)
-        Anuncio a2 = repositorioAnuncio.save(Anuncio.builder()
-                .titulo("Bicicleta de Montaña")
-                .descripcion("Bicicleta en muy buen estado")
-                .precio(120.0)
-                .tipoOperacion(TipoOperacion.VENTA)
+        Anuncio aBici = Anuncio.builder()
+                .titulo("Bicicleta de montaña Rockrider")
+                .descripcion("Cambio por un patinete eléctrico Xiaomi en buen estado.")
+                .precio(null)
+                .tipoOperacion(TipoOperacion.INTERCAMBIO)
                 .estado(Estado.ACTIVO)
                 .condicion(Condicion.USADO)
                 .imagen("bici.jpg")
-                .usuario(u2)
-                .build());
+                .usuario(uVendedor)
+                .categoria(catTransporte)
+                .fechaPublicacion(LocalDateTime.now().minusDays(5))
+                .build();
 
-        // 3. Anuncio con estado.CERRADO
-        Anuncio a3 = repositorioAnuncio.save(Anuncio.builder()
-                .titulo("Libro de Programación Java")
-                .descripcion("Vendido recientemente")
-                .precio(15.0)
+        Anuncio aApuntes = Anuncio.builder()
+                .titulo("Apuntes de Base de Datos 1º DAM")
+                .descripcion("Regalo mis apuntes en limpio del año pasado. A quien venga a buscarlos.")
+                .precio(null)
+                .tipoOperacion(TipoOperacion.CESION)
+                .estado(Estado.ACTIVO)
+                .condicion(Condicion.USADO)
+                .imagen("apuntes_sql.jpg")
+                .usuario(uComprador)
+                .categoria(catLibros)
+                .fechaPublicacion(LocalDateTime.now().minusHours(4))
+                .build();
+
+        Anuncio aLibroJava = Anuncio.builder()
+                .titulo("Clean Code - Robert C. Martin")
+                .descripcion("Libro imprescindible. Ya lo he leído.")
+                .precio(20.00)
                 .tipoOperacion(TipoOperacion.VENTA)
                 .estado(Estado.CERRADO)
                 .condicion(Condicion.NUEVO)
-                .imagen("libro.jpg")
-                .usuario(u)
-                .build());
+                .imagen("cleancode.jpg")
+                .usuario(uVendedor)
+                .categoria(catLibros)
+                .fechaPublicacion(LocalDateTime.now().minusWeeks(2))
+                .build();
 
+        repoAnuncio.saveAll(List.of(aPortatil, aBici, aApuntes, aLibroJava));
 
+        Mensaje m1 = Mensaje.builder()
+                .contenido("Hola Carlos, ¿sigue disponible el portátil? ¿El precio es negociable?")
+                .fechaEnvio(LocalDateTime.now().minusDays(1))
+                .anuncio(aPortatil)
+                .build();
 
-        log.info("Datos de prueba inicializados correctamente.");
+        Mensaje m2 = Mensaje.builder()
+                .contenido("Hola Laura, sí, sigue disponible. Podría bajarlo a 630€ si vienes hoy.")
+                .fechaEnvio(LocalDateTime.now().minusDays(1).plusHours(1))
+                .anuncio(aPortatil)
+                .build();
+
+        repoMensaje.saveAll(List.of(m1, m2));
+
+        Favorito f1 = Favorito.builder()
+                .usuario(uNuevo)
+                .anuncio(aBici)
+                .fecha(LocalDateTime.now())
+                .build();
+
+        Favorito f2 = Favorito.builder()
+                .usuario(uNuevo)
+                .anuncio(aPortatil)
+                .fecha(LocalDateTime.now())
+                .build();
+
+        repoFavorito.saveAll(List.of(f1, f2));
+
+        Valoracion val1 = Valoracion.builder()
+                .puntuacion(5.0)
+                .comentario("El libro estaba impecable, tal como decía el anuncio. Carlos es muy amable.")
+                .evaluador(uComprador)
+                .evaluado(uVendedor)
+                .anuncio(aLibroJava)
+                .fecha(LocalDateTime.now().minusDays(3))
+                .build();
+
+        repoValoracion.save(val1);
+
+        log.info("CARGA DE DATOS COMPLETADA: Usuarios, Anuncios, Favoritos, Mensajes y Valoraciones listos.");
+    }
+
+    private Usuario crearUsuario(String nombre, String email, String pass, String foto, String desc, double reputacion) {
+        return Usuario.builder()
+                .nombre(nombre)
+                .email(email)
+                .contrasena(pass)
+                .fotoPerfil(foto)
+                .descripcion(desc)
+                .reputacionMedia(reputacion)
+                .activo(true)
+                .fechaRegistro(LocalDateTime.now().minusMonths(1))
+                .build();
+    }
+
+    private Categoria crearCategoria(String nombre, String descripcion) {
+        return Categoria.builder()
+                .nombre(nombre)
+                .descripcion(descripcion)
+                .build();
     }
 }
