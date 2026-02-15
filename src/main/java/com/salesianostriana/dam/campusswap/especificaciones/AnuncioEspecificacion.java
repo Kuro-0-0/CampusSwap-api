@@ -1,6 +1,5 @@
 package com.salesianostriana.dam.campusswap.especificaciones;
 
-import ch.qos.logback.core.CoreConstants;
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
 import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;

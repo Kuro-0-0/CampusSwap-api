@@ -138,7 +138,7 @@ public class ControladorCatalogo {
     )
     @Operation(
             summary = "Obtener catálogo de anuncios activos",
-            description = "Obtiene una página de anuncios activos, con opción de búsqueda por título o descripción."
+            description = "Obtiene una página de anuncios, con opción de búsqueda por título o descripción y filtros opcionales por categoría, rango de precio, tipo de operación y estado."
     )
     public ResponseEntity<Page<AnuncioResponseDto>> obtenerCatalogo(@PageableDefault(page = 0, size = 10, sort = "fechaPublicacion",
                                                                                 direction = Sort.Direction.DESC)Pageable pageable, @RequestParam(required = false) String q,
