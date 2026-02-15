@@ -46,7 +46,7 @@ public class ServicioFavorito {
 
     public void eliminarFavorito(Long id, String idUsuario) {
         Favorito favorito = repositorioFavorito.findById(id).orElseThrow(() -> new NoSuchElementException("No se ha encontrado el favorito con id: " + id));
-        if (!favorito.getUsuario().getId().toString().equals(idUsuario))
+        if (!favorito.getUsuario().getId().equals(UUID.fromString(idUsuario)))
             throw new NotOwnedException("No puedes eliminar un favorito que no es tuyo");
 
         repositorioFavorito.delete(favorito);

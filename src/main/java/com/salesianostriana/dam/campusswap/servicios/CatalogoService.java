@@ -1,7 +1,6 @@
 package com.salesianostriana.dam.campusswap.servicios;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
-import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioResponseDto;
 import com.salesianostriana.dam.campusswap.especificaciones.AnuncioEspecificacion;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
 import lombok.RequiredArgsConstructor;
