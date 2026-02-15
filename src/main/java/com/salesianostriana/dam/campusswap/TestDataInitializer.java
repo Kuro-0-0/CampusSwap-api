@@ -54,7 +54,8 @@ class TestDataInitializer {
         log.info("Usuarios creados: " + u.getId() + " y " + u2.getId());
 
         Categoria c = repoCategoria.save(Categoria.builder()
-                .nombre("Sin Categoría")
+                .nombre("Categoria de Prueba")
+                .descripcion("Descripción de la categoría de prueba")
                 .build());
 
         log.info("Creando anuncios de prueba...");
