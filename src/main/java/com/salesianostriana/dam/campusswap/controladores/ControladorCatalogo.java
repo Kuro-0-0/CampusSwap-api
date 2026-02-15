@@ -1,5 +1,8 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
+import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
+import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioFiltroDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.CatalogoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +14,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -122,7 +127,7 @@ public class ControladorCatalogo {
                                     value = """
                                             {
                                                 "detail": "Ha ocurrido un error inesperado",
-                                                "instance": "/api/v1/anuncios/1",
+                                                "instance": "/api/v1/catalogo",
                                                 "status": 500,
                                                 "title": "Error inesperado."
                                             }
@@ -133,10 +138,20 @@ public class ControladorCatalogo {
     )
     @Operation(
             summary = "Obtener catálogo de anuncios activos",
-            description = "Obtiene una página de anuncios activos, con opción de búsqueda por título o descripción."
+            description = "Obtiene una página de anuncios, con opción de búsqueda por título o descripción y filtros opcionales por categoría, rango de precio, tipo de operación y estado."
     )
-    public ResponseEntity<Page<AnuncioResponseDto>> obtenerCatalogo(Pageable pageable, @RequestParam(required = false) String q){
-        return ResponseEntity.ok(catalogoService.obtenerCatalogo(pageable, q).map(AnuncioResponseDto::of));
+    public ResponseEntity<Page<AnuncioResponseDto>> obtenerCatalogo(@PageableDefault(page = 0, size = 10, sort = "fechaPublicacion",
+                                                                                direction = Sort.Direction.DESC)Pageable pageable, @RequestParam(required = false) String q,
+                                                                                @RequestParam(required = false) Long categoriaId,
+                                                                                @RequestParam(required = false) Double minPrecio,
+                                                                                @RequestParam(required = false) Double maxPrecio,
+                                                                                @RequestParam(required = false) TipoOperacion tipoOperacion,
+                                                                                @RequestParam(required = false) Estado estado
+    ){
+
+        AnuncioFiltroDto filtro = new AnuncioFiltroDto(q, categoriaId, minPrecio, maxPrecio, tipoOperacion, estado);
+
+        return ResponseEntity.ok(catalogoService.obtenerCatalogo(pageable, filtro).map(AnuncioResponseDto::of));
     }
 
 }
