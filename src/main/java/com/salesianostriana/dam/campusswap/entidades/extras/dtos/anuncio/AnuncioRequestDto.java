@@ -5,7 +5,7 @@ import com.salesianostriana.dam.campusswap.entidades.Categoria;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.Condicion;
 import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
-import com.salesianostriana.dam.campusswap.validacion.anotaciones.PrecioSegunTipoOperacion;
+import com.salesianostriana.dam.campusswap.validacion.PrecioSegunTipoOperacion;
 import jakarta.validation.constraints.*;
 
 import java.util.UUID;
@@ -28,7 +28,7 @@ public record AnuncioRequestDto(
         Condicion condicion,
         @NotBlank(message = "El ID de usuario no puede estar vacío")
         String usuarioId,
-        @NotNull(message = "La categoría no puede estar vacía")
+        @NotNull(message = "La categoría no puede ser nula")
         Long categoriaId
 ) {
 
