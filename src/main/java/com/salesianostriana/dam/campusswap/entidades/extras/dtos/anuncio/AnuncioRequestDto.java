@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.crear;
+package com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Categoria;
@@ -11,7 +11,7 @@ import jakarta.validation.constraints.*;
 import java.util.UUID;
 
 @PrecioSegunTipoOperacion
-public record CrearAnuncioRequestDto(
+public record AnuncioRequestDto(
         @NotBlank(message = "El título no puede estar vacío")
         @Size(min = 3, max = 100, message = "El título debe tener entre 3 y 100 caracteres")
         String titulo,

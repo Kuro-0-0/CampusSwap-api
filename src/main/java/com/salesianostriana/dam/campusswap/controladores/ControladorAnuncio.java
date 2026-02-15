@@ -2,7 +2,7 @@ package com.salesianostriana.dam.campusswap.controladores;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioResponseDto;
-import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.crear.CrearAnuncioRequestDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioRequestDto;
 import com.salesianostriana.dam.campusswap.servicios.ServicioAnuncio;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.editar.EditarAnuncioRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -121,7 +121,7 @@ public class ControladorAnuncio {
             summary = "Crear un nuevo anuncio",
             description = "Permite crear un nuevo anuncio en el sistema."
     )
-    public ResponseEntity<AnuncioResponseDto> crearAnuncio(@Valid @RequestBody CrearAnuncioRequestDto dto){
+    public ResponseEntity<AnuncioResponseDto> crearAnuncio(@Valid @RequestBody AnuncioRequestDto dto){
         Anuncio nuevoAnuncio = dto.toAnuncio();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(AnuncioResponseDto.of(servicio.crearAnuncio(nuevoAnuncio)));
@@ -231,7 +231,7 @@ public class ControladorAnuncio {
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = EditarAnuncioRequestDto.class),
+                            schema = @Schema(implementation = AnuncioRequestDto.class),
                             examples = {
                                     @ExampleObject(
                                             value = """
@@ -251,7 +251,7 @@ public class ControladorAnuncio {
 
                     )
             )
-            @Valid @RequestBody EditarAnuncioRequestDto dto
+            @Valid @RequestBody AnuncioRequestDto dto
     ){
         return ResponseEntity.status(HttpStatus.OK).body(AnuncioResponseDto.of(
             servicio.editarAnuncio(id, dto.toAnuncio(),
