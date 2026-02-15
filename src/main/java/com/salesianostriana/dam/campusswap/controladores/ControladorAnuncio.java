@@ -1,7 +1,7 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
-import com.salesianostriana.dam.campusswap.entidades.extras.dtos.AnuncioResponseDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.crear.CrearAnuncioRequestDto;
 import com.salesianostriana.dam.campusswap.servicios.ServicioAnuncio;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.editar.EditarAnuncioRequestDto;

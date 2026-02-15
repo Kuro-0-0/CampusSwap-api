@@ -30,9 +30,10 @@ public class Categoria {
     @OneToMany(mappedBy = "categoria",orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Anuncio> anuncios = new ArrayList<>();
 
-
-    public void addAnuncio(Anuncio original) {
-        this.anuncios.add(original);
-        original.setCategoria(this);
+    public void addAnuncio(Anuncio anuncio) {
+        anuncios.add(anuncio);
+        anuncio.setCategoria(this);
     }
+
+
 }
