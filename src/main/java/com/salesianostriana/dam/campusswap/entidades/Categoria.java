@@ -31,6 +31,8 @@ public class Categoria {
     private List<Anuncio> anuncios = new ArrayList<>();
 
 
-
-
+    public void addAnuncio(Anuncio original) {
+        this.anuncios.add(original);
+        original.setCategoria(this);
+    }
 }

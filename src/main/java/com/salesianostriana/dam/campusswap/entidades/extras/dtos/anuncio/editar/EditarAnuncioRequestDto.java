@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.editar;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
+import com.salesianostriana.dam.campusswap.entidades.Categoria;
 import com.salesianostriana.dam.campusswap.entidades.extras.Condicion;
 import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
 import jakarta.validation.constraints.*;
@@ -22,6 +23,7 @@ public record EditarAnuncioRequestDto(
                 .descripcion(descripcion)
                 .precio(precio)
                 .imagen(imagen)
+                .categoria(Categoria.builder().id(categoriaId).build())
                 .tipoOperacion(tipoOperacion)
                 .condicion(condicion)
                 .build();

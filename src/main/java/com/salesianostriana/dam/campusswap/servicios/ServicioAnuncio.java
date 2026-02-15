@@ -1,11 +1,13 @@
 package com.salesianostriana.dam.campusswap.servicios;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
+import com.salesianostriana.dam.campusswap.entidades.Categoria;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
 import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
 import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
+import com.salesianostriana.dam.campusswap.repositorios.RepositorioCategoria;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ public class ServicioAnuncio {
 
     private final RepositorioAnuncio repositorioAnuncio;
     private final RepositorioUsuario repositorioUsuario;
+    private final RepositorioCategoria repositorioCategoria;
 
     public Anuncio crearAnuncio(Anuncio anuncio) {
         Usuario usuario = repositorioUsuario.findById(anuncio.getUsuario().getId()).orElseThrow(() -> new NoSuchElementException("Usuario con ID " + anuncio.getUsuario().getId() + " no encontrado"));
@@ -38,11 +41,16 @@ public class ServicioAnuncio {
 
         Usuario usuario = repositorioUsuario.findById(UUID.fromString(usuarioId)).orElseThrow(() -> new NoSuchElementException("No se ha encontrado el usuario con id: " + usuarioId));
 
+        Categoria categoria = repositorioCategoria.findById(anuncio.getCategoria().getId()).orElseThrow(() -> new NoSuchElementException("No se ha encontrado la categoría con id: " + anuncio.getCategoria().getId()));
+
         if (original.getUsuario() == null || !original.getUsuario().equals(usuario))
             throw new NotOwnedException("No puedes modificar un anuncio que no es tuyo");
 
         if (original.getEstado().equals(Estado.CERRADO))
             throw new IllegalStateException("No se pueden modificar anuncios cerrados");
+
+        categoria.addAnuncio(original);
+        repositorioCategoria.save(categoria);
 
         return repositorioAnuncio.save(original.modificar(anuncio));
     }
