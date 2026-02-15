@@ -431,6 +431,11 @@ public class ControladorAnuncio {
 
 
     @DeleteMapping("/{id}")
+    @Operation(
+            summary = "Eliminar un anuncio",
+            description = "Permite eliminar un anuncio existente. " +
+                    "Solo el propietario del anuncio puede eliminarlo."
+    )
     @ApiResponse(
             responseCode = "204",
             description = "Anuncio eliminado correctamente",
@@ -498,7 +503,13 @@ public class ControladorAnuncio {
                     }
             )
     )
-    public ResponseEntity<?> eliminarAnuncio(@RequestBody BorrarAnuncioRequestDto dto , @PathVariable Long id ){
+    public ResponseEntity<?> eliminarAnuncio(@RequestBody BorrarAnuncioRequestDto dto ,
+                                             @Parameter(
+                                                     description = "ID del anuncio a eliminar",
+                                                     example = "1",
+                                                     required = true
+                                             )
+                                             @PathVariable Long id){
         servicio.borrarAnuncio(id,dto.usuarioId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
