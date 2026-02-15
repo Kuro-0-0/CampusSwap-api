@@ -4,6 +4,7 @@ import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.AnuncioRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.AnuncioResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.ServicioAnuncio;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class ControladorAnuncio {
     private final ServicioAnuncio servicioAnuncio;
 
     @PostMapping
-    public ResponseEntity<AnuncioResponseDto> crearAnuncio(@RequestBody AnuncioRequestDto dto){
+    public ResponseEntity<AnuncioResponseDto> crearAnuncio(@Valid @RequestBody AnuncioRequestDto dto){
         Anuncio nuevoAnuncio = dto.toAnuncio();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(AnuncioResponseDto.of(servicioAnuncio.crearAnuncio(nuevoAnuncio)));
