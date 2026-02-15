@@ -37,6 +37,10 @@ public class ServicioAnuncio {
     }
 
     public Anuncio editarAnuncio(Long id, Anuncio anuncio, String usuarioId) {
+        if((anuncio.getTipoOperacion().equals(TipoOperacion.CESION) || anuncio.getTipoOperacion().equals(TipoOperacion.INTERCAMBIO)) && anuncio.getPrecio() != null) {
+            throw new IllegalArgumentException("Un anuncio de cesión o intercambio no puede tener un precio establecido");
+        }
+
         Anuncio original = repositorioAnuncio.findById(id).orElseThrow(() -> new NoSuchElementException("No se ha encontrado el anuncio con id: " + id));
 
         Usuario usuario = repositorioUsuario.findById(UUID.fromString(usuarioId)).orElseThrow(() -> new NoSuchElementException("No se ha encontrado el usuario con id: " + usuarioId));
