@@ -1,11 +1,13 @@
 package com.salesianostriana.dam.campusswap;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
+import com.salesianostriana.dam.campusswap.entidades.Categoria;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.Condicion;
 import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
 import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
+import com.salesianostriana.dam.campusswap.repositorios.RepositorioCategoria;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ class TestDataInitializer {
 
     private final RepositorioAnuncio repositorioAnuncio;
     private final RepositorioUsuario repositorioUsuario;
+    private final RepositorioCategoria repoCategoria;
 
     @PostConstruct
     public void init() {
@@ -50,6 +53,11 @@ class TestDataInitializer {
 
         log.info("Usuarios creados: " + u.getId() + " y " + u2.getId());
 
+        Categoria c = repoCategoria.save(Categoria.builder()
+                .nombre("Categoria de Prueba")
+                .descripcion("Descripción de la categoría de prueba")
+                .build());
+
         log.info("Creando anuncios de prueba...");
 
         // Anuncio original de u
@@ -61,6 +69,7 @@ class TestDataInitializer {
                 .estado(Estado.ACTIVO)
                 .condicion(Condicion.NUEVO)
                 .imagen("producto.jpg")
+                .categoria(c)
                 .usuario(u)
                 .build());
 
@@ -73,6 +82,7 @@ class TestDataInitializer {
                 .estado(Estado.ACTIVO)
                 .condicion(Condicion.USADO)
                 .imagen("bici.jpg")
+                .categoria(c)
                 .usuario(u2)
                 .build());
 
@@ -86,7 +96,10 @@ class TestDataInitializer {
                 .condicion(Condicion.NUEVO)
                 .imagen("libro.jpg")
                 .usuario(u)
+                .categoria(c)
                 .build());
+
+
 
         log.info("Datos de prueba inicializados correctamente.");
     }

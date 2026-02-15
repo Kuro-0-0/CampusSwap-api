@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.campusswap.entidades.extras.dtos;
+package com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 
@@ -6,7 +6,7 @@ public record AnuncioResponseDto(
         Long id,
         String titulo,
         String descripcion,
-        double precio,
+        Double precio,
         String categoria,
         String imagen,
         String tipoOperacion,
@@ -20,7 +20,7 @@ public record AnuncioResponseDto(
                     anuncio.getTitulo(),
                     anuncio.getDescripcion(),
                     anuncio.getPrecio(),
-                    "sin categoria",
+                    anuncio.getCategoria().getNombre(),
                     anuncio.getImagen(),
                     anuncio.getTipoOperacion().name(),
                     anuncio.getEstado().name(),
