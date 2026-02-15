@@ -127,7 +127,7 @@ public class ControladorFavorito {
             description = "Forbidden - El usuario no es el propietario del favorito",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = ResponseEntity.class),
+                    schema = @Schema(implementation = ProblemDetail.class),
                     examples = {
                             @ExampleObject(
                                     value = """
@@ -147,7 +147,7 @@ public class ControladorFavorito {
             description = "Internal Server Error - Error al eliminar el favorito",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = ResponseEntity.class),
+                    schema = @Schema(implementation = ProblemDetail.class),
                     examples = {
                             @ExampleObject(
                                     value = """
