@@ -63,7 +63,7 @@ public class ControladorAnuncio {
                             @ExampleObject(
                                     value = """
                                             {
-                                                "detail": "El precio debe ser mayor que 0 para venta y null para cesión o intercambio",
+                                                "detail": "El precio debe ser nulo para cesión e intercambio, y mayor que 0 para venta",
                                                 "instance": "/api/v1/anuncios",
                                                 "status": 400,
                                                 "title": "Solicitud inválida"
@@ -117,7 +117,31 @@ public class ControladorAnuncio {
             summary = "Crear un nuevo anuncio",
             description = "Permite crear un nuevo anuncio en el sistema."
     )
-    public ResponseEntity<AnuncioResponseDto> crearAnuncio(@Valid @RequestBody AnuncioRequestDto dto){
+    public ResponseEntity<AnuncioResponseDto> crearAnuncio(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "DTO con los datos para editar el anuncio",
+            required = true,
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = AnuncioRequestDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "titulo": "Producto de Prueba2",
+                                                "descripcion": "Una descripción detallada del producto",
+                                                "precio": 25.5,
+                                                "imagen": "producto.jpg",
+                                                "tipoOperacion": "VENTA",
+                                                "condicion": "NUEVO",
+                                                "categoriaId": 1,
+                                                "usuarioId":"6ac890d0-8ee2-4967-8bb7-cfa8b84376bc"
+                                            }
+                                            """
+                            )
+                    }
+
+            )
+    ) @RequestBody() AnuncioRequestDto dto) {
         Anuncio nuevoAnuncio = dto.toAnuncio();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(AnuncioResponseDto.of(servicioAnuncio.crearAnuncio(nuevoAnuncio)));
