@@ -143,6 +143,26 @@ public class ControladorFavorito {
             )
     )
     @ApiResponse(
+            responseCode = "404",
+            description = "Not Found - No se ha encontrado el favorito con el ID proporcionado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se ha encontrado el favorito con id: 1",
+                                                "instance": "/api/v1/favoritos/1",
+                                                "status": 404,
+                                                "title": "Recurso no encontrado"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
             responseCode = "500",
             description = "Internal Server Error - Error al eliminar el favorito",
             content = @Content(
