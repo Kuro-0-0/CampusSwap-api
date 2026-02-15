@@ -9,6 +9,8 @@ import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioCategoria;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
@@ -51,6 +53,12 @@ public class ServicioAnuncio {
         repositorioCategoria.save(categoria);
 
         return repositorioAnuncio.save(original.modificar(anuncio));
+    }
+
+    public Page<Anuncio> obtenerAnuncios(Pageable pageable, String idUsuario) {
+        Usuario usuario = repositorioUsuario.findById(UUID.fromString(idUsuario)).orElseThrow(() -> new NoSuchElementException("No se ha encontrado el usuario con id: " + idUsuario));
+
+        return repositorioAnuncio.findByUsuarioId(usuario.getId(), pageable);
     }
 
 
