@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.BorrarAnuncioRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.ServicioAnuncio;
@@ -556,5 +557,92 @@ public class ControladorAnuncio {
                 )
         );
     }
+
+
+
+    @DeleteMapping("/{id}")
+    @Operation(
+            summary = "Eliminar un anuncio",
+            description = "Permite eliminar un anuncio existente. " +
+                    "Solo el propietario del anuncio puede eliminarlo."
+    )
+    @ApiResponse(
+            responseCode = "204",
+            description = "Anuncio eliminado correctamente",
+            content = @Content(
+                    mediaType = "application/json"
+            )
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Solicitud prohibida",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se puede eliminar un anuncio que no te pertenece",
+                                                "instance": "/api/v1/anuncios/2",
+                                                "status": 403,
+                                                "title": "Recurso no perteneciente al usuario"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Recurso no encontrado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                 "detail": "No se ha encontrado el anuncio con id: 20",
+                                                 "instance": "/api/v1/anuncios/20",
+                                                 "status": 404,
+                                                 "title": "Recurso no encontrado"
+                                             }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Ha ocurrido un error inesperado",
+                                                "instance": "/api/v1/anuncios/1",
+                                                "status": 500,
+                                                "title": "Error inesperado."
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    public ResponseEntity<?> eliminarAnuncio(@RequestBody BorrarAnuncioRequestDto dto ,
+                                             @Parameter(
+                                                     description = "ID del anuncio a eliminar",
+                                                     example = "1",
+                                                     required = true
+                                             )
+                                             @PathVariable Long id){
+        servicio.borrarAnuncio(id,dto.usuarioId());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 
 }

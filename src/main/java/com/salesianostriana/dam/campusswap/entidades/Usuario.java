@@ -64,4 +64,9 @@ public class Usuario {
         anuncio.setUsuario(this);
     }
 
+    public void borrarAnuncio(Anuncio anuncio){
+        anuncios.remove(anuncio);
+        anuncio.setUsuario(null);
+    }
+
 }

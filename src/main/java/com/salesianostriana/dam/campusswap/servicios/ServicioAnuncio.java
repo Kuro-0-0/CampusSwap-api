@@ -80,4 +80,22 @@ public class ServicioAnuncio {
 
         return repositorioAnuncio.save(anuncio);
     }
+
+
+    public void borrarAnuncio(Long id, String idUsuario) {
+
+        Anuncio anuncio = repositorioAnuncio.findById(id).orElseThrow(() -> new NoSuchElementException("No se ha encontrado el anuncio con id: " + id));
+        Usuario usuario = repositorioUsuario.findById(UUID.fromString(idUsuario)).orElseThrow(() -> new NoSuchElementException("No se ha encontrado el usuario con id: " + idUsuario));
+
+
+        if(!anuncio.getUsuario().equals(usuario)){
+            throw new NotOwnedException("No se puede eliminar un anuncio que no te pertenece");
+        }
+
+        usuario.borrarAnuncio(anuncio);
+        repositorioUsuario.save(usuario);
+        repositorioAnuncio.delete(anuncio);
+
+
+    }
 }
