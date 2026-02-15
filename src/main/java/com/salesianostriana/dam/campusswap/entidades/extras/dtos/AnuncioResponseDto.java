@@ -6,7 +6,7 @@ public record AnuncioResponseDto(
         Long id,
         String titulo,
         String descripcion,
-        double precio,
+        Double precio,
         String categoria,
         String imagen,
         String tipoOperacion,
