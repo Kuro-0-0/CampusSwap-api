@@ -9,13 +9,13 @@ import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioCategoria;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
-@Slf4j
+@Log
 @Service
 @RequiredArgsConstructor
 public class ServicioAnuncio {
