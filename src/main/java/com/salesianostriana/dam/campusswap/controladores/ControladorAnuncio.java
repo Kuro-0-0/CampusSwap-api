@@ -89,7 +89,7 @@ public class ControladorAnuncio {
     )
     @ApiResponse(
             responseCode = "404",
-            description = "Anuncio no encontrado",
+            description = "Recurso no encontrado",
             content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(implementation = ProblemDetail.class),

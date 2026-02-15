@@ -64,4 +64,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return pd;
     }
 
+    @ExceptionHandler(Exception.class)
+    public ProblemDetail handleGenericException(Exception ex, HttpServletRequest request) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "Ha ocurrido un error inesperado");
+        log.warning("Error class: " + ex.getClass() + ", Error message: " + ex.getMessage());
+        pd.setTitle("Error inesperado.");
+        pd.setInstance(URI.create(request.getRequestURI()));
+        return pd;
+    }
+
+
 }
