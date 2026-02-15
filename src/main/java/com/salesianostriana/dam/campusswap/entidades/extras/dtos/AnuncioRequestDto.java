@@ -28,7 +28,7 @@ public record AnuncioRequestDto(
         Condicion condicion,
         @NotBlank(message = "El ID de usuario no puede estar vacío")
         String usuarioId,
-        @NotEmpty(message = "La categoría no puede estar vacía")
+        @NotNull(message = "La categoría no puede estar vacía")
         Long categoriaId
 ) {
 
