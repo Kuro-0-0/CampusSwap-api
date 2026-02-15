@@ -31,8 +31,12 @@ public class Mensaje {
     @JoinColumn(name = "anuncio_id")
     private Anuncio anuncio;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "emisor_id")
+    private Usuario emisor;
 
-
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receptor_id")
+    private Usuario receptor;
 
 }
