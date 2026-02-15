@@ -58,7 +58,7 @@ public class ServicioAnuncio {
     public Page<Anuncio> obtenerAnuncios(Pageable pageable, String idUsuario) {
         Usuario usuario = repositorioUsuario.findById(UUID.fromString(idUsuario)).orElseThrow(() -> new NoSuchElementException("No se ha encontrado el usuario con id: " + idUsuario));
 
-        return repositorioAnuncio.findByUsuarioId(usuario.getId(), pageable);
+        return repositorioAnuncio.findByUsuarioId(UUID.fromString(idUsuario), pageable);
     }
 
 

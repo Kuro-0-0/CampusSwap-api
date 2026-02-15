@@ -8,7 +8,7 @@ import org.springframework.validation.ObjectError;
 @Builder
 public record ValidacionDeApiSubError(
         String objeto,
-        String mesnseaje,
+        String mensaje,
         @JsonInclude(JsonInclude.Include.NON_NULL)
         String campo,
         @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -25,14 +25,14 @@ public record ValidacionDeApiSubError(
         if(error instanceof FieldError fieldError){
             resultado = ValidacionDeApiSubError.builder()
                     .objeto(error.getObjectName())
-                    .mesnseaje(error.getDefaultMessage())
+                    .mensaje(error.getDefaultMessage())
                     .campo(fieldError.getField())
                     .valorRechazado(String.valueOf(fieldError.getRejectedValue()))
                     .build();
         }else{
             resultado = ValidacionDeApiSubError.builder()
                     .objeto(error.getObjectName())
-                    .mesnseaje(error.getDefaultMessage())
+                    .mensaje(error.getDefaultMessage())
                     .build();
         }
 
