@@ -316,26 +316,6 @@ public class ControladorAnuncio {
             )
     )
     @ApiResponse(
-            responseCode = "400",
-            description = "Solicitud inválida",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ProblemDetail.class),
-                    examples = {
-                            @ExampleObject(
-                                    value = """
-                                            {
-                                                "detail": "No se pueden modificar anuncios con estado: PAUSADO",
-                                                "instance": "/api/v1/anuncios/1/alternar-estado",
-                                                "status": 400,
-                                                "title": "Solicitud inválida"
-                                            }
-                                            """
-                            )
-                    }
-            )
-    )
-    @ApiResponse(
             responseCode = "403",
             description = "Solicitud prohibida",
             content = @Content(
@@ -375,7 +355,26 @@ public class ControladorAnuncio {
                     }
             )
     )
-
+    @ApiResponse(
+            responseCode = "409",
+            description = "Estado inválido para alternar",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se pueden modificar anuncios con estado: PAUSADO",
+                                                "instance": "/api/v1/anuncios/1/alternar-estado",
+                                                "status": 409,
+                                                "title": "Solicitud inválida"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
     @ApiResponse(
             responseCode = "500",
             description = "Error interno del servidor",
