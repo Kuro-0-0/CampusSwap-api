@@ -1,7 +1,8 @@
-package com.salesianostriana.dam.campusswap.validacion;
+package com.salesianostriana.dam.campusswap.validacion.validadores;
 
 import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
-import com.salesianostriana.dam.campusswap.entidades.extras.dtos.AnuncioRequestDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioRequestDto;
+import com.salesianostriana.dam.campusswap.validacion.anotaciones.PrecioSegunTipoOperacion;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

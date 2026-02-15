@@ -52,4 +52,14 @@ public class Anuncio {
     @Builder.Default
     private List<Mensaje> mensajes = new ArrayList<>();
 
+    public Anuncio modificar(Anuncio anuncio) {
+        this.titulo = anuncio.getTitulo();
+        this.descripcion = anuncio.getDescripcion();
+        this.precio = anuncio.getPrecio();
+        this.tipoOperacion = anuncio.getTipoOperacion();
+        this.condicion = anuncio.getCondicion();
+        this.imagen = anuncio.getImagen();
+        return this;
+
+    }
 }
