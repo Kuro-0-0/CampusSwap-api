@@ -11,11 +11,13 @@ import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+@Log
 @Service
 @RequiredArgsConstructor
 public class ServicioAnuncio {
@@ -62,4 +64,20 @@ public class ServicioAnuncio {
     }
 
 
+    public Anuncio alternarEstado(Long id, String usuarioId) {
+        Anuncio anuncio = repositorioAnuncio.findById(id).orElseThrow(() -> new NoSuchElementException("No se ha encontrado el anuncio con id: " + id));
+        Usuario usuario = repositorioUsuario.findById(UUID.fromString(usuarioId)).orElseThrow(() -> new NoSuchElementException("No se ha encontrado el usuario con id: " + usuarioId));
+
+        if (anuncio.getUsuario() == null || !anuncio.getUsuario().equals(usuario))
+            throw new NotOwnedException("No puedes modificar un anuncio que no es tuyo");
+
+        if (anuncio.getEstado().equals(Estado.CERRADO))
+            anuncio.setEstado(Estado.ACTIVO);
+        else if (anuncio.getEstado().equals(Estado.ACTIVO))
+            anuncio.setEstado(Estado.CERRADO);
+        else
+            throw new IllegalStateException("No se pueden modificar anuncios con estado: " + anuncio.getEstado());
+
+        return repositorioAnuncio.save(anuncio);
+    }
 }

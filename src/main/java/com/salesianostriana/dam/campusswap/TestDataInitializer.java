@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Log
 @Profile("dev")
-public class TestDataInitializer {
+class TestDataInitializer {
 
     private final RepositorioAnuncio repoAnuncio;
     private final RepositorioUsuario repoUsuario;
