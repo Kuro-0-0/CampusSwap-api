@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.campusswap.entidades.extras.dtos;
+package com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 
