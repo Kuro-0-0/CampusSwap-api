@@ -283,4 +283,18 @@ public class ControladorAnuncio {
         ));
     }
 
+
+    @PutMapping("/{id}/alternar-estado")
+    public ResponseEntity<AnuncioResponseDto> alternarEstado(
+
+            @PathVariable Long id,
+            @RequestBody String usuarioId // Cuando haya seguridad se deberá obtener el ID del usuario autenticado en lugar de recibirlo en el cuerpo de la petición
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                AnuncioResponseDto.of(
+                        servicio.alternarEstado(id, usuarioId)
+                )
+        );
+    }
+
 }
