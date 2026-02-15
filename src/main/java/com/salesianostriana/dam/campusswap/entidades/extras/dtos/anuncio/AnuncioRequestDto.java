@@ -5,7 +5,7 @@ import com.salesianostriana.dam.campusswap.entidades.Categoria;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.Condicion;
 import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
-import com.salesianostriana.dam.campusswap.validacion.PrecioSegunTipoOperacion;
+import com.salesianostriana.dam.campusswap.validacion.anotaciones.PrecioSegunTipoOperacion;
 import jakarta.validation.constraints.*;
 
 import java.util.UUID;
