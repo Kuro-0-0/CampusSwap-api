@@ -1,9 +1,12 @@
 package com.salesianostriana.dam.campusswap.servicios;
 
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
+import com.salesianostriana.dam.campusswap.entidades.Valoracion;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioValoracion;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
@@ -33,5 +36,13 @@ public class ServicioValoracion {
         repositorioUsuario.save(usuario);
         return media;
 
+    }
+
+    public Page<Valoracion> obtenerValoraciones(Pageable pageable, String usuarioId) {
+
+        Usuario usuario = repositorioUsuario.findById(UUID.fromString(usuarioId))
+                .orElseThrow(()-> new NoSuchElementException("No se ha encontrado el usuario con id: " +usuarioId));
+
+        return repositorioValoracion.findByEvaluadoId(UUID.fromString(usuarioId),pageable);
     }
 }
