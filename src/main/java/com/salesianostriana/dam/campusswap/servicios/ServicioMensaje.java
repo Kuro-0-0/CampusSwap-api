@@ -6,13 +6,13 @@ import com.salesianostriana.dam.campusswap.repositorios.RepositorioMensaje;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.data.domain.Page;
+import lombok.extern.java.Log;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
 
-
-@CommonsLog
+@Log
 @Service
 @RequiredArgsConstructor
 public class ServicioMensaje {
