@@ -3,6 +3,8 @@ package com.salesianostriana.dam.campusswap.entidades.extras.dtos.valoracion;
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.Valoracion;
+import com.salesianostriana.dam.campusswap.validacion.anotaciones.CheckExistenciaAnuncio;
+import com.salesianostriana.dam.campusswap.validacion.anotaciones.CheckExistenciaUsuario;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
@@ -12,7 +14,9 @@ public record ValoracionRequestDto(
     @Max(5) @Min(1)
     double puntuacion,
     String comentario,
+    @CheckExistenciaAnuncio
     Long idAnuncio,
+    @CheckExistenciaUsuario
     String idEvaluador
 ) {
     public Valoracion to() {

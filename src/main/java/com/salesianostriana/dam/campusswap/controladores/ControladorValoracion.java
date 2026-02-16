@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -229,6 +230,26 @@ public class ControladorValoracion {
                     }
             )
     )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Ha ocurrido un error inesperado",
+                                                "instance": "/api/v1/valoraciones",
+                                                "status": 500,
+                                                "title": "Error inesperado."
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
     public ResponseEntity<ValoracionResponseDto> crearValoracion(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Datos necesarios para crear una valoración",
@@ -250,7 +271,7 @@ public class ControladorValoracion {
                             }
                     )
             )
-            @RequestBody ValoracionRequestDto valoracionRequestDto
+            @Valid @RequestBody ValoracionRequestDto valoracionRequestDto
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 ValoracionResponseDto.of(
