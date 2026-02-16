@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/valoraciones")
+@Tag(
+        name = "Controlador para la gestión de valoraciones",
+        description = "Operaciones relacionadas con las valoraciones de los usuarios"
+)
 public class ControladorValoracion {
 
     private final ServicioValoracion servicioValoracion;
@@ -68,8 +73,8 @@ public class ControladorValoracion {
             description = "Usuario no encontrado",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = ProblemDetail.class, examples = "Usuario no encontrado"),
-            examples = {
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
                             @ExampleObject(
                                     value = """
                                             {
@@ -90,7 +95,7 @@ public class ControladorValoracion {
             description = "El usuario no tiene valoraciones",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = ProblemDetail.class, examples = "El usuario no tiene valoraciones"),
+                    schema = @Schema(implementation = ProblemDetail.class),
                     examples = {
                             @ExampleObject(
                                     value = """
