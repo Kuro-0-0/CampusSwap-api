@@ -2,11 +2,13 @@ package com.salesianostriana.dam.campusswap.servicios;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Categoria;
+import com.salesianostriana.dam.campusswap.entidades.Reporte;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
 import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioCategoria;
+import com.salesianostriana.dam.campusswap.repositorios.RepositorioReporte;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,7 @@ public class ServicioAnuncio {
     private final RepositorioAnuncio repositorioAnuncio;
     private final RepositorioUsuario repositorioUsuario;
     private final RepositorioCategoria repositorioCategoria;
+    private final RepositorioReporte repositorioReporte;
 
     public Anuncio crearAnuncio(Anuncio anuncio) {
         Usuario usuario = repositorioUsuario.findById(anuncio.getUsuario().getId()).orElseThrow(() -> new NoSuchElementException("Usuario con ID " + anuncio.getUsuario().getId() + " no encontrado"));
@@ -93,4 +96,26 @@ public class ServicioAnuncio {
 
 
     }
+
+    public Reporte reportarAnuncio(Long anuncioId, Reporte reporte) {
+        Anuncio anuncio = repositorioAnuncio.findById(anuncioId).orElseThrow(() -> new NoSuchElementException("No se ha encontrado el anuncio con id: " + anuncioId));
+        Usuario usuario = repositorioUsuario.findById(reporte.getUsuario().getId()).orElseThrow(() -> new NoSuchElementException("No se ha encontrado el usuario con id: " + reporte.getUsuario().getId().toString()));
+
+        if(repositorioReporte.findByAnuncioIdAndUsuarioId(anuncio.getId(), usuario.getId()).isPresent()){
+            throw new IllegalStateException("Ya has reportado este anuncio");
+        }
+
+        if (anuncio.getEstado().equals(Estado.CERRADO)){
+            throw new IllegalStateException("No se pueden reportar anuncios cerrados");
+        }
+
+        if (anuncio.getUsuario().equals(usuario)){
+            throw new IllegalStateException("No se pueden reportar tus propios anuncios");
+        }
+
+        reporte.setAnuncio(anuncio);
+        reporte.setUsuario(usuario);
+        return repositorioReporte.save(reporte);
+    }
+
 }
