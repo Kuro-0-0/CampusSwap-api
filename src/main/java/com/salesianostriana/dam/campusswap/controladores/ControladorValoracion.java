@@ -148,10 +148,10 @@ public class ControladorValoracion {
     @GetMapping("/usuario/{usuarioId}")
     @ApiResponse(
             responseCode = "200",
-            description = "Valoraciones obtenidos correctamente",
+            description = "Valoraciones obtenidas correctamente",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = ValoracionResponseDto.class),
+                    schema = @Schema(implementation = Page.class),
                     examples = {
                             @ExampleObject(
                                     value = """

@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -44,6 +43,6 @@ public class ServicioValoracion {
         Usuario usuario = repositorioUsuario.findById(UUID.fromString(usuarioId))
                 .orElseThrow(()-> new NoSuchElementException("No se ha encontrado el usuario con id: "+usuarioId));
 
-        return repositorioValoracion.findByEvaluadorId(UUID.fromString(usuarioId),pageable);
+        return repositorioValoracion.findByEvaluadoId(UUID.fromString(usuarioId),pageable);
     }
 }

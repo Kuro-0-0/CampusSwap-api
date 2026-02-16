@@ -22,8 +22,8 @@ public interface RepositorioValoracion extends JpaRepository<Valoracion, Long>, 
             """)
     Double calcularMediaValoracionesUsuario(@Param("usuarioId") UUID usuarioId);
 
-    @EntityGraph(attributePaths = {"evaluador","anuncio"})
-    Page<Valoracion> findByEvaluadorId(UUID usuarioId, Pageable pageable);
+    @EntityGraph(attributePaths = {"evaluado","anuncio"})
+    Page<Valoracion> findByEvaluadoId(UUID usuarioEvaluadoId, Pageable pageable);
 
 
 }
