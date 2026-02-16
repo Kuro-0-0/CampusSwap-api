@@ -39,26 +39,6 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Anuncio> anuncios = new ArrayList<>();
 
-    @Builder.Default
-    @OneToMany(mappedBy = "evaluador", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Valoracion> valoracionesEnviadas = new ArrayList<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "evaluado", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Valoracion> valoracionesRecibidas = new ArrayList<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "usuario", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Favorito> favoritos = new ArrayList<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "emisor", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Mensaje> mensajesEnviados = new ArrayList<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "receptor", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Mensaje> mensajesRecibidos = new ArrayList<>();
-
     public void agregarAnuncio(Anuncio anuncio) {
         anuncios.add(anuncio);
         anuncio.setUsuario(this);
