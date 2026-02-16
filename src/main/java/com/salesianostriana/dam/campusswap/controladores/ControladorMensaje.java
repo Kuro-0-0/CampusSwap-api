@@ -70,6 +70,26 @@ public class ControladorMensaje {
             )
     )
     @ApiResponse(
+            responseCode = "404",
+            description = "Anuncio no encontrado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se ha encontrado el anuncio con id: 1231234",
+                                                "instance": "/api/v1/mensajes/1231234",
+                                                "status": 404,
+                                                "title": "Recurso no encontrado"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
             responseCode = "500",
             description = "Error interno del servidor",
             content = @Content(
