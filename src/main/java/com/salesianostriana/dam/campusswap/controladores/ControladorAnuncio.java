@@ -1,9 +1,12 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
+import com.salesianostriana.dam.campusswap.entidades.Reporte;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.BorrarAnuncioRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioResponseDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.reporte.ReporteRequestDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.reporte.ReporteResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.ServicioAnuncio;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -543,7 +546,7 @@ public class ControladorAnuncio {
                             examples = {
                                     @ExampleObject(
                                             value = """
-                                                    "6ac890d0-8ee2-4967-8bb7-cfa8b84376bc"
+                                                        "6e44a229-0400-4903-9f58-11c63a1dc31a"
                                                     """
                                     )
                             }
@@ -644,5 +647,119 @@ public class ControladorAnuncio {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @PostMapping("/{id}/reportar")
+    @ApiResponse(
+            responseCode = "201",
+            description = "Anuncio reportado correctamente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ReporteResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "id": 1,
+                                                "motivo": "INAPROPIADO",
+                                                "anuncioId": 5,
+                                                "usuarioId": "6ac890d0-8ee2-4967-8bb7-cfa8b84376bc"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Recurso no encontrado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se ha encontrado el anuncio con id: 1",
+                                                "instance": "/api/v1/anuncios/1/reportar",
+                                                "status": 404,
+                                                "title": "Recurso no encontrado"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "409",
+            description = "Conflicto",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se pueden reportar anuncios cerrados",
+                                                "instance": "/api/v1/anuncios/1/reportar",
+                                                "status": 409,
+                                                "title": "Estado no válido"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Ha ocurrido un error inesperado",
+                                                "instance": "/api/v1/anuncios/1/reportar",
+                                                "status": 500,
+                                                "title": "Error inesperado."
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @Operation(
+            summary = "Reportar un anuncio",
+            description = "Permite reportar un anuncio por un motivo específico."
+    )
+    public ResponseEntity<ReporteResponseDto> reportarAnuncio(
+            @Parameter(
+                    description = "ID del anuncio a reportar",
+                    example = "1",
+                    required = true
+            ) @PathVariable Long id,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "DTO con los datos para reportar el anuncio",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ReporteRequestDto.class),
+                            examples = {
+                                    @ExampleObject(
+                                            value = """
+                                                    {
+                                                        "motivo": "SPAM",
+                                                        "usuarioId": "6ac890d0-8ee2-4967-8bb7-cfa8b84376bc"
+                                                    }
+                                                    """
+                                    )
+                            }
 
+                    )
+            )
+            @Valid @RequestBody ReporteRequestDto dto
+    ){
+        Reporte nuevoReporte = ReporteRequestDto.toEntity(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ReporteResponseDto.from(servicioAnuncio.reportarAnuncio(id ,nuevoReporte)));
+    }
 }
