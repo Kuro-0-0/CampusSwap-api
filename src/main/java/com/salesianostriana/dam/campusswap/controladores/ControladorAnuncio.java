@@ -546,7 +546,7 @@ public class ControladorAnuncio {
                             examples = {
                                     @ExampleObject(
                                             value = """
-                                                    "6ac890d0-8ee2-4967-8bb7-cfa8b84376bc"
+                                                        "6e44a229-0400-4903-9f58-11c63a1dc31a"
                                                     """
                                     )
                             }
@@ -701,7 +701,7 @@ public class ControladorAnuncio {
                                                 "detail": "No se pueden reportar anuncios cerrados",
                                                 "instance": "/api/v1/anuncios/1/reportar",
                                                 "status": 409,
-                                                "title": "Estado inválido"
+                                                "title": "Estado no válido"
                                             }
                                             """
                             )
@@ -747,6 +747,10 @@ public class ControladorAnuncio {
                             examples = {
                                     @ExampleObject(
                                             value = """
+                                                    {
+                                                        "motivo": "SPAM",
+                                                        "usuarioId": "6ac890d0-8ee2-4967-8bb7-cfa8b84376bc"
+                                                    }
                                                     """
                                     )
                             }
