@@ -6,15 +6,12 @@ import com.salesianostriana.dam.campusswap.repositorios.RepositorioValoracion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ValoracionServicio {
+public class ServicioValoracion {
 
 
     private final RepositorioValoracion repositorioValoracion;
@@ -28,6 +25,9 @@ public class ValoracionServicio {
                 .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
 
         Double media = repositorioValoracion.calcularMediaValoracionesUsuario(usuario.getId());
+
+        if(media == null)
+            new IllegalStateException("El usuario no tiene valoraciones");
 
         usuario.setReputacionMedia(media);
         repositorioUsuario.save(usuario);
