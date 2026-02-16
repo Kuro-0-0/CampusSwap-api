@@ -7,16 +7,18 @@ import com.salesianostriana.dam.campusswap.validacion.anotaciones.CheckExistenci
 import com.salesianostriana.dam.campusswap.validacion.anotaciones.CheckExistenciaUsuario;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
 public record ValoracionRequestDto(
-    @Max(5) @Min(1)
+    @Max(value = 5, message = "La puntuación no puede ser mayor que 5")
+    @Min(value = 1, message = "La puntuación no puede ser menor que 1")
     double puntuacion,
     String comentario,
-    @CheckExistenciaAnuncio
+    @NotNull @CheckExistenciaAnuncio
     Long idAnuncio,
-    @CheckExistenciaUsuario
+    @NotNull @CheckExistenciaUsuario
     String idEvaluador
 ) {
     public Valoracion to() {

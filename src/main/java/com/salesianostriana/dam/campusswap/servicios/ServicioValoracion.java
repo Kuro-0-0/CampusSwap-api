@@ -51,8 +51,7 @@ public class ServicioValoracion {
         if (!anuncio.getEstado().equals(Estado.CERRADO))
             throw new IllegalStateException("Solo se pueden valorar anuncios cerrados");
 
-        Usuario evaluado = repositorioUsuario.findById(anuncio.getUsuario().getId())
-                .orElseThrow(() -> new NoSuchElementException("No se ha encontrado el usuario evaluado con ID: " + valoracion.getEvaluado().getId()));
+        Usuario evaluado = anuncio.getUsuario();
 
         Usuario evaluador = repositorioUsuario.findById(valoracion.getEvaluador().getId())
                 .orElseThrow(() -> new NoSuchElementException("No se ha encontrado el usuario evaluador con ID: " + valoracion.getEvaluador().getId()));

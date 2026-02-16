@@ -1,6 +1,5 @@
 package com.salesianostriana.dam.campusswap.validacion.anotaciones;
 
-import com.salesianostriana.dam.campusswap.validacion.validadores.ValidadorExistenciaAnuncio;
 import com.salesianostriana.dam.campusswap.validacion.validadores.ValidadorExistenciaUsuario;
 import jakarta.validation.Constraint;
 

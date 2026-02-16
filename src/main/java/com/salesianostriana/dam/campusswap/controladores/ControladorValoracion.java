@@ -1,9 +1,7 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
-import com.salesianostriana.dam.campusswap.entidades.Valoracion;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.valoracion.CrearValoracionResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.valoracion.ValoracionRequestDto;
-import com.salesianostriana.dam.campusswap.entidades.extras.dtos.valoracion.ValoracionResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.valoracion.ValoracionResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.ServicioValoracion;
 import io.swagger.v3.oas.annotations.Operation;
