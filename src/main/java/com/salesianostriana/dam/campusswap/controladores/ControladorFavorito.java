@@ -205,7 +205,7 @@ public class ControladorFavorito {
     @GetMapping
     @Operation(
             summary = "Listar favoritos",
-            description = "Obtiene una lista paginada de los favoritos. Se pueden aplicar filtros opcionales para obtener favoritos de un usuario específico o relacionados con un anuncio específico."
+            description = "Obtiene una lista paginada de los favoritos."
     )
     @ApiResponse(
             responseCode = "200",
@@ -251,8 +251,9 @@ public class ControladorFavorito {
                             @ExampleObject(
                                     value = """
                                             {
-                                                "detail": "Ha ocurrido un error inesperado",
+                                                "detail": "Ha ocurrido un error inesperado", 
                                                 "instance": "/api/v1/favoritos",
+                                                "tile": "Error interno del servidor",
                                                 "status": 500,
                                             }
                                             """
