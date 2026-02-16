@@ -32,7 +32,6 @@ public class ServicioAnuncio {
 
         anuncio.setEstado(Estado.ACTIVO);
         usuario.agregarAnuncio(anuncio);
-        categoria.addAnuncio(anuncio);
         repositorioCategoria.save(categoria);
         repositorioUsuario.save(usuario);
         return repositorioAnuncio.save(anuncio);
@@ -51,7 +50,6 @@ public class ServicioAnuncio {
         if (original.getEstado().equals(Estado.CERRADO))
             throw new IllegalStateException("No se pueden modificar anuncios cerrados");
 
-        categoria.addAnuncio(original);
         repositorioCategoria.save(categoria);
 
         return repositorioAnuncio.save(original.modificar(anuncio));
