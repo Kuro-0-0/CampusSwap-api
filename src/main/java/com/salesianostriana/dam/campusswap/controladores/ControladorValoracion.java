@@ -1,10 +1,13 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
 import com.salesianostriana.dam.campusswap.entidades.Valoracion;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.valoracion.CrearValoracionResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.valoracion.ValoracionRequestDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.valoracion.ValoracionResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.valoracion.ValoracionResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.ServicioValoracion;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,6 +16,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -139,8 +146,120 @@ public class ControladorValoracion {
 
         return ResponseEntity.ok(media);
 
+    }
+
+    @GetMapping("/usuario/{usuarioId}")
+    @ApiResponse(
+            responseCode = "200",
+            description = "Valoraciones obtenidas correctamente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Page.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                             {
+                                                 "content": [
+                                                     {
+                                                         "id": 1,
+                                                         "puntuacion": 5.0,
+                                                         "comentario": "El libro estaba impecable, tal como decía el anuncio. Carlos es muy amable.",
+                                                         "fecha": "2026-02-16 20:16:49",
+                                                         "evaluadorNombre": "Laura Compradora",
+                                                         "fotoPerfilEvaluador": "laura.jpg",
+                                                         "anuncioTitulo": "Clean Code - Robert C. Martin"
+                                                     }
+                                                 ],
+                                                 "page": {
+                                                     "size": 10,
+                                                     "number": 0,
+                                                     "totalElements": 1,
+                                                     "totalPages": 1
+                                                 }
+                                             }
+                                            
+                                            """
+                            )
+
+                    }
+
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "Solicitud incorrecta",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                  "detail": "UUID string too large",
+                                                  "instance": "/api/v1/valoraciones/usuario/9c9cb8c5-0a3d-4291-b96e-4c3bb4cf1ed11",
+                                                  "status": 400,
+                                                  "title": "Argumento no válido"
+                                              }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Usuario no encontrado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se ha encontrado el usuario con id: 9c9cb8c5-0a3d-4291-b96e-4c3bb4cf1ed1",
+                                                "instance": "/api/v1/valoraciones/usuario/9c9cb8c5-0a3d-4291-b96e-4c3bb4cf1ed1",
+                                                "status": 404,
+                                                "title": "Recurso no encontrado"
+                                            }
+                                            
+                                            
+                                            """
 
 
+                            )
+                    }
+
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                 "detail": "Ha ocurrido un error inesperado",
+                                                 "instance": "/api/v1/valoraciones/usuario/9c9cb8c5-0a3d-4291-b96e-4c3bb4cf1ed1",
+                                                 "status": 500,
+                                                 "title": "Error inesperado."
+                                             }
+                                            """
+                            )
+                    }
+            )
+    )
+    @Operation(
+            summary = "Obtener las valoraciones de un usuario",
+            description = "Devuelve una lista paginada de las valoraciones recibidas por un usuario específico, ordenadas por fecha de creación."
+    )
+    public ResponseEntity<Page<ValoracionResponseDto>> obtenerValoraciones(@Parameter(description = "ID UUID del usuario",example= "550e8400-e29b-41d4-a716-446655440000")
+                                                                           @PathVariable String usuarioId,
+                                                                           @Parameter(description = "Parámetros de paginación y ordenación")
+                                                                           @PageableDefault(size = 10,sort = "fecha",direction = Sort.Direction.DESC)
+                                                                           Pageable pageable){
+        return ResponseEntity.ok(servicioValoracion.obtenerValoraciones(pageable,usuarioId).map(ValoracionResponseDto::of));
     }
 
     @PostMapping
@@ -153,7 +272,7 @@ public class ControladorValoracion {
             description = "Valoración creada correctamente",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = ValoracionResponseDto.class),
+                    schema = @Schema(implementation = CrearValoracionResponseDto.class),
                     examples = {
                             @ExampleObject(
                                     value = """
@@ -250,7 +369,7 @@ public class ControladorValoracion {
                     }
             )
     )
-    public ResponseEntity<ValoracionResponseDto> crearValoracion(
+    public ResponseEntity<CrearValoracionResponseDto> crearValoracion(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Datos necesarios para crear una valoración",
                     required = true,
@@ -274,7 +393,7 @@ public class ControladorValoracion {
             @Valid @RequestBody ValoracionRequestDto valoracionRequestDto
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                ValoracionResponseDto.of(
+                CrearValoracionResponseDto.of(
                         servicioValoracion.crearValoracion(valoracionRequestDto.to())
                 )
         );

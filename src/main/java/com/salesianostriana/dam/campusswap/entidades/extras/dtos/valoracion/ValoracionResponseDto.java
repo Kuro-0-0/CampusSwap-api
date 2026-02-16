@@ -6,25 +6,24 @@ import com.salesianostriana.dam.campusswap.entidades.Valoracion;
 import java.time.LocalDateTime;
 
 public record ValoracionResponseDto(
-        double puntuacion,
+        Long id,
+        Double puntuacion,
         String comentario,
-        String nombreEvaluador,
-        String nombreEvaluado,
-        String tituloAnuncio,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd' 'HH:mm:ss")
-        LocalDateTime fecha
-
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        LocalDateTime fecha,
+        String evaluadorNombre,
+        String fotoPerfilEvaluador,
+        String anuncioTitulo
 ) {
-
-    public static ValoracionResponseDto of(Valoracion v) {
+    public static ValoracionResponseDto of(Valoracion valoracion){
         return new ValoracionResponseDto(
-                v.getPuntuacion(),
-                v.getComentario(),
-                v.getEvaluador().getNombre(),
-                v.getEvaluado().getNombre(),
-                v.getAnuncio().getTitulo(),
-                v.getFecha()
+                valoracion.getId(),
+                valoracion.getPuntuacion(),
+                valoracion.getComentario(),
+                valoracion.getFecha(),
+                valoracion.getEvaluador().getNombre(),
+                valoracion.getEvaluador().getFotoPerfil(),
+                valoracion.getAnuncio().getTitulo()
         );
     }
-
 }
