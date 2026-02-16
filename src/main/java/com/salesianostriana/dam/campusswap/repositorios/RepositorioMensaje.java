@@ -20,7 +20,7 @@ public interface RepositorioMensaje extends JpaRepository<Mensaje, Long> {
     @Query(
             "SELECT m FROM Mensaje m WHERE m.anuncio.id = :idAnuncio"
     )
-    Page<Mensaje> findAllByAnuncioId(Pageable pageable, Long idAnuncio);
+    Page<Mensaje> findAllByAnuncioId(Long idAnuncio, Pageable pageable);
 
 }
 

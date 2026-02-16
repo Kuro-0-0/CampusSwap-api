@@ -47,6 +47,8 @@ public class Anuncio {
     @OneToOne(mappedBy = "anuncio", orphanRemoval = true, fetch = FetchType.LAZY)
     private Valoracion valoracion;
 
+
+
     public Anuncio modificar(Anuncio anuncio) {
         this.titulo = anuncio.getTitulo();
         this.descripcion = anuncio.getDescripcion();
