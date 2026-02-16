@@ -22,9 +22,8 @@ public class ServicioMensaje {
 
 
     public Page<Mensaje> obtenerMensajes(Long idAnuncio, Pageable pageable) {
-        return repositorioMensaje.findAllByAnuncioId(idAnuncio, pageable);
         if (!repositorioAnuncio.existsById(idAnuncio))
             throw new NoSuchElementException("No se ha encontrado el anuncio con id: " + idAnuncio);
-        return repositorioMensaje.findAllByAnuncioId(pageable,idAnuncio);
+        return repositorioMensaje.findAllByAnuncioId(idAnuncio, pageable);
     }
 }
