@@ -4,9 +4,11 @@ package com.salesianostriana.dam.campusswap.errores;
 import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.java.Log;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.net.URI;
@@ -69,6 +71,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "Ha ocurrido un error inesperado");
         log.warning("Error class: " + ex.getClass() + ", Error message: " + ex.getMessage());
         pd.setTitle("Error inesperado.");
+        pd.setInstance(URI.create(request.getRequestURI()));
+        return pd;
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ProblemDetail handleBadRequestException(BadRequestException ex, HttpServletRequest request) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+        log.warning("Error class: " + ex.getClass() + ", Error message: " + ex.getMessage());
+        pd.setTitle("Error de solicitud.");
         pd.setInstance(URI.create(request.getRequestURI()));
         return pd;
     }
