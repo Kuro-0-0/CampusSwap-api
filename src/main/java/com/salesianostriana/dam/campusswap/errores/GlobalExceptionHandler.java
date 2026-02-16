@@ -6,8 +6,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.java.Log;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.*;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.net.URI;
@@ -51,6 +53,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         pd.setInstance(URI.create(request.getRequestURI()));
 
         return pd;
+    }
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        ProblemDetail pb = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Fallo de validacion en uno o mas argumentos");
+        pb.setType(URI.create("about:blank"));
+        pb.setTitle("Error de validación");
+
+        pb.setProperty("invalid-params", ex.getAllErrors().stream()
+                .map(ValidacionDeApiSubError::from)
+                .toList());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(pb);
     }
 
     @ExceptionHandler(IllegalStateException.class)
