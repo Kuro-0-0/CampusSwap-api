@@ -203,6 +203,63 @@ public class ControladorFavorito {
 
 
     @GetMapping
+    @Operation(
+            summary = "Listar favoritos",
+            description = "Obtiene una lista paginada de los favoritos. Se pueden aplicar filtros opcionales para obtener favoritos de un usuario específico o relacionados con un anuncio específico."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "OK - Lista de favoritos obtenida correctamente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = FavoritoResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "content": [
+                                                    {
+                                                        "nombreUsuario": "Pepe Novato",
+                                                        "tituloAnuncio": "Bicicleta de montaña Rockrider",
+                                                        "fechaFavorito": "2026-02-16T13:25:19.473785"
+                                                    },
+                                                    {
+                                                        "nombreUsuario": "Pepe Novato",
+                                                        "tituloAnuncio": "Portátil HP Victus 16GB RAM",
+                                                        "fechaFavorito": "2026-02-16T13:25:19.475755"
+                                                    }
+                                                ],
+                                                "page": {
+                                                    "size": 20,
+                                                    "number": 0,
+                                                    "totalElements": 2,
+                                                    "totalPages": 1
+                                                }
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Internal Server Error - Error al listar favoritos",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Ha ocurrido un error inesperado",
+                                                "instance": "/api/v1/favoritos",
+                                                "status": 500,
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
     public ResponseEntity<Page<FavoritoResponseDto>> listarFavoritos(Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(servicioFavorito.listarFavoritos(pageable).map(FavoritoResponseDto::of));
     }
