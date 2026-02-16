@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CatalogoService {
+public class ServicioCatalogo {
 
     private final RepositorioAnuncio repositorioAnuncio;
 
