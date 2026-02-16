@@ -4,8 +4,12 @@ import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Favorito;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
+import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioFavorito;
+import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
@@ -48,5 +52,11 @@ public class ServicioFavorito {
             throw new NotOwnedException("No puedes eliminar un favorito que no es tuyo");
 
         repositorioFavorito.delete(favorito);
+    }
+
+    public Page<Favorito> listarFavoritos(Pageable pageable) {
+
+        return repositorioFavorito.findAll(pageable);
+
     }
 }

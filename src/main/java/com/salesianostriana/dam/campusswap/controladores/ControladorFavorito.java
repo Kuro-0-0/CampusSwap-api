@@ -12,6 +12,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -198,5 +201,10 @@ public class ControladorFavorito {
         return ResponseEntity.noContent().build();
     }
 
+
+    @GetMapping
+    public ResponseEntity<Page<FavoritoResponseDto>> listarFavoritos(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(servicioFavorito.listarFavoritos(pageable).map(FavoritoResponseDto::of));
+    }
 
 }
