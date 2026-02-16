@@ -12,6 +12,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -198,5 +201,68 @@ public class ControladorFavorito {
         return ResponseEntity.noContent().build();
     }
 
+
+    @GetMapping
+    @Operation(
+            summary = "Listar favoritos",
+            description = "Obtiene una lista paginada de los favoritos."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "OK - Lista de favoritos obtenida correctamente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = FavoritoResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "content": [
+                                                    {
+                                                        "nombreUsuario": "Pepe Novato",
+                                                        "tituloAnuncio": "Bicicleta de montaña Rockrider",
+                                                        "fechaFavorito": "2026-02-16T13:25:19.473785"
+                                                    },
+                                                    {
+                                                        "nombreUsuario": "Pepe Novato",
+                                                        "tituloAnuncio": "Portátil HP Victus 16GB RAM",
+                                                        "fechaFavorito": "2026-02-16T13:25:19.475755"
+                                                    }
+                                                ],
+                                                "page": {
+                                                    "size": 20,
+                                                    "number": 0,
+                                                    "totalElements": 2,
+                                                    "totalPages": 1
+                                                }
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Internal Server Error - Error al listar favoritos",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Ha ocurrido un error inesperado", 
+                                                "instance": "/api/v1/favoritos",
+                                                "tile": "Error interno del servidor",
+                                                "status": 500,
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    public ResponseEntity<Page<FavoritoResponseDto>> listarFavoritos(Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(servicioFavorito.listarFavoritos(pageable).map(FavoritoResponseDto::of));
+    }
 
 }
