@@ -80,7 +80,30 @@ public class ControladorValoracion {
                                             }
                                             """
                             )
+
             }
+
+            )
+    )
+    @ApiResponse(
+            responseCode = "409",
+            description = "El usuario no tiene valoraciones",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class, examples = "El usuario no tiene valoraciones"),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                  "detail": "El usuario no tiene valoraciones",
+                                                   "instance": "/api/v1/valoraciones/76f2606b-b61e-4067-909f-c0de543ff05f",
+                                                   "status": 409,
+                                                   "title": "Estado no válido"
+                                            }
+                                            """
+
+                            )
+                    }
             )
     )
     @ApiResponse(

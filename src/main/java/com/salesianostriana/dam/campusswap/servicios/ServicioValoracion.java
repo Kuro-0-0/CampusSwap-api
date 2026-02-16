@@ -22,12 +22,12 @@ public class ServicioValoracion {
     public Double calcularMediaValoraciones(String usuarioId) {
 
         Usuario usuario = repositorioUsuario.findById(UUID.fromString(usuarioId))
-                .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado"));
+                .orElseThrow(() -> new NoSuchElementException("No se ha encontrado el usuario con ID: " + usuarioId));
 
         Double media = repositorioValoracion.calcularMediaValoracionesUsuario(usuario.getId());
 
         if(media == null)
-            new IllegalStateException("El usuario no tiene valoraciones");
+            throw  new  IllegalStateException("El usuario no tiene valoraciones");
 
         usuario.setReputacionMedia(media);
         repositorioUsuario.save(usuario);
