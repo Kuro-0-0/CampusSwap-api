@@ -1,29 +1,17 @@
 package com.salesianostriana.dam.campusswap.servicios;
 
-<<<<<<< F06.1
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Mensaje;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioMensaje;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
-=======
-import com.salesianostriana.dam.campusswap.entidades.Mensaje;
-import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
-import com.salesianostriana.dam.campusswap.repositorios.RepositorioMensaje;
->>>>>>> main
 import lombok.RequiredArgsConstructor;
-import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.data.domain.Page;
 import lombok.extern.java.Log;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-<<<<<<< F06.1
 import java.util.NoSuchElementException;
-=======
->>>>>>> main
 
 @Log
 @Service
@@ -32,7 +20,6 @@ public class ServicioMensaje {
 
     private final RepositorioMensaje repositorioMensaje;
     private final RepositorioAnuncio repositorioAnuncio;
-<<<<<<< F06.1
     private final RepositorioUsuario repositorioUsuario;
 
     public Mensaje enviarMensaje(Mensaje mensaje) {
@@ -46,9 +33,6 @@ public class ServicioMensaje {
 
         return repositorioMensaje.save(mensaje);
     }
-=======
-
->>>>>>> main
 
     public Page<Mensaje> obtenerMensajes(Long idAnuncio, Pageable pageable) {
         if (!repositorioAnuncio.existsById(idAnuncio))

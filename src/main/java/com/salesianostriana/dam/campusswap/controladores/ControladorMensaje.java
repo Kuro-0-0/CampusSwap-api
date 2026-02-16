@@ -1,11 +1,8 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
-<<<<<<< F06.1
 import com.salesianostriana.dam.campusswap.entidades.Mensaje;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.EnviarMensajeRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.MensajeResponseDto;
-=======
->>>>>>> main
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.ListarMensajeResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.ServicioMensaje;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-<<<<<<< F06.1
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,12 +21,6 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-=======
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ProblemDetail;
->>>>>>> main
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,7 +37,6 @@ public class ControladorMensaje {
 
     private final ServicioMensaje servicio;
 
-<<<<<<< F06.1
     @PostMapping
     @ApiResponse(
             responseCode = "201",
@@ -159,8 +148,6 @@ public class ControladorMensaje {
         Mensaje mensaje = servicio.enviarMensaje(EnviarMensajeRequestDto.from(dto));
         return ResponseEntity.status(HttpStatus.CREATED).body(MensajeResponseDto.of(mensaje));
     }
-=======
->>>>>>> main
 
     @GetMapping("/{idAnuncio}")
     @Operation(
