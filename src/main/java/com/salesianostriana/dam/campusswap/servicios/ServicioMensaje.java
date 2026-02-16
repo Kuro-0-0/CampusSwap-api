@@ -18,6 +18,6 @@ public class ServicioMensaje {
 
 
     public Page<Mensaje> obtenerMensajes(Long idAnuncio, Pageable pageable) {
-        return repositorioMensaje.findAllByAnuncioId(pageable,idAnuncio);
+        return repositorioMensaje.findAllByAnuncioId(idAnuncio, pageable);
     }
 }
