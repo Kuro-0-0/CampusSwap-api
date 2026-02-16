@@ -20,5 +20,8 @@ public interface RepositorioValoracion extends JpaRepository<Valoracion, Long>, 
     Double calcularMediaValoracionesUsuario(@Param("usuarioId") UUID usuarioId);
 
 
-
+    @Query(
+            "SELECT COUNT(v) > 0 FROM Valoracion v WHERE v.anuncio.id = :id"
+    )
+    boolean existsByAnuncioId(Long id);
 }
