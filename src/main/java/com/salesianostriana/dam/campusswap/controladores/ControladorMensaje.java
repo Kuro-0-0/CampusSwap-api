@@ -1,5 +1,8 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
+import com.salesianostriana.dam.campusswap.entidades.Mensaje;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.EnviarMensajeRequestDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.MensajeResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.ListarMensajeResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.ServicioMensaje;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,10 +12,15 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +37,117 @@ public class ControladorMensaje {
 
     private final ServicioMensaje servicio;
 
+    @PostMapping
+    @ApiResponse(
+            responseCode = "201",
+            description = "Mensaje enviado correctamente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = MensajeResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "id": 3,
+                                                "contenido": "mensaje",
+                                                "fechaEnvio": "2026-02-16T17:01:15.852592700",
+                                                "anuncioId": 1,
+                                                "emisorId": "7e631478-7d11-48fd-9e4f-7d18a3bb753a",
+                                                "receptorId": "e7c93db8-f0be-4692-9e55-68529a0533fd"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "Solicitud inválida",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Argumento no válido",
+                                                "instance": "/api/v1/mensajes",
+                                                "status": 400,
+                                                "title": "Argumento no válido"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Recurso no encontrado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se ha encontrado la entidad con id: X",
+                                                "instance": "/api/v1/mensajes",
+                                                "status": 404,
+                                                "title": "Recurso no encontrado"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Ha ocurrido un error inesperado",
+                                                "instance": "/api/v1/mensajes",
+                                                "status": 500,
+                                                "title": "Error inesperado."
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @Operation(
+            summary = "Enviar mensaje",
+            description = "Permite a un usuario enviar un mensaje a otro usuario relacionado con un anuncio específico."
+    )
+    public ResponseEntity<MensajeResponseDto> enviarMensaje(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "DTO con los datos para enviar un mensaje",
+            required = true,
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = EnviarMensajeRequestDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "contenido": "mensaje",
+                                                "anuncioId": 1,
+                                                "emisorId": "d5e7f9e8-e0fb-4482-9b38-e24882e1a263",
+                                                "receptorId": "78aff3fb-7752-44ae-9dcd-a9d57605fc68"
+                                            }
+                                            """
+                            )
+                    }
+
+            )
+    ) @RequestBody EnviarMensajeRequestDto dto) {
+        Mensaje mensaje = servicio.enviarMensaje(EnviarMensajeRequestDto.from(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(MensajeResponseDto.of(mensaje));
+    }
 
     @GetMapping("/{idAnuncio}")
     @Operation(
