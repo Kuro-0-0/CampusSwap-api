@@ -47,11 +47,6 @@ public class Anuncio {
     @OneToOne(mappedBy = "anuncio", orphanRemoval = true, fetch = FetchType.LAZY)
     private Valoracion valoracion;
 
-
-    @OneToMany(mappedBy = "anuncio",orphanRemoval = true,fetch = FetchType.LAZY)
-    @Builder.Default
-    private List<Mensaje> mensajes = new ArrayList<>();
-
     public Anuncio modificar(Anuncio anuncio) {
         this.titulo = anuncio.getTitulo();
         this.descripcion = anuncio.getDescripcion();
