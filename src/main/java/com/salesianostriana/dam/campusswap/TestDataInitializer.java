@@ -117,11 +117,15 @@ class TestDataInitializer {
                 .contenido("Hola Carlos, ¿sigue disponible el portátil? ¿El precio es negociable?")
                 .fechaEnvio(LocalDateTime.now().minusDays(1))
                 .anuncio(aPortatil)
+                .emisor(uComprador)
+                .receptor(uVendedor)
                 .build();
 
         Mensaje m2 = Mensaje.builder()
                 .contenido("Hola Laura, sí, sigue disponible. Podría bajarlo a 630€ si vienes hoy.")
                 .fechaEnvio(LocalDateTime.now().minusDays(1).plusHours(1))
+                .emisor(uVendedor)
+                .receptor(uComprador)
                 .anuncio(aPortatil)
                 .build();
 

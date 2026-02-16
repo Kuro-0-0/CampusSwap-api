@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.*;
 )
 public class ControladorAnuncio {
 
-    private final ServicioAnuncio servicio;
+    private final ServicioAnuncio servicioAnuncio;
 
     @PostMapping
     @ApiResponse(
@@ -150,7 +150,7 @@ public class ControladorAnuncio {
     ) @RequestBody() AnuncioRequestDto dto) {
         Anuncio nuevoAnuncio = dto.toAnuncio();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(AnuncioResponseDto.of(servicio.crearAnuncio(nuevoAnuncio)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(AnuncioResponseDto.of(servicioAnuncio.crearAnuncio(nuevoAnuncio)));
     }
 
     @PutMapping("/{id}")
@@ -280,7 +280,7 @@ public class ControladorAnuncio {
             @Valid @RequestBody AnuncioRequestDto dto
     ){
         return ResponseEntity.status(HttpStatus.OK).body(AnuncioResponseDto.of(
-            servicio.editarAnuncio(id, dto.toAnuncio(),
+            servicioAnuncio.editarAnuncio(id, dto.toAnuncio(),
                     dto.usuarioId() // Cuando haya seguridad se deberá obtener el ID del usuario autenticado en lugar de recibirlo en el DTO
             )
         ));
@@ -412,7 +412,7 @@ public class ControladorAnuncio {
             description = "Permite obtener una lista paginada de los anuncios publicados por un usuario específico."
     )
     public ResponseEntity<Page<AnuncioResponseDto>> obtenerAnuncios(@PathVariable String usuarioId, Pageable pageable) {
-        return ResponseEntity.ok(servicio.obtenerAnuncios(pageable,usuarioId).map(AnuncioResponseDto::of));
+        return ResponseEntity.ok(servicioAnuncio.obtenerAnuncios(pageable,usuarioId).map(AnuncioResponseDto::of));
     }
 
     @Operation(
@@ -553,7 +553,7 @@ public class ControladorAnuncio {
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 AnuncioResponseDto.of(
-                        servicio.alternarEstado(id, usuarioId)
+                        servicioAnuncio.alternarEstado(id, usuarioId)
                 )
         );
     }
@@ -640,7 +640,7 @@ public class ControladorAnuncio {
                                                      required = true
                                              )
                                              @PathVariable Long id){
-        servicio.borrarAnuncio(id,dto.usuarioId());
+        servicioAnuncio.borrarAnuncio(id,dto.usuarioId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
