@@ -11,8 +11,8 @@ public record ValoracionResponseDto(
         String comentario,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime fecha,
-        String evaluadoNombre,
-        String fotoPerfilEvaluado,
+        String evaluadorNombre,
+        String fotoPerfilEvaluador,
         String anuncioTitulo
 ) {
     public static ValoracionResponseDto of(Valoracion valoracion){
@@ -21,8 +21,8 @@ public record ValoracionResponseDto(
                 valoracion.getPuntuacion(),
                 valoracion.getComentario(),
                 valoracion.getFecha(),
-                valoracion.getEvaluado().getNombre(),
-                valoracion.getEvaluado().getFotoPerfil(),
+                valoracion.getEvaluador().getNombre(),
+                valoracion.getEvaluador().getFotoPerfil(),
                 valoracion.getAnuncio().getTitulo()
         );
     }

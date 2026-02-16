@@ -41,7 +41,7 @@ public class ServicioValoracion {
     public Page<Valoracion> obtenerValoraciones(Pageable pageable, String usuarioId) {
 
         Usuario usuario = repositorioUsuario.findById(UUID.fromString(usuarioId))
-                .orElseThrow(()-> new NoSuchElementException("No se ha encontrado el usuario con id: "+usuarioId));
+                .orElseThrow(()-> new NoSuchElementException("No se ha encontrado el usuario con id: " +usuarioId));
 
         return repositorioValoracion.findByEvaluadoId(UUID.fromString(usuarioId),pageable);
     }
