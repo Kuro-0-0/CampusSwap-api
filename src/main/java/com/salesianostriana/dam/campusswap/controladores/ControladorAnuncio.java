@@ -124,7 +124,7 @@ public class ControladorAnuncio {
             description = "Permite crear un nuevo anuncio en el sistema."
     )
     public ResponseEntity<AnuncioResponseDto> crearAnuncio(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "DTO con los datos para editar el anuncio",
+            description = "DTO con los datos para crear el anuncio",
             required = true,
             content = @Content(
                     mediaType = "application/json",
