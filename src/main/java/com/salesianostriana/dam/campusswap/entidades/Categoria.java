@@ -24,16 +24,4 @@ public class Categoria {
 
     private String descripcion;
 
-
-    @Builder.Default
-    @ToString.Exclude
-    @OneToMany(mappedBy = "categoria",orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Anuncio> anuncios = new ArrayList<>();
-
-    public void addAnuncio(Anuncio anuncio) {
-        anuncios.add(anuncio);
-        anuncio.setCategoria(this);
-    }
-
-
 }
