@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @EmisorReceptorIguales
 public record EnviarMensajeRequestDto(
-        @NotBlank(message = "El contenido no puede estar) vacío")
+        @NotBlank(message = "El contenido no puede estar vacío")
         String contenido,
         @NotNull(message = "El ID del anuncio no puede ser nulo")
         Long anuncioId,
@@ -25,7 +25,7 @@ public record EnviarMensajeRequestDto(
                  .contenido(dto.contenido())
                  .anuncio(Anuncio.builder().id(dto.anuncioId()).build())
                  .emisor(Usuario.builder().id(UUID.fromString(dto.emisorId())).build())
-                 .receptor(Usuario.builder().id(UUID.fromString(dto.receptorId)).build())
+                 .receptor(Usuario.builder().id(UUID.fromString(dto.receptorId())).build())
                  .build();
      }
 }

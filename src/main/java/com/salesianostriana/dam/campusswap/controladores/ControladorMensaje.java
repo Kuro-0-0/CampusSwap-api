@@ -1,8 +1,6 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
 import com.salesianostriana.dam.campusswap.entidades.Mensaje;
-import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioRequestDto;
-import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.EnviarMensajeRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.MensajeResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.ServicioMensaje;
@@ -15,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,15 +59,15 @@ public class ControladorMensaje {
             description = "Solicitud inválida",
             content = @Content(
                     mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
                     examples = {
                             @ExampleObject(
                                     value = """
                                             {
-                                                "timestamp": "2024-06-16T17:01:15.852592700",
+                                                "detail": "Argumento no válido",
+                                                "instance": "/api/v1/mensajes",
                                                 "status": 400,
-                                                "error": "Bad Request",
-                                                "message": "El contenido no puede estar vacío",
-                                                "path": "/api/v1/mensajes"
+                                                "title": "Argumento no válido"
                                             }
                                             """
                             )
@@ -80,15 +79,15 @@ public class ControladorMensaje {
             description = "Recurso no encontrado",
             content = @Content(
                     mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
                     examples = {
                             @ExampleObject(
                                     value = """
                                             {
-                                                "timestamp": "2024-06-16T17:01:15.852592700",
+                                                "detail": "No se ha encontrado la entidad con id: X",
+                                                "instance": "/api/v1/mensajes",
                                                 "status": 404,
-                                                "error": "Not Found",
-                                                "message": "Anuncio no encontrado",
-                                                "path": "/api/v1/mensajes"
+                                                "title": "Recurso no encontrado"
                                             }
                                             """
                             )
@@ -100,15 +99,15 @@ public class ControladorMensaje {
             description = "Error interno del servidor",
             content = @Content(
                     mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
                     examples = {
                             @ExampleObject(
                                     value = """
                                             {
-                                                "timestamp": "2024-06-16T17:01:15.852592700",
+                                                "detail": "Ha ocurrido un error inesperado",
+                                                "instance": "/api/v1/mensajes",
                                                 "status": 500,
-                                                "error": "Internal Server Error",
-                                                "message": "Error al enviar el mensaje",
-                                                "path": "/api/v1/mensajes"
+                                                "title": "Error inesperado."
                                             }
                                             """
                             )
