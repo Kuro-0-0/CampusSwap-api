@@ -18,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -117,6 +118,45 @@ public class ControladorCatalogo {
 
     )
     @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado. Se requiere autenticación para acceder a este recurso.",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Acceso denegado. No se ha proporcionado un token de autenticación válido.",
+                                                "instance": "/api/v1/catalogo",
+                                                "status": 401,
+                                                "title": "No autorizado."
+                                            }
+                                            """
+                            )
+            })
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Prohibido. El usuario autenticado no tiene permisos para acceder a este recurso.",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Acceso prohibido. El usuario autenticado no tiene permisos para acceder a este recurso.",
+                                                "instance": "/api/v1/catalogo",
+                                                "status": 403,
+                                                "title": "Prohibido."
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
             responseCode = "500",
             description = "Error interno del servidor",
             content = @Content(
@@ -140,6 +180,7 @@ public class ControladorCatalogo {
             summary = "Obtener catálogo de anuncios activos",
             description = "Obtiene una página de anuncios, con opción de búsqueda por título o descripción y filtros opcionales por categoría, rango de precio, tipo de operación y estado."
     )
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USUARIO')")
     public ResponseEntity<Page<AnuncioResponseDto>> obtenerCatalogo(@PageableDefault(page = 0, size = 10, sort = "fechaPublicacion",
                                                                                 direction = Sort.Direction.DESC)Pageable pageable, @RequestParam(required = false) String q,
                                                                                 @RequestParam(required = false) Long categoriaId,
