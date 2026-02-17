@@ -4,6 +4,7 @@ package com.salesianostriana.dam.campusswap.errores;
 import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.java.Log;
+import org.springframework.security.access.AccessDeniedException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.*;
 import org.springframework.security.core.AuthenticationException;
@@ -55,6 +56,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         pd.setInstance(URI.create(request.getRequestURI()));
 
         return pd;
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ProblemDetail handleAccessDeniedException(AccessDeniedException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN,
+                ex.getMessage());
+
+        return problemDetail;
     }
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
