@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.campusswap.servicios;
+package com.salesianostriana.dam.campusswap.servicios.funciones;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioFiltroDto;
