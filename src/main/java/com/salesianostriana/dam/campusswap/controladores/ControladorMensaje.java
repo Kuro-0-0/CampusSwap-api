@@ -4,7 +4,7 @@ import com.salesianostriana.dam.campusswap.entidades.Mensaje;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.EnviarMensajeRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.MensajeResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.ListarMensajeResponseDto;
-import com.salesianostriana.dam.campusswap.servicios.ServicioMensaje;
+import com.salesianostriana.dam.campusswap.servicios.funciones.ServicioMensaje;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

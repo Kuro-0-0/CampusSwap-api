@@ -2,7 +2,7 @@ package com.salesianostriana.dam.campusswap.controladores;
 
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.favorito.FavoritoRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.favorito.FavoritoResponseDto;
-import com.salesianostriana.dam.campusswap.servicios.ServicioFavorito;
+import com.salesianostriana.dam.campusswap.servicios.funciones.ServicioFavorito;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
