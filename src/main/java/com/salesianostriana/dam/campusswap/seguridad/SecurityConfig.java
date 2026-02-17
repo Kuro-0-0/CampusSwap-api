@@ -1,10 +1,12 @@
 package com.salesianostriana.dam.campusswap.seguridad;
 
 
+import com.salesianostriana.dam.campusswap.seguridad.error.JwtAccessDeniedHandler;
+import com.salesianostriana.dam.campusswap.seguridad.error.JwtAuthenticationEntryPoint;
+import com.salesianostriana.dam.campusswap.seguridad.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -57,10 +59,7 @@ public class SecurityConfig {
                 );
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/v1/**").hasAnyRole("USER","ADMIN")
-                .requestMatchers(HttpMethod.POST,"/auth/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
         );
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
