@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 
+import lombok.extern.java.Log;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -24,6 +25,7 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
+@Log
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtAccessTokenService jwtService;
@@ -31,7 +33,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
         String token = getJwtAccessTokenFromRequest(request);
         try {
 
@@ -60,6 +61,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
             }
+
+            filterChain.doFilter(request,response);
 
         } catch (JwtException e) {
             throw new RuntimeException(e);
