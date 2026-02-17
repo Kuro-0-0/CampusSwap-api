@@ -4,9 +4,9 @@ import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.Valoracion;
 import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
-import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
-import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
-import com.salesianostriana.dam.campusswap.repositorios.RepositorioValoracion;
+import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseAnuncio;
+import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseUsuario;
+import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseValoracion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,32 +19,29 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ServicioValoracion {
 
-
-    private final RepositorioValoracion repositorioValoracion;
-    private final RepositorioUsuario  repositorioUsuario;
-    private final RepositorioAnuncio repositorioAnuncio;
+    private final ServicioBaseUsuario servicioBaseUsuario;
+    private final ServicioBaseValoracion servicioBaseValoracion;
+    private final ServicioBaseAnuncio servicioBaseAnuncio;
 
     public Double calcularMediaValoraciones(String usuarioId) {
 
-        Usuario usuario = repositorioUsuario.findById(UUID.fromString(usuarioId))
-                .orElseThrow(() -> new NoSuchElementException("No se ha encontrado el usuario con ID: " + usuarioId));
+        Usuario usuario = servicioBaseUsuario.buscarPorId(usuarioId);
 
-        Double media = repositorioValoracion.calcularMediaValoracionesUsuario(usuario.getId());
+        Double media = servicioBaseValoracion.calcularMediaValoracionesUsuario(usuario.getId());
 
         if(media == null)
             throw  new  IllegalStateException("El usuario no tiene valoraciones");
 
         usuario.setReputacionMedia(media);
-        repositorioUsuario.save(usuario);
+        servicioBaseUsuario.guardar(usuario);
         return media;
 
     }
 
     public Valoracion crearValoracion(Valoracion valoracion) {
-        Anuncio anuncio = repositorioAnuncio.findById(valoracion.getAnuncio().getId())
-                .orElseThrow(() -> new NoSuchElementException("No se ha encontrado el anuncio con ID: " + valoracion.getAnuncio().getId()));
+        Anuncio anuncio = servicioBaseAnuncio.buscarPorId(valoracion.getAnuncio().getId());
 
-        if (repositorioValoracion.existsByAnuncioId(valoracion.getAnuncio().getId()))
+        if (servicioBaseValoracion.existePorAnuncioId(valoracion.getAnuncio().getId()))
             throw new IllegalStateException("Este anuncio ya ha sido valorado");
 
         if (!anuncio.getEstado().equals(Estado.CERRADO))
@@ -52,8 +49,7 @@ public class ServicioValoracion {
 
         Usuario evaluado = anuncio.getUsuario();
 
-        Usuario evaluador = repositorioUsuario.findById(valoracion.getEvaluador().getId())
-                .orElseThrow(() -> new NoSuchElementException("No se ha encontrado el usuario evaluador con ID: " + valoracion.getEvaluador().getId()));
+        Usuario evaluador = servicioBaseUsuario.buscarPorId(valoracion.getEvaluador().getId());
 
         if (evaluado.equals(evaluador))
             throw new IllegalStateException("No puedes valorarte a ti mismo");
@@ -61,16 +57,15 @@ public class ServicioValoracion {
         valoracion.setAnuncio(anuncio);
         valoracion.setEvaluado(evaluado);
         valoracion.setEvaluador(evaluador);
-        Valoracion v =  repositorioValoracion.save(valoracion);
+        Valoracion v =  servicioBaseValoracion.guardar(valoracion);
         this.calcularMediaValoraciones(evaluado.getId().toString());
         return v;
     }
 
     public Page<Valoracion> obtenerValoraciones(Pageable pageable, String usuarioId) {
 
-        Usuario usuario = repositorioUsuario.findById(UUID.fromString(usuarioId))
-                .orElseThrow(()-> new NoSuchElementException("No se ha encontrado el usuario con id: " +usuarioId));
+        Usuario usuario = servicioBaseUsuario.buscarPorId(usuarioId);
 
-        return repositorioValoracion.findByEvaluadoId(UUID.fromString(usuarioId),pageable);
+        return servicioBaseValoracion.buscarPorEvaluadoId(UUID.fromString(usuarioId),pageable);
     }
 }
