@@ -6,6 +6,9 @@ import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioMensaje;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
+import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseAnuncio;
+import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseMensaje;
+import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseUsuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import lombok.extern.java.Log;
@@ -18,25 +21,25 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class ServicioMensaje {
 
-    private final RepositorioMensaje repositorioMensaje;
-    private final RepositorioAnuncio repositorioAnuncio;
-    private final RepositorioUsuario repositorioUsuario;
+    private final ServicioBaseMensaje servicioBaseMensaje;
+    private final ServicioBaseUsuario servicioBaseUsuario;
+    private final ServicioBaseAnuncio servicioBaseAnuncio;
 
     public Mensaje enviarMensaje(Mensaje mensaje) {
-        Usuario emisor = repositorioUsuario.findById(mensaje.getEmisor().getId()).orElseThrow(() -> new NoSuchElementException("Emisor no encontrado"));
-        Usuario receptor = repositorioUsuario.findById(mensaje.getReceptor().getId()).orElseThrow(() -> new NoSuchElementException("Receptor no encontrado"));
-        Anuncio anuncio = repositorioAnuncio.findById(mensaje.getAnuncio().getId()).orElseThrow(() -> new NoSuchElementException("Anuncio no encontrado"));
+        Usuario emisor = servicioBaseUsuario.buscarPorId(mensaje.getEmisor().getId());
+        Usuario receptor = servicioBaseUsuario.buscarPorId(mensaje.getReceptor().getId());
+        Anuncio anuncio = servicioBaseAnuncio.buscarPorId(mensaje.getAnuncio().getId());
 
         mensaje.setEmisor(emisor);
         mensaje.setReceptor(receptor);
         mensaje.setAnuncio(anuncio);
 
-        return repositorioMensaje.save(mensaje);
+        return servicioBaseMensaje.guardar(mensaje);
     }
 
     public Page<Mensaje> obtenerMensajes(Long idAnuncio, Pageable pageable) {
-        if (!repositorioAnuncio.existsById(idAnuncio))
+        if (!servicioBaseAnuncio.existePorId(idAnuncio))
             throw new NoSuchElementException("No se ha encontrado el anuncio con id: " + idAnuncio);
-        return repositorioMensaje.findAllByAnuncioId(idAnuncio, pageable);
+        return servicioBaseMensaje.buscarTodosPorAnuncioId(idAnuncio, pageable);
     }
 }
