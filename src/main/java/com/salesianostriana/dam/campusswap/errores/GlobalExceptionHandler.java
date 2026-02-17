@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.java.Log;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.*;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -97,5 +99,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return pd;
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    public ErrorResponse handleAuthenticationException(AuthenticationException ex) {
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED,
+                ex.getMessage());
+
+
+        ErrorResponse response = ErrorResponse.builder(ex, problemDetail)
+                .header("WWW-Authenticate", "Bearer")
+                .build();
+
+
+        return response;
+    }
 
 }
