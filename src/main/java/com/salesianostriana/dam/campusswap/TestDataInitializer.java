@@ -167,7 +167,7 @@ class TestDataInitializer {
                 .fotoPerfil(foto)
                 .descripcion(desc)
                 .reputacionMedia(reputacion)
-                .activo(true)
+                .enabled(true)
                 .fechaRegistro(LocalDateTime.now().minusMonths(1))
                 .build();
     }
