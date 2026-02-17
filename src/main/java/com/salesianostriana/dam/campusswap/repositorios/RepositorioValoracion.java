@@ -25,5 +25,8 @@ public interface RepositorioValoracion extends JpaRepository<Valoracion, Long>, 
     @EntityGraph(attributePaths = {"evaluado","anuncio"})
     Page<Valoracion> findByEvaluadoId(UUID usuarioEvaluadoId, Pageable pageable);
 
-
+    @Query(
+            "SELECT COUNT(v) > 0 FROM Valoracion v WHERE v.anuncio.id = :id"
+    )
+    boolean existsByAnuncioId(Long id);
 }

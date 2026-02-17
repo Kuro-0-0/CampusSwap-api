@@ -1,5 +1,7 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.valoracion.CrearValoracionResponseDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.valoracion.ValoracionRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.valoracion.ValoracionResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.ServicioValoracion;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,17 +11,16 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -259,6 +260,142 @@ public class ControladorValoracion {
         return ResponseEntity.ok(servicioValoracion.obtenerValoraciones(pageable,usuarioId).map(ValoracionResponseDto::of));
     }
 
+    @PostMapping
+    @Operation(
+            summary = "Crear una nueva valoración",
+            description = "Permite crear una nueva valoración para un anuncio cerrado."
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "Valoración creada correctamente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = CrearValoracionResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "puntuacion": 2.0,
+                                                "comentario": "Bastante desagradable el vendedor...",
+                                                "nombreEvaluador": "Laura Compradora",
+                                                "nombreEvaluado": "Carlos Vendedor",
+                                                "tituloAnuncio": "Clean Code - Robert C. Martin",
+                                                "fecha": "2026-02-16 20:52:23"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse (
+            responseCode = "400",
+            description = "Solicitud incorrecta",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Invalid UUID string: 1",
+                                                "instance": "/api/v1/valoraciones",
+                                                "status": 400,
+                                                "title": "Argumento no válido"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Recurso no encontrado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se ha encontrado el anuncio con ID: 67",
+                                                "instance": "/api/v1/valoraciones",
+                                                "status": 404,
+                                                "title": "Recurso no encontrado"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "409",
+            description = "Estado incorrecto",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Este anuncio ya ha sido valorado",
+                                                "instance": "/api/v1/valoraciones",
+                                                "status": 409,
+                                                "title": "Estado no válido"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Ha ocurrido un error inesperado",
+                                                "instance": "/api/v1/valoraciones",
+                                                "status": 500,
+                                                "title": "Error inesperado."
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    public ResponseEntity<CrearValoracionResponseDto> crearValoracion(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Datos necesarios para crear una valoración",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ValoracionRequestDto.class),
+                            examples = {
+                                    @ExampleObject(
+                                            value = """
+                                                    {
+                                                        "puntuacion" : "2",
+                                                        "comentario": "Bastante desagradable el vendedor...",
+                                                        "idAnuncio": "4",
+                                                        "idEvaluador": "2e65aadb-c876-458a-9ce6-9107fb65b409"
+                                                    }
+                                                    """
+                                    )
+                            }
+                    )
+            )
+            @Valid @RequestBody ValoracionRequestDto valoracionRequestDto
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                CrearValoracionResponseDto.of(
+                        servicioValoracion.crearValoracion(valoracionRequestDto.to())
+                )
+        );
+    }
 
 
 }

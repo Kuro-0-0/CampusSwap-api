@@ -4,7 +4,7 @@ import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
 import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioFiltroDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioResponseDto;
-import com.salesianostriana.dam.campusswap.servicios.CatalogoService;
+import com.salesianostriana.dam.campusswap.servicios.ServicioCatalogo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 )
 public class ControladorCatalogo {
 
-    private final CatalogoService catalogoService;
+    private final ServicioCatalogo catalogoService;
 
 
     @GetMapping
