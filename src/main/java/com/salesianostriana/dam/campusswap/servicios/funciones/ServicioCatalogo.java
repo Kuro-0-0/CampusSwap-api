@@ -4,6 +4,7 @@ import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioFiltroDto;
 import com.salesianostriana.dam.campusswap.especificaciones.AnuncioEspecificacion;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
+import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseAnuncio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ServicioCatalogo {
 
-    private final RepositorioAnuncio repositorioAnuncio;
+    private final ServicioBaseAnuncio servicioBaseAnuncio;
 
     public Page<Anuncio> obtenerCatalogo(Pageable pageable, AnuncioFiltroDto filtro) {
 
@@ -26,6 +27,6 @@ public class ServicioCatalogo {
                 AnuncioEspecificacion.porEstado(filtro.estado())
         );
 
-        return repositorioAnuncio.findBy(pred, p -> p.page(pageable));
+        return servicioBaseAnuncio.buscarFiltradoPageado(pred, pageable);
     }
 }
