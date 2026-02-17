@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.campusswap.configuraciones;
+package com.salesianostriana.dam.campusswap.configuraciones.auditores;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

@@ -2,6 +2,7 @@ package com.salesianostriana.dam.campusswap.entidades;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -22,6 +23,7 @@ public class Favorito {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
+    @CreatedBy
     private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.LAZY)
