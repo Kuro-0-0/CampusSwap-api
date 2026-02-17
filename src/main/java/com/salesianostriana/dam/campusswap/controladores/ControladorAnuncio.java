@@ -732,6 +732,7 @@ public class ControladorAnuncio {
             summary = "Reportar un anuncio",
             description = "Permite reportar un anuncio por un motivo específico."
     )
+
     public ResponseEntity<ReporteResponseDto> reportarAnuncio(
             @Parameter(
                     description = "ID del anuncio a reportar",
