@@ -1,5 +1,7 @@
 package com.salesianostriana.dam.campusswap.ficheros.logica.local;
 
+import com.salesianostriana.dam.campusswap.ficheros.general.model.AbstractFileMetadata;
+import com.salesianostriana.dam.campusswap.ficheros.general.model.FileMetadata;
 import lombok.experimental.SuperBuilder;
 
 
