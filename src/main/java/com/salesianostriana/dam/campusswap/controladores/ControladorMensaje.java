@@ -182,7 +182,6 @@ public class ControladorMensaje {
                                             {
                                                 "contenido": "mensaje",
                                                 "anuncioId": 1,
-                                                "emisorId": "d5e7f9e8-e0fb-4482-9b38-e24882e1a263",
                                                 "receptorId": "78aff3fb-7752-44ae-9dcd-a9d57605fc68"
                                             }
                                             """
