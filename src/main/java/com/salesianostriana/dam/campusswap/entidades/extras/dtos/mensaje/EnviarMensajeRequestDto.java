@@ -15,8 +15,6 @@ public record EnviarMensajeRequestDto(
         String contenido,
         @NotNull(message = "El ID del anuncio no puede ser nulo")
         Long anuncioId,
-        @NotBlank(message = "El ID del emisor no puede estar vacío")
-        String emisorId,
         @NotBlank(message = "El ID del receptor no puede estar vacío")
         String receptorId) {
 
@@ -24,7 +22,6 @@ public record EnviarMensajeRequestDto(
          return Mensaje.builder()
                  .contenido(dto.contenido())
                  .anuncio(Anuncio.builder().id(dto.anuncioId()).build())
-                 .emisor(Usuario.builder().id(UUID.fromString(dto.emisorId())).build())
                  .receptor(Usuario.builder().id(UUID.fromString(dto.receptorId())).build())
                  .build();
      }

@@ -25,12 +25,11 @@ public class ServicioMensaje {
     private final ServicioBaseUsuario servicioBaseUsuario;
     private final ServicioBaseAnuncio servicioBaseAnuncio;
 
-    public Mensaje enviarMensaje(Mensaje mensaje) {
-        Usuario emisor = servicioBaseUsuario.buscarPorId(mensaje.getEmisor().getId());
+    public Mensaje enviarMensaje(Mensaje mensaje, Usuario usuario) {
         Usuario receptor = servicioBaseUsuario.buscarPorId(mensaje.getReceptor().getId());
         Anuncio anuncio = servicioBaseAnuncio.buscarPorId(mensaje.getAnuncio().getId());
 
-        mensaje.setEmisor(emisor);
+        mensaje.setEmisor(usuario);
         mensaje.setReceptor(receptor);
         mensaje.setAnuncio(anuncio);
 

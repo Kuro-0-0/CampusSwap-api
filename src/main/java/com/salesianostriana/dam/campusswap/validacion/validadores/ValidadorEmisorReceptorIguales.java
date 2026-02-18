@@ -9,13 +9,15 @@ public class ValidadorEmisorReceptorIguales implements ConstraintValidator<Emiso
     @Override
     public boolean isValid(EnviarMensajeRequestDto enviarMensajeRequestDto, ConstraintValidatorContext constraintValidatorContext) {
 
-        if (enviarMensajeRequestDto.receptorId() == null || enviarMensajeRequestDto.emisorId() == null) {
-            return true;
-        }
+        // Tras securizar, ha quedado inutil.
 
-        if(enviarMensajeRequestDto.receptorId().equals(enviarMensajeRequestDto.emisorId())) {
-            return false;
-        }
+//        if (enviarMensajeRequestDto.receptorId() == null || enviarMensajeRequestDto.emisorId() == null) {
+//            return true;
+//        }
+//
+//        if(enviarMensajeRequestDto.receptorId().equals(enviarMensajeRequestDto.emisorId())) {
+//            return false;
+//        }
 
         return true;
     }

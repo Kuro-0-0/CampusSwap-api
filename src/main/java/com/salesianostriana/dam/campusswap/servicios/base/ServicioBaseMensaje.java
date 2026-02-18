@@ -7,6 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class ServicioBaseMensaje {
@@ -19,5 +22,9 @@ public class ServicioBaseMensaje {
 
     public Page<Mensaje> buscarTodosPorAnuncioId(Long idAnuncio, Pageable pageable) {
         return repositorioMensaje.findAllByAnuncioId(idAnuncio, pageable);
+    }
+
+    public List<Mensaje> buscarTodosPorAnuncioIdYUsuarioId(Long idAnuncio, UUID idUsuario) {
+        return repositorioMensaje.findAllByAnuncioIdAndUsuarioId(idAnuncio, idUsuario);
     }
 }

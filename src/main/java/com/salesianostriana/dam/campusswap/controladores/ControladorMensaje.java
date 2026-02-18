@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
 import com.salesianostriana.dam.campusswap.entidades.Mensaje;
+import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.EnviarMensajeRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.MensajeResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.ListarMensajeResponseDto;
@@ -19,6 +20,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +41,9 @@ public class ControladorMensaje {
     private final ServicioMensaje servicio;
 
     @PostMapping
+    @PreAuthorize(
+        "#dto.receptorId != principal.id"
+    )
     @ApiResponse(
             responseCode = "201",
             description = "Mensaje enviado correctamente",
@@ -144,12 +150,14 @@ public class ControladorMensaje {
                     }
 
             )
-    ) @RequestBody EnviarMensajeRequestDto dto) {
-        Mensaje mensaje = servicio.enviarMensaje(EnviarMensajeRequestDto.from(dto));
-        return ResponseEntity.status(HttpStatus.CREATED).body(MensajeResponseDto.of(mensaje));
+        ) @RequestBody EnviarMensajeRequestDto dto,
+            @AuthenticationPrincipal Usuario usuario
+            ) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(MensajeResponseDto.of(servicio.enviarMensaje(EnviarMensajeRequestDto.from(dto), usuario)));
     }
 
     @GetMapping("/{idAnuncio}")
+    @PreAuthorize("@comprobarMensaje.esParticipante(#idAnuncio, principal)")
     @Operation(
             summary = "Obtener mensajes de un anuncio",
             description = "Obtiene una lista paginada de mensajes asociados a un anuncio específico."
