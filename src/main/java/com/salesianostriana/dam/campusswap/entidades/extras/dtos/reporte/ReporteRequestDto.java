@@ -11,15 +11,11 @@ import java.util.UUID;
 
 public record ReporteRequestDto(
         @NotNull(message = "El motivo no puede ser nulo")
-        Motivo motivo,
-        @NotBlank(message = "El ID del usuario no puede estar vacío")
-        String usuarioId
+        Motivo motivo
 
 ) {
     public static Reporte toEntity(ReporteRequestDto dto) {
          return Reporte.builder()
-                 .motivo(dto.motivo())
-                 .usuario(Usuario.builder().id(UUID.fromString(dto.usuarioId())).build())
-                 .build();
+                 .motivo(dto.motivo()).build();
     }
 }
