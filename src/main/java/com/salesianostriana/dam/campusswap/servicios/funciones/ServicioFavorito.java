@@ -6,13 +6,10 @@ import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseAnuncio;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseFavorito;
-import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseUsuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
