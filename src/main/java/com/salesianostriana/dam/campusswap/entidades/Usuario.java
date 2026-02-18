@@ -21,10 +21,12 @@ import java.util.stream.Collectors;
 @Setter
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue
+    @EqualsAndHashCode.Include()
     private UUID id;
 
     private String nombre;
