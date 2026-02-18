@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
+import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.valoracion.CrearValoracionResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.valoracion.ValoracionRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.valoracion.ValoracionResponseDto;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -33,10 +35,10 @@ public class ControladorValoracion {
 
     private final ServicioValoracion servicioValoracion;
 
-    @GetMapping("/{id}")
+    @GetMapping
     @Operation(
             summary = "Obtener la media de valoraciones de un usuario",
-            description = "Devuelve la media de las valoraciones recibidas por un usuario específico."
+            description = "Devuelve la media de las valoraciones recibidas por el usuario autenticado."
     )
     @ApiResponse(
             responseCode = "200",
@@ -55,9 +57,10 @@ public class ControladorValoracion {
                     }
             )
     )
+
     @ApiResponse(
-            responseCode = "400",
-            description = "Solicitud incorrecta",
+            responseCode = "401",
+            description = "No autorizado",
             content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(implementation = ProblemDetail.class),
@@ -65,10 +68,30 @@ public class ControladorValoracion {
                             @ExampleObject(
                                     value = """
                                             {
-                                                 "detail": "UUID string too large",
-                                                 "instance": "/api/v1/valoraciones/504f42a0-6869-44db-a2c5-d07e75483d953",
-                                                 "status": 400,
-                                                 "title": "Argumento no válido"
+                                                 "detail": "Full authentication is required to access this resource",
+                                                 "instance": "/api/v1/valoraciones",
+                                                 "status": 401,
+                                                 "title": "Unauthorized"
+                                             }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Prohibido",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                 "detail": "Access is denied",
+                                                 "instance": "/api/v1/valoraciones",
+                                                 "status": 403,
+                                                 "title": "Forbidden"
                                              }
                                             """
                             )
@@ -86,7 +109,7 @@ public class ControladorValoracion {
                                     value = """
                                             {
                                                 "detail": "Usuario no encontrado",
-                                                "instance": "/api/v1/valoraciones/504f42a0-6869-44db-a2c5-d07e75483d95",
+                                                "instance": "/api/v1/valoraciones/",
                                                 "status": 404,
                                                 "title": "Recurso no encontrado"
                                             }
@@ -108,7 +131,7 @@ public class ControladorValoracion {
                                     value = """
                                             {
                                                   "detail": "El usuario no tiene valoraciones",
-                                                   "instance": "/api/v1/valoraciones/76f2606b-b61e-4067-909f-c0de543ff05f",
+                                                   "instance": "/api/v1/valoraciones/",
                                                    "status": 409,
                                                    "title": "Estado no válido"
                                             }
@@ -129,7 +152,7 @@ public class ControladorValoracion {
                                     value = """
                                             {
                                                  "detail": "Ha ocurrido un error inesperado",
-                                                 "instance": "/api/v1/valoraciones/70a8fa74-0461-4b9d-ae5c-4bb37f8a2580",
+                                                 "instance": "/api/v1/valoraciones/",
                                                  "status": 500,
                                                  "title": "Error inesperado."
                                              }
@@ -138,15 +161,15 @@ public class ControladorValoracion {
             }
             )
     )
-    public ResponseEntity<Double> obtenerMediaValoraciones (@PathVariable String id) {
+    public ResponseEntity<Double> obtenerMediaValoraciones (@AuthenticationPrincipal Usuario usuario) {
 
-        Double media = servicioValoracion.calcularMediaValoraciones(id);
+        Double media = servicioValoracion.calcularMediaValoraciones(usuario);
 
         return ResponseEntity.ok(media);
 
     }
 
-    @GetMapping("/usuario/{usuarioId}")
+    @GetMapping("/media")
     @ApiResponse(
             responseCode = "200",
             description = "Valoraciones obtenidas correctamente",
@@ -183,9 +206,10 @@ public class ControladorValoracion {
 
             )
     )
+
     @ApiResponse(
-            responseCode = "400",
-            description = "Solicitud incorrecta",
+            responseCode = "401",
+            description = "No autorizado",
             content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(implementation = ProblemDetail.class),
@@ -193,11 +217,31 @@ public class ControladorValoracion {
                             @ExampleObject(
                                     value = """
                                             {
-                                                  "detail": "UUID string too large",
-                                                  "instance": "/api/v1/valoraciones/usuario/9c9cb8c5-0a3d-4291-b96e-4c3bb4cf1ed11",
-                                                  "status": 400,
-                                                  "title": "Argumento no válido"
-                                              }
+                                                "detail": "Full authentication is required to access this resource",
+                                                "instance": "/api/v1/valoraciones/media",
+                                                "status": 401,
+                                                "title": "Unauthorized"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Prohibido",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                 "detail": "Access is denied",
+                                                 "instance": "/api/v1/valoraciones/media",
+                                                 "status": 403,
+                                                 "title": "Forbidden"
+                                             }
                                             """
                             )
                     }
@@ -213,8 +257,8 @@ public class ControladorValoracion {
                             @ExampleObject(
                                     value = """
                                             {
-                                                "detail": "No se ha encontrado el usuario con id: 9c9cb8c5-0a3d-4291-b96e-4c3bb4cf1ed1",
-                                                "instance": "/api/v1/valoraciones/usuario/9c9cb8c5-0a3d-4291-b96e-4c3bb4cf1ed1",
+                                                "detail": "Usuario no encontrado",
+                                                "instance": "/api/v1/valoraciones/media",
                                                 "status": 404,
                                                 "title": "Recurso no encontrado"
                                             }
@@ -239,7 +283,7 @@ public class ControladorValoracion {
                                     value = """
                                             {
                                                  "detail": "Ha ocurrido un error inesperado",
-                                                 "instance": "/api/v1/valoraciones/usuario/9c9cb8c5-0a3d-4291-b96e-4c3bb4cf1ed1",
+                                                 "instance": "/api/v1/valoraciones/media",
                                                  "status": 500,
                                                  "title": "Error inesperado."
                                              }
@@ -250,14 +294,14 @@ public class ControladorValoracion {
     )
     @Operation(
             summary = "Obtener las valoraciones de un usuario",
-            description = "Devuelve una lista paginada de las valoraciones recibidas por un usuario específico, ordenadas por fecha de creación."
+            description = "Devuelve una lista paginada de las valoraciones recibidas por el usuario autenticado, ordenadas por fecha de creación."
     )
-    public ResponseEntity<Page<ValoracionResponseDto>> obtenerValoraciones(@Parameter(description = "ID UUID del usuario",example= "550e8400-e29b-41d4-a716-446655440000")
-                                                                           @PathVariable String usuarioId,
+    public ResponseEntity<Page<ValoracionResponseDto>> obtenerValoraciones(
+                                                                           @AuthenticationPrincipal Usuario usuario,
                                                                            @Parameter(description = "Parámetros de paginación y ordenación")
                                                                            @PageableDefault(size = 10,sort = "fecha",direction = Sort.Direction.DESC)
                                                                            Pageable pageable){
-        return ResponseEntity.ok(servicioValoracion.obtenerValoraciones(pageable,usuarioId).map(ValoracionResponseDto::of));
+        return ResponseEntity.ok(servicioValoracion.obtenerValoraciones(pageable,usuario).map(ValoracionResponseDto::of));
     }
 
     @PostMapping
@@ -287,9 +331,74 @@ public class ControladorValoracion {
                     }
             )
     )
-    @ApiResponse (
+    @ApiResponse(
             responseCode = "400",
-            description = "Solicitud incorrecta",
+            description = "Solicitud incorrecta por datos de entrada inválidos",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    name = "Puntuación nula",
+                                    value = """
+                                            {
+                                                "detail": "puntuacion: La puntuación no puede ser nula",
+                                                "instance": "/api/v1/valoraciones",
+                                                "status": 400,
+                                                "title": "Argumento no válido"
+                                            }
+                                            """
+                            ),
+                            @ExampleObject(
+                                    name = "Puntuación fuera de rango",
+                                    value = """
+                                            {
+                                                "detail": "puntuacion: La puntuación no puede ser mayor que 5",
+                                                "instance": "/api/v1/valoraciones",
+                                                "status": 400,
+                                                "title": "Argumento no válido"
+                                            }
+                                            """
+                            ),
+                            @ExampleObject(
+                                    name = "Comentario nulo",
+                                    value = """
+                                            {
+                                                "detail": "comentario: El comentario no puede estar vacío",
+                                                "instance": "/api/v1/valoraciones",
+                                                "status": 400,
+                                                "title": "Argumento no válido"
+                                            }
+                                            """
+                            ),
+                            @ExampleObject(
+                                    name = "Comentario fuera de tamaño",
+                                    value = """
+                                            {
+                                                "detail": "comentario: El comentario debe tener entre 10 y 500 caracteres",
+                                                "instance": "/api/v1/valoraciones",
+                                                "status": 400,
+                                                "title": "Argumento no válido"
+                                            }
+                                            """
+                            ),
+                            @ExampleObject(
+                                    name = "ID de anuncio nulo",
+                                    value = """
+                                            {
+                                                "detail": "idAnuncio: no puede ser nulo",
+                                                "instance": "/api/v1/valoraciones",
+                                                "status": 400,
+                                                "title": "Argumento no válido"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado",
             content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(implementation = ProblemDetail.class),
@@ -297,10 +406,30 @@ public class ControladorValoracion {
                             @ExampleObject(
                                     value = """
                                             {
-                                                "detail": "Invalid UUID string: 1",
+                                                "detail": "Full authentication is required to access this resource",
                                                 "instance": "/api/v1/valoraciones",
-                                                "status": 400,
-                                                "title": "Argumento no válido"
+                                                "status": 401,
+                                                "title": "Unauthorized"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Prohibido",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Access is denied",
+                                                "instance": "/api/v1/valoraciones",
+                                                "status": 403,
+                                                "title": "Forbidden"
                                             }
                                             """
                             )
@@ -380,19 +509,19 @@ public class ControladorValoracion {
                                                     {
                                                         "puntuacion" : "2",
                                                         "comentario": "Bastante desagradable el vendedor...",
-                                                        "idAnuncio": "4",
-                                                        "idEvaluador": "2e65aadb-c876-458a-9ce6-9107fb65b409"
+                                                        "idAnuncio": "4"
                                                     }
                                                     """
                                     )
                             }
                     )
             )
-            @Valid @RequestBody ValoracionRequestDto valoracionRequestDto
+            @Valid @RequestBody ValoracionRequestDto valoracionRequestDto,
+            @AuthenticationPrincipal Usuario usuario
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 CrearValoracionResponseDto.of(
-                        servicioValoracion.crearValoracion(valoracionRequestDto.to())
+                        servicioValoracion.crearValoracion(valoracionRequestDto.to(), usuario)
                 )
         );
     }
