@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.campusswap.seguridad.spel;
+package com.salesianostriana.dam.campusswap.validacion.validadores.spel;
 
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseFavorito;

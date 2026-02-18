@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.campusswap.seguridad.spel;
+package com.salesianostriana.dam.campusswap.validacion.validadores.spel;
 
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseAnuncio;
@@ -12,7 +12,6 @@ public class ComprobarAnuncio {
     private ServicioBaseAnuncio servicioBaseAnuncio;
 
     public boolean esPropietario(Long id, Usuario usuario) {
-        System.out.println("Comprobando si el usuario " + usuario.getId() + " es propietario del anuncio con id " + id);
         return servicioBaseAnuncio.buscarPorId(id).getUsuario().equals(usuario);
     }
 
