@@ -115,7 +115,7 @@ public class ControladorFavorito {
     )
     @Operation(
             summary = "Crear un nuevo favorito",
-            description = "Permite a un usuario marcar un anuncio como favorito. Se requiere el ID del usuario y el ID del anuncio."
+            description = "Permite al usuario autenticado marcar un anuncio como favorito. En el cuerpo de la solicitud solo es necesario enviar el ID del anuncio; el usuario se obtiene a partir de la autenticación."
     )
     public ResponseEntity<FavoritoResponseDto> crearFavorito(
             @Valid @RequestBody FavoritoRequestDto favoritoRequestDto,
