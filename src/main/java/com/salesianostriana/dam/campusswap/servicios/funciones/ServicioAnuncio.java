@@ -28,19 +28,17 @@ public class ServicioAnuncio {
     private final ServicioBaseAnuncio servicioBaseAnuncio;
     private final ServicioBaseReporte servicioBaseReporte;
 
-    public Anuncio crearAnuncio(Anuncio anuncio) {
-        Usuario usuario = servicioBaseUsuario.buscarPorId(anuncio.getUsuario().getId());
+    public Anuncio crearAnuncio(Anuncio anuncio, Usuario usuario) {
         Categoria categoria = servicioBaseCategoria.buscarPorId(anuncio.getCategoria().getId());
 
         anuncio.setEstado(Estado.ACTIVO);
-        usuario.agregarAnuncio(anuncio);
-        servicioBaseUsuario.guardar(usuario);
+        anuncio.setUsuario(usuario);
+        anuncio.setCategoria(categoria);
         return servicioBaseAnuncio.guardar(anuncio);
     }
 
-    public Anuncio editarAnuncio(Long id, Anuncio anuncio, String usuarioId) {
+    public Anuncio editarAnuncio(Long id, Anuncio anuncio, Usuario usuario) {
         Anuncio original = servicioBaseAnuncio.buscarPorId(id);
-        Usuario usuario = servicioBaseUsuario.buscarPorId(usuarioId);
         Categoria categoria = servicioBaseCategoria.buscarPorId(anuncio.getCategoria().getId());
 
         if (original.getUsuario() == null || !original.getUsuario().equals(usuario))
@@ -86,8 +84,6 @@ public class ServicioAnuncio {
             throw new NotOwnedException("No se puede eliminar un anuncio que no te pertenece");
         }
 
-        usuario.borrarAnuncio(anuncio);
-        servicioBaseUsuario.guardar(usuario);
         servicioBaseAnuncio.borrar(anuncio);
     }
 
