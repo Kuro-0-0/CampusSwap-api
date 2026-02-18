@@ -3,12 +3,15 @@ package com.salesianostriana.dam.campusswap.servicios.funciones;
 import com.salesianostriana.dam.campusswap.entidades.*;
 import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
 import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
+import com.salesianostriana.dam.campusswap.ficheros.general.model.FileMetadata;
+import com.salesianostriana.dam.campusswap.ficheros.logica.StorageService;
 import com.salesianostriana.dam.campusswap.servicios.base.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,17 +27,22 @@ public class ServicioAnuncio {
     private final ServicioBaseReporte servicioBaseReporte;
     private final ServicioBaseFavorito servicioBaseFavorito;
     private final ServicioBaseMensaje servicioBaseMensaje;
+    private final StorageService storageService;
 
-    public Anuncio crearAnuncio(Anuncio anuncio, Usuario usuario) {
+
+    public Anuncio crearAnuncio(Anuncio anuncio, Usuario usuario, MultipartFile file) {
         Categoria categoria = servicioBaseCategoria.buscarPorId(anuncio.getCategoria().getId());
+        FileMetadata fileMetadata = storageService.store(file);
 
         anuncio.setEstado(Estado.ACTIVO);
         anuncio.setUsuario(usuario);
         anuncio.setCategoria(categoria);
+        anuncio.setImagen(fileMetadata.getFilename());
+
         return servicioBaseAnuncio.guardar(anuncio);
     }
 
-    public Anuncio editarAnuncio(Long id, Anuncio anuncio, Usuario usuario) {
+    public Anuncio editarAnuncio(Long id, Anuncio anuncio, Usuario usuario, MultipartFile file) {
         Anuncio original = servicioBaseAnuncio.buscarPorId(id);
         Categoria categoria = servicioBaseCategoria.buscarPorId(anuncio.getCategoria().getId());
 
@@ -43,6 +51,15 @@ public class ServicioAnuncio {
 
         if (original.getEstado().equals(Estado.CERRADO))
             throw new IllegalStateException("No se pueden modificar anuncios cerrados");
+
+        if (file != null) {
+            String oldFilename = original.getImagen();
+            FileMetadata fileMetadata = storageService.store(file);
+            if (oldFilename != null && !oldFilename.isBlank()) {
+                storageService.deleteFile(oldFilename);
+            }
+            original.setImagen(fileMetadata.getFilename());
+        }
 
         return servicioBaseAnuncio.guardar(original.modificar(anuncio));
     }

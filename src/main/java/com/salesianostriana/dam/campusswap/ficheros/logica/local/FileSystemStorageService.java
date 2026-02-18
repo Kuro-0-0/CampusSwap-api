@@ -1,6 +1,5 @@
 package com.salesianostriana.dam.campusswap.ficheros.logica.local;
 
-
 import com.salesianostriana.dam.campusswap.ficheros.general.excepciones.StorageException;
 import com.salesianostriana.dam.campusswap.ficheros.general.model.FileMetadata;
 import com.salesianostriana.dam.campusswap.ficheros.logica.StorageService;
@@ -22,9 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-//@Primary
 @Service
-//@ConditionalOnProperty(name = "storage.type", havingValue = "local", matchIfMissing = true)
 public class FileSystemStorageService implements StorageService {
 
     @Value("${storage.location}")
