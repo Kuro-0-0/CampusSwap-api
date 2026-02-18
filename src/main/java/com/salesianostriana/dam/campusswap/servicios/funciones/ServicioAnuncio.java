@@ -56,9 +56,8 @@ public class ServicioAnuncio {
     }
 
 
-    public Anuncio alternarEstado(Long id, String usuarioId) {
+    public Anuncio alternarEstado(Long id, Usuario usuario) {
         Anuncio anuncio = servicioBaseAnuncio.buscarPorId(id);
-        Usuario usuario = servicioBaseUsuario.buscarPorId(usuarioId);
 
         if (anuncio.getUsuario() == null || !anuncio.getUsuario().equals(usuario))
             throw new NotOwnedException("No puedes modificar un anuncio que no es tuyo");
@@ -74,22 +73,14 @@ public class ServicioAnuncio {
     }
 
 
-    public void borrarAnuncio(Long id, String idUsuario) {
-
+    public void borrarAnuncio(Long id) {
         Anuncio anuncio = servicioBaseAnuncio.buscarPorId(id);
-        Usuario usuario = servicioBaseUsuario.buscarPorId(idUsuario);
-
-
-        if(!anuncio.getUsuario().equals(usuario)){
-            throw new NotOwnedException("No se puede eliminar un anuncio que no te pertenece");
-        }
 
         servicioBaseAnuncio.borrar(anuncio);
     }
 
-    public Reporte reportarAnuncio(Long anuncioId, Reporte reporte) {
+    public Reporte reportarAnuncio(Long anuncioId, Reporte reporte, Usuario usuario) {
         Anuncio anuncio = servicioBaseAnuncio.buscarPorId(anuncioId);
-        Usuario usuario = servicioBaseUsuario.buscarPorId(reporte.getUsuario().getId());
 
         if(servicioBaseReporte.buscarPorAnuncioIdYUsuarioId(anuncio.getId(), usuario.getId()).isPresent())
             throw new IllegalStateException("Ya has reportado este anuncio");
