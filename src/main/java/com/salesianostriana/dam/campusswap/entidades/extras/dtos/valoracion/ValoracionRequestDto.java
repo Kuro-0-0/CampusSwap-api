@@ -21,16 +21,14 @@ public record ValoracionRequestDto(
     @Size(min = 10,max = 500,message = "El comentario debe tener entre 10 y 500 caracteres")
     String comentario,
     @NotNull @CheckExistenciaAnuncio
-    Long idAnuncio,
-    @NotNull @CheckExistenciaUsuario
-    String idEvaluador
+    Long idAnuncio
+
 ) {
     public Valoracion to() {
         return Valoracion.builder()
                 .puntuacion(puntuacion)
                 .comentario(comentario)
                 .anuncio(Anuncio.builder().id(idAnuncio).build())
-                .evaluador(Usuario.builder().id(UUID.fromString(idEvaluador)).build())
                 .build();
     }
 }

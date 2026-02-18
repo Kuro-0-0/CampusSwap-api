@@ -23,9 +23,9 @@ public class ServicioValoracion {
     private final ServicioBaseValoracion servicioBaseValoracion;
     private final ServicioBaseAnuncio servicioBaseAnuncio;
 
-    public Double calcularMediaValoraciones(String usuarioId) {
+    public Double calcularMediaValoraciones(Usuario usuario) {
 
-        Usuario usuario = servicioBaseUsuario.buscarPorId(usuarioId);
+
 
         Double media = servicioBaseValoracion.calcularMediaValoracionesUsuario(usuario.getId());
 
@@ -38,7 +38,7 @@ public class ServicioValoracion {
 
     }
 
-    public Valoracion crearValoracion(Valoracion valoracion) {
+    public Valoracion crearValoracion(Valoracion valoracion, Usuario evaluador) {
         Anuncio anuncio = servicioBaseAnuncio.buscarPorId(valoracion.getAnuncio().getId());
 
         if (servicioBaseValoracion.existePorAnuncioId(valoracion.getAnuncio().getId()))
@@ -49,8 +49,6 @@ public class ServicioValoracion {
 
         Usuario evaluado = anuncio.getUsuario();
 
-        Usuario evaluador = servicioBaseUsuario.buscarPorId(valoracion.getEvaluador().getId());
-
         if (evaluado.equals(evaluador))
             throw new IllegalStateException("No puedes valorarte a ti mismo");
 
@@ -58,14 +56,14 @@ public class ServicioValoracion {
         valoracion.setEvaluado(evaluado);
         valoracion.setEvaluador(evaluador);
         Valoracion v =  servicioBaseValoracion.guardar(valoracion);
-        this.calcularMediaValoraciones(evaluado.getId().toString());
+        this.calcularMediaValoraciones(evaluado);
         return v;
     }
 
-    public Page<Valoracion> obtenerValoraciones(Pageable pageable, String usuarioId) {
+    public Page<Valoracion> obtenerValoraciones(Pageable pageable, Usuario usuario) {
 
-        Usuario usuario = servicioBaseUsuario.buscarPorId(usuarioId);
 
-        return servicioBaseValoracion.buscarPorEvaluadoId(UUID.fromString(usuarioId),pageable);
+
+        return servicioBaseValoracion.buscarPorEvaluadoId(usuario.getId(),pageable);
     }
 }
