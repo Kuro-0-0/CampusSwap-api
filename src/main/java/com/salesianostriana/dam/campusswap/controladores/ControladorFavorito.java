@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -74,6 +75,46 @@ public class ControladorFavorito {
             )
     )
     @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado - El usuario no está autenticado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Full authentication is required to access this resource",
+                                                "instance": "/api/v1/favoritos",
+                                                "status": 401,
+                                                "title": "Unauthorized"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Prohibido - No se puede marcar como favorito un anuncio propio",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Access Denied",
+                                                "instance": "/api/v1/favoritos",
+                                                "status": 403,
+                                                "title": "Forbidden"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
             responseCode = "404",
             description = "Recurso no encontrado",
             content = @Content(
@@ -117,6 +158,9 @@ public class ControladorFavorito {
             summary = "Crear un nuevo favorito",
             description = "Permite al usuario autenticado marcar un anuncio como favorito. En el cuerpo de la solicitud solo es necesario enviar el ID del anuncio; el usuario se obtiene a partir de la autenticación."
     )
+    @PreAuthorize(
+            "@comprobarAnuncio.esPropietario(#favoritoRequestDto.anuncioId, principal) == false"
+    )
     public ResponseEntity<FavoritoResponseDto> crearFavorito(
             @Valid @RequestBody FavoritoRequestDto favoritoRequestDto,
             @AuthenticationPrincipal Usuario usuario
@@ -130,6 +174,26 @@ public class ControladorFavorito {
             description = "No Content - Favorito eliminado correctamente"
     )
 
+    @ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized - El usuario no está autenticado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Full authentication is required to access this resource",
+                                                "instance": "/api/v1/favoritos/1",
+                                                "status": 401,
+                                                "title": "Unauthorized"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
     @ApiResponse(
             responseCode = "403",
             description = "Forbidden - El usuario no es el propietario del favorito",
@@ -193,6 +257,9 @@ public class ControladorFavorito {
             summary = "Eliminar un favorito",
             description = "Elimina un favorito específico. Solo el usuario que creó el favorito puede eliminarlo."
     )
+    @PreAuthorize(
+            "@comprobarFavorito.esPropietario(#id, principal)"
+    )
     public ResponseEntity<?> eliminarFavorito(
             @Parameter(
                     description = "ID del favorito a eliminar",
@@ -246,7 +313,26 @@ public class ControladorFavorito {
                     }
             )
     )
-
+    @ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized - El usuario no está autenticado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Full authentication is required to access this resource",
+                                                "instance": "/api/v1/favoritos",
+                                                "status": 401,
+                                                "title": "Unauthorized"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
     @ApiResponse(
             responseCode = "500",
             description = "Internal Server Error - Error al listar favoritos",

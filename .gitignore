@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+
+
 ### STS ###
 .apt_generated
 .classpath
@@ -31,3 +33,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+src/main/java/com/salesianostriana/dam/campusswap/auth/*
+src/main/java/com/salesianostriana/dam/campusswap/auth/*.*
+/src/main/java/com/salesianostriana/dam/campusswap/auth/
+/src/main/java/com/salesianostriana/dam/campusswap/auth/dto/
