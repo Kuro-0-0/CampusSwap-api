@@ -25,8 +25,6 @@ public class ServicioValoracion {
 
     public Double calcularMediaValoraciones(Usuario usuario) {
 
-
-
         Double media = servicioBaseValoracion.calcularMediaValoracionesUsuario(usuario.getId());
 
         if(media == null)
@@ -61,8 +59,6 @@ public class ServicioValoracion {
     }
 
     public Page<Valoracion> obtenerValoraciones(Pageable pageable, Usuario usuario) {
-
-
 
         return servicioBaseValoracion.buscarPorEvaluadoId(usuario.getId(),pageable);
     }

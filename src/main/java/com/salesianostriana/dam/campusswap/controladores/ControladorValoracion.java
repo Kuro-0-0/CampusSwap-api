@@ -38,7 +38,7 @@ public class ControladorValoracion {
     @GetMapping
     @Operation(
             summary = "Obtener la media de valoraciones de un usuario",
-            description = "Devuelve la media de las valoraciones recibidas por un usuario específico."
+            description = "Devuelve la media de las valoraciones recibidas por el usuario autenticado."
     )
     @ApiResponse(
             responseCode = "200",
@@ -57,26 +57,7 @@ public class ControladorValoracion {
                     }
             )
     )
-    @ApiResponse(
-            responseCode = "400",
-            description = "Solicitud incorrecta",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ProblemDetail.class),
-                    examples = {
-                            @ExampleObject(
-                                    value = """
-                                            {
-                                                 "detail": "UUID string too large",
-                                                 "instance": "/api/v1/valoraciones/504f42a0-6869-44db-a2c5-d07e75483d953",
-                                                 "status": 400,
-                                                 "title": "Argumento no válido"
-                                             }
-                                            """
-                            )
-                    }
-            )
-    )
+
     @ApiResponse(
             responseCode = "401",
             description = "No autorizado",
@@ -128,7 +109,7 @@ public class ControladorValoracion {
                                     value = """
                                             {
                                                 "detail": "Usuario no encontrado",
-                                                "instance": "/api/v1/valoraciones/504f42a0-6869-44db-a2c5-d07e75483d95",
+                                                "instance": "/api/v1/valoraciones/",
                                                 "status": 404,
                                                 "title": "Recurso no encontrado"
                                             }
@@ -150,7 +131,7 @@ public class ControladorValoracion {
                                     value = """
                                             {
                                                   "detail": "El usuario no tiene valoraciones",
-                                                   "instance": "/api/v1/valoraciones/76f2606b-b61e-4067-909f-c0de543ff05f",
+                                                   "instance": "/api/v1/valoraciones/",
                                                    "status": 409,
                                                    "title": "Estado no válido"
                                             }
@@ -171,7 +152,7 @@ public class ControladorValoracion {
                                     value = """
                                             {
                                                  "detail": "Ha ocurrido un error inesperado",
-                                                 "instance": "/api/v1/valoraciones/70a8fa74-0461-4b9d-ae5c-4bb37f8a2580",
+                                                 "instance": "/api/v1/valoraciones/",
                                                  "status": 500,
                                                  "title": "Error inesperado."
                                              }
@@ -225,26 +206,7 @@ public class ControladorValoracion {
 
             )
     )
-    @ApiResponse(
-            responseCode = "400",
-            description = "Solicitud incorrecta",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = ProblemDetail.class),
-                    examples = {
-                            @ExampleObject(
-                                    value = """
-                                            {
-                                                  "detail": "UUID string too large",
-                                                  "instance": "/api/v1/valoraciones/usuario/9c9cb8c5-0a3d-4291-b96e-4c3bb4cf1ed11",
-                                                  "status": 400,
-                                                  "title": "Argumento no válido"
-                                              }
-                                            """
-                            )
-                    }
-            )
-    )
+
     @ApiResponse(
             responseCode = "401",
             description = "No autorizado",
@@ -295,8 +257,8 @@ public class ControladorValoracion {
                             @ExampleObject(
                                     value = """
                                             {
-                                                "detail": "No se ha encontrado el usuario con id: 9c9cb8c5-0a3d-4291-b96e-4c3bb4cf1ed1",
-                                                "instance": "/api/v1/valoraciones/usuario/9c9cb8c5-0a3d-4291-b96e-4c3bb4cf1ed1",
+                                                "detail": "Usuario no encontrado",
+                                                "instance": "/api/v1/valoraciones/media",
                                                 "status": 404,
                                                 "title": "Recurso no encontrado"
                                             }
@@ -321,7 +283,7 @@ public class ControladorValoracion {
                                     value = """
                                             {
                                                  "detail": "Ha ocurrido un error inesperado",
-                                                 "instance": "/api/v1/valoraciones/usuario/9c9cb8c5-0a3d-4291-b96e-4c3bb4cf1ed1",
+                                                 "instance": "/api/v1/valoraciones/media",
                                                  "status": 500,
                                                  "title": "Error inesperado."
                                              }
@@ -332,7 +294,7 @@ public class ControladorValoracion {
     )
     @Operation(
             summary = "Obtener las valoraciones de un usuario",
-            description = "Devuelve una lista paginada de las valoraciones recibidas por un usuario específico, ordenadas por fecha de creación."
+            description = "Devuelve una lista paginada de las valoraciones recibidas por el usuario autenticado, ordenadas por fecha de creación."
     )
     public ResponseEntity<Page<ValoracionResponseDto>> obtenerValoraciones(
                                                                            @AuthenticationPrincipal Usuario usuario,
@@ -369,17 +331,62 @@ public class ControladorValoracion {
                     }
             )
     )
-    @ApiResponse (
+    @ApiResponse(
             responseCode = "400",
-            description = "Solicitud incorrecta",
+            description = "Solicitud incorrecta por datos de entrada inválidos",
             content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(implementation = ProblemDetail.class),
                     examples = {
                             @ExampleObject(
+                                    name = "Puntuación nula",
                                     value = """
                                             {
-                                                "detail": "Invalid UUID string: 1",
+                                                "detail": "puntuacion: La puntuación no puede ser nula",
+                                                "instance": "/api/v1/valoraciones",
+                                                "status": 400,
+                                                "title": "Argumento no válido"
+                                            }
+                                            """
+                            ),
+                            @ExampleObject(
+                                    name = "Puntuación fuera de rango",
+                                    value = """
+                                            {
+                                                "detail": "puntuacion: La puntuación no puede ser mayor que 5",
+                                                "instance": "/api/v1/valoraciones",
+                                                "status": 400,
+                                                "title": "Argumento no válido"
+                                            }
+                                            """
+                            ),
+                            @ExampleObject(
+                                    name = "Comentario nulo",
+                                    value = """
+                                            {
+                                                "detail": "comentario: El comentario no puede estar vacío",
+                                                "instance": "/api/v1/valoraciones",
+                                                "status": 400,
+                                                "title": "Argumento no válido"
+                                            }
+                                            """
+                            ),
+                            @ExampleObject(
+                                    name = "Comentario fuera de tamaño",
+                                    value = """
+                                            {
+                                                "detail": "comentario: El comentario debe tener entre 10 y 500 caracteres",
+                                                "instance": "/api/v1/valoraciones",
+                                                "status": 400,
+                                                "title": "Argumento no válido"
+                                            }
+                                            """
+                            ),
+                            @ExampleObject(
+                                    name = "ID de anuncio nulo",
+                                    value = """
+                                            {
+                                                "detail": "idAnuncio: no puede ser nulo",
                                                 "instance": "/api/v1/valoraciones",
                                                 "status": 400,
                                                 "title": "Argumento no válido"
