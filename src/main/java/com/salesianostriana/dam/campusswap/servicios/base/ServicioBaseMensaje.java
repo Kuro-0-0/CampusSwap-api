@@ -24,6 +24,10 @@ public class ServicioBaseMensaje {
         return repositorioMensaje.findAllByAnuncioId(idAnuncio, pageable);
     }
 
+    public void borrar(Mensaje mensaje) {
+        repositorioMensaje.delete(mensaje);
+    }  
+    
     public List<Mensaje> buscarTodosPorAnuncioIdYUsuarioId(Long idAnuncio, UUID idUsuario) {
         return repositorioMensaje.findAllByAnuncioIdAndUsuarioId(idAnuncio, idUsuario);
     }

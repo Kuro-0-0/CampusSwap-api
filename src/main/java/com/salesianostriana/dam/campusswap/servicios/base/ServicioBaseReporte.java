@@ -5,6 +5,7 @@ import com.salesianostriana.dam.campusswap.repositorios.RepositorioReporte;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,5 +21,13 @@ public class ServicioBaseReporte {
 
     public Reporte guardar(Reporte reporte) {
         return repositorioReporte.save(reporte);
+    }
+
+    public List<Reporte> BuscarPorAnuncioId(Long id){
+        return repositorioReporte.findByAnuncioId(id);
+    }
+
+    public void borrar(Reporte reporte) {
+        repositorioReporte.delete(reporte);
     }
 }

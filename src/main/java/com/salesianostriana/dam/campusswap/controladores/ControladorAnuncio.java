@@ -2,6 +2,7 @@ package com.salesianostriana.dam.campusswap.controladores;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Reporte;
+import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.BorrarAnuncioRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioResponseDto;
@@ -22,6 +23,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -83,6 +86,45 @@ public class ControladorAnuncio {
             )
     )
     @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado. Se requiere autenticación para acceder a este recurso.",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Acceso denegado. No se ha proporcionado un token de autenticación válido.",
+                                                "instance": "/api/v1/catalogo",
+                                                "status": 401,
+                                                "title": "No autorizado."
+                                            }
+                                            """
+                            )
+                    })
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Prohibido. El usuario autenticado no tiene permisos para acceder a este recurso.",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Acceso prohibido. El usuario autenticado no tiene permisos para acceder a este recurso.",
+                                                "instance": "/api/v1/catalogo",
+                                                "status": 403,
+                                                "title": "Prohibido."
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
             responseCode = "404",
             description = "Entidad no encontrada",
             content = @Content(
@@ -126,6 +168,7 @@ public class ControladorAnuncio {
             summary = "Crear un nuevo anuncio",
             description = "Permite crear un nuevo anuncio en el sistema."
     )
+    @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
     public ResponseEntity<AnuncioResponseDto> crearAnuncio(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "DTO con los datos para crear el anuncio",
             required = true,
@@ -143,17 +186,16 @@ public class ControladorAnuncio {
                                                 "tipoOperacion": "VENTA",
                                                 "condicion": "NUEVO",
                                                 "categoriaId": 1,
-                                                "usuarioId":"6ac890d0-8ee2-4967-8bb7-cfa8b84376bc"
                                             }
                                             """
                             )
                     }
 
             )
-    ) @RequestBody() AnuncioRequestDto dto) {
+    ) @RequestBody() AnuncioRequestDto dto, @AuthenticationPrincipal Usuario usuario) {
         Anuncio nuevoAnuncio = dto.toAnuncio();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(AnuncioResponseDto.of(servicioAnuncio.crearAnuncio(nuevoAnuncio)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(AnuncioResponseDto.of(servicioAnuncio.crearAnuncio(nuevoAnuncio, usuario)));
     }
 
     @PutMapping("/{id}")
@@ -171,7 +213,7 @@ public class ControladorAnuncio {
                                                 "titulo": "Producto de Prueba2",
                                                 "descripcion": "Una descripción detallada del producto",
                                                 "precio": 25.5,
-                                                "categoria": "sin categoria",
+                                                "categoria": "Categoría de Prueba",
                                                 "imagen": "producto.jpg",
                                                 "tipoOperacion": "VENTA",
                                                 "estado": "ACTIVO",
@@ -182,6 +224,25 @@ public class ControladorAnuncio {
                             )
                     }
             )
+    )
+    @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado. Se requiere autenticación para acceder a este recurso.",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Acceso denegado. No se ha proporcionado un token de autenticación válido.",
+                                                "instance": "/api/v1/catalogo",
+                                                "status": 401,
+                                                "title": "No autorizado."
+                                            }
+                                            """
+                            )
+                    })
     )
     @ApiResponse(
             responseCode = "403",
@@ -248,6 +309,9 @@ public class ControladorAnuncio {
             description = "Permite editar un anuncio existente. " +
                     "Solo el propietario del anuncio puede editarlo, y el anuncio no puede estar cerrado."
     )
+    @PreAuthorize(
+            "hasAnyRole('ADMIN', 'USUARIO') and @comprobarAnuncio.esPropietario(#id, principal)"
+    )
     public ResponseEntity<AnuncioResponseDto> editarAnuncio(
             @Parameter(
                     description = "ID del anuncio a editar",
@@ -272,7 +336,6 @@ public class ControladorAnuncio {
                                                         "tipoOperacion": "VENTA",
                                                         "condicion": "NUEVO",
                                                         "categoriaId": 1,
-                                                        "usuarioId":"6ac890d0-8ee2-4967-8bb7-cfa8b84376bc"
                                                     }
                                                     """
                                     )
@@ -280,11 +343,11 @@ public class ControladorAnuncio {
 
                     )
             )
-            @Valid @RequestBody AnuncioRequestDto dto
+            @Valid @RequestBody AnuncioRequestDto dto, @AuthenticationPrincipal Usuario usuario
     ){
         return ResponseEntity.status(HttpStatus.OK).body(AnuncioResponseDto.of(
             servicioAnuncio.editarAnuncio(id, dto.toAnuncio(),
-                    dto.usuarioId() // Cuando haya seguridad se deberá obtener el ID del usuario autenticado en lugar de recibirlo en el DTO
+                    usuario
             )
         ));
     }
@@ -371,6 +434,25 @@ public class ControladorAnuncio {
             )
     )
     @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado. Se requiere autenticación para acceder a este recurso.",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Acceso denegado. No se ha proporcionado un token de autenticación válido.",
+                                                "instance": "/api/v1/catalogo",
+                                                "status": 401,
+                                                "title": "No autorizado."
+                                            }
+                                            """
+                            )
+                    })
+    )
+    @ApiResponse(
             responseCode = "404",
             description = "Usuario no encontrado",
             content = @Content(
@@ -414,15 +496,13 @@ public class ControladorAnuncio {
             summary = "Obtener anuncios de un usuario",
             description = "Permite obtener una lista paginada de los anuncios publicados por un usuario específico."
     )
+    @PreAuthorize(
+            "hasAnyRole('ADMIN', 'USUARIO')"
+    )
     public ResponseEntity<Page<AnuncioResponseDto>> obtenerAnuncios(@PathVariable String usuarioId, Pageable pageable) {
         return ResponseEntity.ok(servicioAnuncio.obtenerAnuncios(pageable,usuarioId).map(AnuncioResponseDto::of));
     }
 
-    @Operation(
-            summary = "Alternar el estado de un anuncio",
-            description = "Permite alternar el estado de un anuncio entre ACTIVO y CERRADO. " +
-                    "Solo el propietario del anuncio puede alternar su estado, y el anuncio no puede estar pausado."
-    )
     @ApiResponse(
             responseCode = "200",
             description = "Estado del anuncio alternado correctamente",
@@ -448,6 +528,25 @@ public class ControladorAnuncio {
                             )
                     }
             )
+    )
+    @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado. Se requiere autenticación para acceder a este recurso.",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Acceso denegado. No se ha proporcionado un token de autenticación válido.",
+                                                "instance": "/api/v1/catalogo",
+                                                "status": 401,
+                                                "title": "No autorizado."
+                                            }
+                                            """
+                            )
+                    })
     )
     @ApiResponse(
             responseCode = "403",
@@ -530,6 +629,14 @@ public class ControladorAnuncio {
             )
     )
     @PutMapping("/{id}/alternar-estado")
+    @Operation(
+            summary = "Alternar el estado de un anuncio",
+            description = "Permite alternar el estado de un anuncio entre ACTIVO y CERRADO. " +
+                    "Solo el propietario del anuncio puede alternar su estado, y el anuncio no puede estar pausado."
+    )
+    @PreAuthorize(
+            "hasAnyRole('ADMIN', 'USUARIO') and @comprobarAnuncio.esPropietario(#id, principal)"
+    )
     public ResponseEntity<AnuncioResponseDto> alternarEstado(
             @Parameter(
                     description = "ID del anuncio al que se le quiere alternar el estado",
@@ -537,26 +644,11 @@ public class ControladorAnuncio {
                     required = true
             )
             @PathVariable Long id,
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "ID del usuario propietario del anuncio (en futuras implementaciones se obtendrá del token de autenticación)",
-                    required = true,
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(type = "string"),
-                            examples = {
-                                    @ExampleObject(
-                                            value = """
-                                                        "6e44a229-0400-4903-9f58-11c63a1dc31a"
-                                                    """
-                                    )
-                            }
-                    )
-            )
-            @RequestBody String usuarioId // Cuando haya seguridad se deberá obtener el ID del usuario autenticado en lugar de recibirlo en el cuerpo de la petición
+            @AuthenticationPrincipal Usuario usuario
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 AnuncioResponseDto.of(
-                        servicioAnuncio.alternarEstado(id, usuarioId)
+                        servicioAnuncio.alternarEstado(id, usuario)
                 )
         );
     }
@@ -575,6 +667,25 @@ public class ControladorAnuncio {
             content = @Content(
                     mediaType = "application/json"
             )
+    )
+    @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado. Se requiere autenticación para acceder a este recurso.",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Acceso denegado. No se ha proporcionado un token de autenticación válido.",
+                                                "instance": "/api/v1/catalogo",
+                                                "status": 401,
+                                                "title": "No autorizado."
+                                            }
+                                            """
+                            )
+                    })
     )
     @ApiResponse(
             responseCode = "403",
@@ -636,14 +747,17 @@ public class ControladorAnuncio {
                     }
             )
     )
-    public ResponseEntity<?> eliminarAnuncio(@RequestBody BorrarAnuncioRequestDto dto ,
+    @PreAuthorize(
+            "hasAnyRole('ADMIN', 'USUARIO') and @comprobarAnuncio.esPropietario(#id, principal)"
+    )
+    public ResponseEntity<?> eliminarAnuncio(
                                              @Parameter(
                                                      description = "ID del anuncio a eliminar",
                                                      example = "1",
                                                      required = true
                                              )
                                              @PathVariable Long id){
-        servicioAnuncio.borrarAnuncio(id,dto.usuarioId());
+        servicioAnuncio.borrarAnuncio(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -662,6 +776,45 @@ public class ControladorAnuncio {
                                                 "motivo": "INAPROPIADO",
                                                 "anuncioId": 5,
                                                 "usuarioId": "6ac890d0-8ee2-4967-8bb7-cfa8b84376bc"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado. Se requiere autenticación para acceder a este recurso.",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Acceso denegado. No se ha proporcionado un token de autenticación válido.",
+                                                "instance": "/api/v1/catalogo",
+                                                "status": 401,
+                                                "title": "No autorizado."
+                                            }
+                                            """
+                            )
+                    })
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Solicitud prohibida",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se puede reportar un anuncio que te pertenece",
+                                                "instance": "/api/v1/anuncios/2",
+                                                "status": 403,
+                                                "title": "Recurso perteneciente al usuario"
                                             }
                                             """
                             )
@@ -732,7 +885,9 @@ public class ControladorAnuncio {
             summary = "Reportar un anuncio",
             description = "Permite reportar un anuncio por un motivo específico."
     )
-
+    @PreAuthorize(
+            "hasAnyRole('ADMIN', 'USUARIO') and !@comprobarAnuncio.esPropietario(#id, principal)"
+    )
     public ResponseEntity<ReporteResponseDto> reportarAnuncio(
             @Parameter(
                     description = "ID del anuncio a reportar",
@@ -750,7 +905,6 @@ public class ControladorAnuncio {
                                             value = """
                                                     {
                                                         "motivo": "SPAM",
-                                                        "usuarioId": "6ac890d0-8ee2-4967-8bb7-cfa8b84376bc"
                                                     }
                                                     """
                                     )
@@ -758,9 +912,10 @@ public class ControladorAnuncio {
 
                     )
             )
-            @Valid @RequestBody ReporteRequestDto dto
+            @Valid @RequestBody ReporteRequestDto dto,
+            @AuthenticationPrincipal Usuario usuario
     ){
         Reporte nuevoReporte = ReporteRequestDto.toEntity(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ReporteResponseDto.from(servicioAnuncio.reportarAnuncio(id ,nuevoReporte)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ReporteResponseDto.from(servicioAnuncio.reportarAnuncio(id ,nuevoReporte, usuario)));
     }
 }

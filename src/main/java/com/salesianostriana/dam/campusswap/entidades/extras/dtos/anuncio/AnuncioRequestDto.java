@@ -26,8 +26,6 @@ public record AnuncioRequestDto(
         TipoOperacion tipoOperacion,
         @NotNull(message = "La condición no puede ser nula")
         Condicion condicion,
-        @NotBlank(message = "El ID de usuario no puede estar vacío")
-        String usuarioId,
         @NotNull(message = "La categoría no puede ser nula")
         Long categoriaId
 ) {
@@ -40,7 +38,6 @@ public record AnuncioRequestDto(
                 .imagen(imagen)
                 .tipoOperacion(tipoOperacion)
                 .condicion(condicion)
-                .usuario(Usuario.builder().id(UUID.fromString(usuarioId)).build())
                 .categoria(Categoria.builder().id(categoriaId).build())
                 .build();
     }

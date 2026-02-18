@@ -16,7 +16,7 @@ public class ServicioBaseUsuario
     private final RepositorioUsuario repositorioUsuario;
 
     public Usuario buscarPorId(String uuid) {
-        return buscarPorId(uuid);
+        return buscarPorId(UUID.fromString(uuid));
     }
 
     public Usuario buscarPorId(UUID uuid) {

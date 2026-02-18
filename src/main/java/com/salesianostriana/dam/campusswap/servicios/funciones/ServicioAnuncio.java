@@ -1,21 +1,16 @@
 package com.salesianostriana.dam.campusswap.servicios.funciones;
 
-import com.salesianostriana.dam.campusswap.entidades.Anuncio;
-import com.salesianostriana.dam.campusswap.entidades.Categoria;
-import com.salesianostriana.dam.campusswap.entidades.Reporte;
-import com.salesianostriana.dam.campusswap.entidades.Usuario;
+import com.salesianostriana.dam.campusswap.entidades.*;
 import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
 import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
-import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseAnuncio;
-import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseCategoria;
-import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseReporte;
-import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseUsuario;
+import com.salesianostriana.dam.campusswap.servicios.base.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Log
@@ -27,20 +22,20 @@ public class ServicioAnuncio {
     private final ServicioBaseCategoria servicioBaseCategoria;
     private final ServicioBaseAnuncio servicioBaseAnuncio;
     private final ServicioBaseReporte servicioBaseReporte;
+    private final ServicioBaseFavorito servicioBaseFavorito;
+    private final ServicioBaseMensaje servicioBaseMensaje;
 
-    public Anuncio crearAnuncio(Anuncio anuncio) {
-        Usuario usuario = servicioBaseUsuario.buscarPorId(anuncio.getUsuario().getId());
+    public Anuncio crearAnuncio(Anuncio anuncio, Usuario usuario) {
         Categoria categoria = servicioBaseCategoria.buscarPorId(anuncio.getCategoria().getId());
 
         anuncio.setEstado(Estado.ACTIVO);
-        usuario.agregarAnuncio(anuncio);
-        servicioBaseUsuario.guardar(usuario);
+        anuncio.setUsuario(usuario);
+        anuncio.setCategoria(categoria);
         return servicioBaseAnuncio.guardar(anuncio);
     }
 
-    public Anuncio editarAnuncio(Long id, Anuncio anuncio, String usuarioId) {
+    public Anuncio editarAnuncio(Long id, Anuncio anuncio, Usuario usuario) {
         Anuncio original = servicioBaseAnuncio.buscarPorId(id);
-        Usuario usuario = servicioBaseUsuario.buscarPorId(usuarioId);
         Categoria categoria = servicioBaseCategoria.buscarPorId(anuncio.getCategoria().getId());
 
         if (original.getUsuario() == null || !original.getUsuario().equals(usuario))
@@ -58,9 +53,8 @@ public class ServicioAnuncio {
     }
 
 
-    public Anuncio alternarEstado(Long id, String usuarioId) {
+    public Anuncio alternarEstado(Long id, Usuario usuario) {
         Anuncio anuncio = servicioBaseAnuncio.buscarPorId(id);
-        Usuario usuario = servicioBaseUsuario.buscarPorId(usuarioId);
 
         if (anuncio.getUsuario() == null || !anuncio.getUsuario().equals(usuario))
             throw new NotOwnedException("No puedes modificar un anuncio que no es tuyo");
@@ -76,24 +70,28 @@ public class ServicioAnuncio {
     }
 
 
-    public void borrarAnuncio(Long id, String idUsuario) {
-
+    public void borrarAnuncio(Long id) {
         Anuncio anuncio = servicioBaseAnuncio.buscarPorId(id);
-        Usuario usuario = servicioBaseUsuario.buscarPorId(idUsuario);
-
-
-        if(!anuncio.getUsuario().equals(usuario)){
-            throw new NotOwnedException("No se puede eliminar un anuncio que no te pertenece");
+        List<Favorito> favoritos = servicioBaseFavorito.buscarPorAnuncioId(anuncio.getId());
+        if(!favoritos.isEmpty()){
+            favoritos.forEach(servicioBaseFavorito::borrar);
         }
 
-        usuario.borrarAnuncio(anuncio);
-        servicioBaseUsuario.guardar(usuario);
+        Page<Mensaje> mensajes = servicioBaseMensaje.buscarTodosPorAnuncioId(anuncio.getId(), Pageable.unpaged());
+        if(mensajes.hasContent()){
+            mensajes.getContent().forEach(servicioBaseMensaje::borrar);
+        }
+
+        List<Reporte> reportes = servicioBaseReporte.BuscarPorAnuncioId(anuncio.getId());
+        if(!reportes.isEmpty()){
+            reportes.forEach(servicioBaseReporte::borrar);
+        }
+
         servicioBaseAnuncio.borrar(anuncio);
     }
 
-    public Reporte reportarAnuncio(Long anuncioId, Reporte reporte) {
+    public Reporte reportarAnuncio(Long anuncioId, Reporte reporte, Usuario usuario) {
         Anuncio anuncio = servicioBaseAnuncio.buscarPorId(anuncioId);
-        Usuario usuario = servicioBaseUsuario.buscarPorId(reporte.getUsuario().getId());
 
         if(servicioBaseReporte.buscarPorAnuncioIdYUsuarioId(anuncio.getId(), usuario.getId()).isPresent())
             throw new IllegalStateException("Ya has reportado este anuncio");

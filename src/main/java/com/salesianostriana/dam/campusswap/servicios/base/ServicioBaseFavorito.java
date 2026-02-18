@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -36,4 +37,9 @@ public class ServicioBaseFavorito
     public Page<Favorito> buscarTodos(Pageable pageable) {
         return repositorioFavorito.findAll(pageable);
     }
+
+    public List<Favorito> buscarPorAnuncioId(Long anuncioId) {
+        return repositorioFavorito.findByAnuncioId(anuncioId);
+    }
+
 }
