@@ -180,7 +180,7 @@ public class ControladorCatalogo {
             summary = "Obtener catálogo de anuncios activos",
             description = "Obtiene una página de anuncios, con opción de búsqueda por título o descripción y filtros opcionales por categoría, rango de precio, tipo de operación y estado."
     )
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USUARIO')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
     public ResponseEntity<Page<AnuncioResponseDto>> obtenerCatalogo(@PageableDefault(page = 0, size = 10, sort = "fechaPublicacion",
                                                                             direction = Sort.Direction.DESC)Pageable pageable, @RequestParam(required = false) String q,
                                                                     @RequestParam(required = false) Long categoriaId,
