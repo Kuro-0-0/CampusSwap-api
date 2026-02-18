@@ -12,8 +12,5 @@ public class ComprobarMensaje {
     @Autowired
     private ServicioBaseMensaje servicioBaseMensaje;
 
-    public boolean esParticipante(Long id, Usuario usuario) {
-        return !servicioBaseMensaje.buscarTodosPorAnuncioIdYUsuarioId(id, usuario.getId()).isEmpty();
-    }
 
 }
