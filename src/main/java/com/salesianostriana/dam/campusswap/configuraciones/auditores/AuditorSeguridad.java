@@ -3,6 +3,7 @@ package com.salesianostriana.dam.campusswap.configuraciones.auditores;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -17,8 +18,9 @@ public class AuditorSeguridad implements AuditorAware<Usuario> {
     public Optional<Usuario> getCurrentAuditor() {
         return Optional.ofNullable(SecurityContextHolder.getContext())
                 .map(SecurityContext::getAuthentication)
-                .filter(Authentication::isAuthenticated)
+                .filter(auth -> auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken))
                 .map(Authentication::getPrincipal)
+                .filter(principal -> principal instanceof Usuario)
                 .map(Usuario.class::cast);
 
 
