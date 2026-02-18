@@ -29,17 +29,16 @@ public class AuthService {
     public LoginResponse doLogin(LoginRequest loginRequest) {
         Authentication authentication = authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.username(), loginRequest.password())
+                        loginRequest.email(), loginRequest.password())
         );
 
-        // Rescatar al usuario por username para obtener su id
-        Usuario user = userRepository.findByUsername(loginRequest.username())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + loginRequest.username()));
+        Usuario user = userRepository.findByEmail(loginRequest.email())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + loginRequest.email()));
 
 
         String token = jwtAccessTokenService.generateAccessToken(user);
 
-        return new LoginResponse(loginRequest.username(), token);
+        return new LoginResponse(loginRequest.email(), token);
 
     }
 

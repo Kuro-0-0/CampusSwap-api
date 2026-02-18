@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.campusswap.repositorios;
 
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,6 @@ public interface RepositorioUsuario extends JpaRepository<Usuario, UUID>, JpaSpe
     boolean existsByEmail(String value);
 
     boolean existsByUsername(String value);
+
+    Optional<Usuario> findByEmail(String email);
 }
