@@ -1,6 +1,9 @@
 package com.salesianostriana.dam.campusswap.seguridad.auth.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record LoginRequest(
-        String username, String password
+        @NotBlank String username,
+        @NotBlank String password
 ) {
 }

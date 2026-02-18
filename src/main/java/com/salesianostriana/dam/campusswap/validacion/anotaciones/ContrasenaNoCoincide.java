@@ -1,7 +1,6 @@
 package com.salesianostriana.dam.campusswap.validacion.anotaciones;
 
 import com.salesianostriana.dam.campusswap.validacion.validadores.ValidadorContrasenaNoCoincide;
-import com.salesianostriana.dam.campusswap.validacion.validadores.ValidadorPrecioSegunTipoOperacion;
 import jakarta.validation.Constraint;
 
 import java.lang.annotation.*;

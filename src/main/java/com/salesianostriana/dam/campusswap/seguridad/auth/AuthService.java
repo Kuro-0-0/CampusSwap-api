@@ -49,8 +49,6 @@ public class AuthService {
         nuevoUsuario.setContrasena(passwordEncoder.encode(nuevoUsuario.getContrasena()));
         nuevoUsuario.addRol(RolUsuario.USUARIO);
 
-        System.out.println(nuevoUsuario);
-
         userRepository.save(nuevoUsuario);
         String token = jwtAccessTokenService.generateAccessToken(nuevoUsuario);
 
