@@ -9,6 +9,7 @@ import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.Anuncio
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.reporte.ReporteRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.reporte.ReporteResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.funciones.ServicioAnuncio;
+import com.salesianostriana.dam.campusswap.validacion.anotaciones.ValidImage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -173,7 +174,7 @@ public class ControladorAnuncio {
     public ResponseEntity<AnuncioResponseDto> crearAnuncio(
 
         @Valid @RequestPart("data") AnuncioRequestDto dto,
-        @Valid @RequestPart("file") MultipartFile image,
+        @ValidImage @Valid @RequestPart("file") MultipartFile file,
         @AuthenticationPrincipal Usuario usuario) {
         Anuncio nuevoAnuncio = dto.toAnuncio();
 
@@ -181,7 +182,7 @@ public class ControladorAnuncio {
                 .status(HttpStatus.CREATED)
                 .body(
                         AnuncioResponseDto.of(
-                                servicioAnuncio.crearAnuncio(nuevoAnuncio, usuario, image)
+                                servicioAnuncio.crearAnuncio(nuevoAnuncio, usuario, file)
                         )
                 );
     }
@@ -311,7 +312,7 @@ public class ControladorAnuncio {
                     description = "DTO con los datos para editar el anuncio",
                     required = true,
                     content = @Content(
-                            mediaType = "application/json",
+                            mediaType = "multipart/form-data",
                             schema = @Schema(implementation = AnuncioRequestDto.class),
                             examples = {
                                     @ExampleObject(
@@ -333,7 +334,7 @@ public class ControladorAnuncio {
             )
             @Valid @RequestPart("data") AnuncioRequestDto dto,
             @AuthenticationPrincipal Usuario usuario,
-            @RequestPart(value = "file", required = false) MultipartFile file
+            @ValidImage @RequestPart(value = "file", required = false) MultipartFile file
     ){
         return ResponseEntity.status(HttpStatus.OK).body(AnuncioResponseDto.of(
             servicioAnuncio.editarAnuncio(id, dto.toAnuncio(),

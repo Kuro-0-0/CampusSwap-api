@@ -46,16 +46,20 @@ public class ServicioAnuncio {
         Anuncio original = servicioBaseAnuncio.buscarPorId(id);
         Categoria categoria = servicioBaseCategoria.buscarPorId(anuncio.getCategoria().getId());
 
-        if (file != null) {
-            FileMetadata fileMetadata = storageService.store(file);
-            original.setImagen(fileMetadata.getFilename());
-        }
-
         if (original.getUsuario() == null || !original.getUsuario().equals(usuario))
             throw new NotOwnedException("No puedes modificar un anuncio que no es tuyo");
 
         if (original.getEstado().equals(Estado.CERRADO))
             throw new IllegalStateException("No se pueden modificar anuncios cerrados");
+
+        if (file != null) {
+            String oldFilename = original.getImagen();
+            FileMetadata fileMetadata = storageService.store(file);
+            if (oldFilename != null && !oldFilename.isBlank()) {
+                storageService.deleteFile(oldFilename);
+            }
+            original.setImagen(fileMetadata.getFilename());
+        }
 
         return servicioBaseAnuncio.guardar(original.modificar(anuncio));
     }

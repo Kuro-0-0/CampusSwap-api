@@ -5,7 +5,8 @@ import com.salesianostriana.dam.campusswap.ficheros.general.model.FileMetadata;
 import lombok.experimental.SuperBuilder;
 
 
-@SuperBuilder public class LocalFileMetadataImpl extends AbstractFileMetadata {
+@SuperBuilder
+public class LocalFileMetadataImpl extends AbstractFileMetadata {
 
     public static FileMetadata of(String filename) {
         return LocalFileMetadataImpl.builder()
