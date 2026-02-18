@@ -20,4 +20,8 @@ public class ServicioBaseMensaje {
     public Page<Mensaje> buscarTodosPorAnuncioId(Long idAnuncio, Pageable pageable) {
         return repositorioMensaje.findAllByAnuncioId(idAnuncio, pageable);
     }
+
+    public void borrar(Mensaje mensaje) {
+        repositorioMensaje.delete(mensaje);
+    }
 }
