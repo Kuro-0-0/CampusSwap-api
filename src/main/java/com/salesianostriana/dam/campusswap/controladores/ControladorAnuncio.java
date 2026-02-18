@@ -26,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -169,33 +170,20 @@ public class ControladorAnuncio {
             description = "Permite crear un nuevo anuncio en el sistema."
     )
     @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
-    public ResponseEntity<AnuncioResponseDto> crearAnuncio(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "DTO con los datos para crear el anuncio",
-            required = true,
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = AnuncioRequestDto.class),
-                    examples = {
-                            @ExampleObject(
-                                    value = """
-                                            {
-                                                "titulo": "Producto de Prueba2",
-                                                "descripcion": "Una descripción detallada del producto",
-                                                "precio": 25.5,
-                                                "imagen": "producto.jpg",
-                                                "tipoOperacion": "VENTA",
-                                                "condicion": "NUEVO",
-                                                "categoriaId": 1,
-                                            }
-                                            """
-                            )
-                    }
+    public ResponseEntity<AnuncioResponseDto> crearAnuncio(
 
-            )
-    ) @RequestBody() AnuncioRequestDto dto, @AuthenticationPrincipal Usuario usuario) {
+        @Valid @RequestPart("data") AnuncioRequestDto dto,
+        @Valid @RequestPart("file") MultipartFile image,
+        @AuthenticationPrincipal Usuario usuario) {
         Anuncio nuevoAnuncio = dto.toAnuncio();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(AnuncioResponseDto.of(servicioAnuncio.crearAnuncio(nuevoAnuncio, usuario)));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(
+                        AnuncioResponseDto.of(
+                                servicioAnuncio.crearAnuncio(nuevoAnuncio, usuario, image)
+                        )
+                );
     }
 
     @PutMapping("/{id}")
@@ -343,11 +331,13 @@ public class ControladorAnuncio {
 
                     )
             )
-            @Valid @RequestBody AnuncioRequestDto dto, @AuthenticationPrincipal Usuario usuario
+            @Valid @RequestPart("data") AnuncioRequestDto dto,
+            @AuthenticationPrincipal Usuario usuario,
+            @RequestPart(value = "file", required = false) MultipartFile file
     ){
         return ResponseEntity.status(HttpStatus.OK).body(AnuncioResponseDto.of(
             servicioAnuncio.editarAnuncio(id, dto.toAnuncio(),
-                    usuario
+                    usuario, file
             )
         ));
     }

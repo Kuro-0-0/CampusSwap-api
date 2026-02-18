@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.campusswap.ficheros.logica;
 
+import com.salesianostriana.dam.campusswap.ficheros.general.model.FileMetadata;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
