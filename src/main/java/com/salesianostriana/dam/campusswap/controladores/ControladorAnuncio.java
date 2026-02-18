@@ -644,22 +644,7 @@ public class ControladorAnuncio {
                     required = true
             )
             @PathVariable Long id,
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "ID del usuario propietario del anuncio (en futuras implementaciones se obtendrá del token de autenticación)",
-                    required = true,
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(type = "string"),
-                            examples = {
-                                    @ExampleObject(
-                                            value = """
-                                                        "6e44a229-0400-4903-9f58-11c63a1dc31a"
-                                                    """
-                                    )
-                            }
-                    )
-            )
-            Usuario usuario
+            @AuthenticationPrincipal Usuario usuario
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 AnuncioResponseDto.of(
