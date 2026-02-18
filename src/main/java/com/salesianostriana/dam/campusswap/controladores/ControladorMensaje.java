@@ -87,6 +87,46 @@ public class ControladorMensaje {
             )
     )
     @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se ha proporcionado un token de autenticación válido",
+                                                "instance": "/api/v1/mensajes",
+                                                "status": 401,
+                                                "title": "No autorizado"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Prohibido",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No tienes permiso para enviar un mensaje a este usuario",
+                                                "instance": "/api/v1/mensajes",
+                                                "status": 403,
+                                                "title": "Prohibido"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
             responseCode = "404",
             description = "Recurso no encontrado",
             content = @Content(
