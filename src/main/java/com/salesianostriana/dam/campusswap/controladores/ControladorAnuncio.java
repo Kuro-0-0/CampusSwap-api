@@ -2,6 +2,7 @@ package com.salesianostriana.dam.campusswap.controladores;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Reporte;
+import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.BorrarAnuncioRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioResponseDto;
@@ -22,6 +23,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -81,6 +84,44 @@ public class ControladorAnuncio {
                             )
                     }
             )
+    )@ApiResponse(
+            responseCode = "401",
+            description = "No autorizado. Se requiere autenticación para acceder a este recurso.",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Acceso denegado. No se ha proporcionado un token de autenticación válido.",
+                                                "instance": "/api/v1/catalogo",
+                                                "status": 401,
+                                                "title": "No autorizado."
+                                            }
+                                            """
+                            )
+                    })
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Prohibido. El usuario autenticado no tiene permisos para acceder a este recurso.",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Acceso prohibido. El usuario autenticado no tiene permisos para acceder a este recurso.",
+                                                "instance": "/api/v1/catalogo",
+                                                "status": 403,
+                                                "title": "Prohibido."
+                                            }
+                                            """
+                            )
+                    }
+            )
     )
     @ApiResponse(
             responseCode = "404",
@@ -126,6 +167,7 @@ public class ControladorAnuncio {
             summary = "Crear un nuevo anuncio",
             description = "Permite crear un nuevo anuncio en el sistema."
     )
+    @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
     public ResponseEntity<AnuncioResponseDto> crearAnuncio(@Valid @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "DTO con los datos para crear el anuncio",
             required = true,
@@ -143,17 +185,16 @@ public class ControladorAnuncio {
                                                 "tipoOperacion": "VENTA",
                                                 "condicion": "NUEVO",
                                                 "categoriaId": 1,
-                                                "usuarioId":"6ac890d0-8ee2-4967-8bb7-cfa8b84376bc"
                                             }
                                             """
                             )
                     }
 
             )
-    ) @RequestBody() AnuncioRequestDto dto) {
+    ) @RequestBody() AnuncioRequestDto dto, @AuthenticationPrincipal Usuario usuario) {
         Anuncio nuevoAnuncio = dto.toAnuncio();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(AnuncioResponseDto.of(servicioAnuncio.crearAnuncio(nuevoAnuncio)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(AnuncioResponseDto.of(servicioAnuncio.crearAnuncio(nuevoAnuncio, usuario)));
     }
 
     @PutMapping("/{id}")
@@ -248,6 +289,9 @@ public class ControladorAnuncio {
             description = "Permite editar un anuncio existente. " +
                     "Solo el propietario del anuncio puede editarlo, y el anuncio no puede estar cerrado."
     )
+    @PreAuthorize(
+            "hasAnyRole('ADMIN', 'USUARIO') and @comprobarAnuncio.esPropietario(#id, principal)"
+    )
     public ResponseEntity<AnuncioResponseDto> editarAnuncio(
             @Parameter(
                     description = "ID del anuncio a editar",
@@ -272,7 +316,6 @@ public class ControladorAnuncio {
                                                         "tipoOperacion": "VENTA",
                                                         "condicion": "NUEVO",
                                                         "categoriaId": 1,
-                                                        "usuarioId":"6ac890d0-8ee2-4967-8bb7-cfa8b84376bc"
                                                     }
                                                     """
                                     )
@@ -280,11 +323,11 @@ public class ControladorAnuncio {
 
                     )
             )
-            @Valid @RequestBody AnuncioRequestDto dto
+            @Valid @RequestBody AnuncioRequestDto dto, @AuthenticationPrincipal Usuario usuario
     ){
         return ResponseEntity.status(HttpStatus.OK).body(AnuncioResponseDto.of(
             servicioAnuncio.editarAnuncio(id, dto.toAnuncio(),
-                    dto.usuarioId() // Cuando haya seguridad se deberá obtener el ID del usuario autenticado en lugar de recibirlo en el DTO
+                    usuario // Cuando haya seguridad se deberá obtener el ID del usuario autenticado en lugar de recibirlo en el DTO
             )
         ));
     }
