@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
+import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.favorito.FavoritoRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.favorito.FavoritoResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.funciones.ServicioFavorito;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -113,10 +115,13 @@ public class ControladorFavorito {
     )
     @Operation(
             summary = "Crear un nuevo favorito",
-            description = "Permite a un usuario marcar un anuncio como favorito. Se requiere el ID del usuario y el ID del anuncio."
+            description = "Permite al usuario autenticado marcar un anuncio como favorito. En el cuerpo de la solicitud solo es necesario enviar el ID del anuncio; el usuario se obtiene a partir de la autenticación."
     )
-    public ResponseEntity<FavoritoResponseDto> crearFavorito(@Valid @RequestBody() FavoritoRequestDto favoritoRequestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(FavoritoResponseDto.of(servicioFavorito.crearFavorito(favoritoRequestDto.anuncioId(), favoritoRequestDto.usuarioId())));
+    public ResponseEntity<FavoritoResponseDto> crearFavorito(
+            @Valid @RequestBody FavoritoRequestDto favoritoRequestDto,
+            @AuthenticationPrincipal Usuario usuario
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(FavoritoResponseDto.of(servicioFavorito.crearFavorito(favoritoRequestDto.anuncioId(), usuario)));
     }
 
     @DeleteMapping("/{id}")
@@ -124,6 +129,7 @@ public class ControladorFavorito {
             responseCode = "204",
             description = "No Content - Favorito eliminado correctamente"
     )
+
     @ApiResponse(
             responseCode = "403",
             description = "Forbidden - El usuario no es el propietario del favorito",
@@ -194,9 +200,9 @@ public class ControladorFavorito {
                     required = true
             )
             @PathVariable Long id,
-            @RequestBody String idUsuario
-    ) {
-        servicioFavorito.eliminarFavorito(id, idUsuario);
+            @AuthenticationPrincipal Usuario usuario
+            ) {
+        servicioFavorito.eliminarFavorito(id, usuario);
         return ResponseEntity.noContent().build();
     }
 
@@ -240,6 +246,7 @@ public class ControladorFavorito {
                     }
             )
     )
+
     @ApiResponse(
             responseCode = "500",
             description = "Internal Server Error - Error al listar favoritos",

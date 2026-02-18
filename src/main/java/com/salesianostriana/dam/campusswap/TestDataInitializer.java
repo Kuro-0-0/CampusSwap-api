@@ -3,17 +3,20 @@ package com.salesianostriana.dam.campusswap;
 import com.salesianostriana.dam.campusswap.entidades.*;
 import com.salesianostriana.dam.campusswap.entidades.extras.Condicion;
 import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
+import com.salesianostriana.dam.campusswap.entidades.extras.RolUsuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
 import com.salesianostriana.dam.campusswap.repositorios.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -27,6 +30,7 @@ class TestDataInitializer {
     private final RepositorioMensaje repoMensaje;
     private final RepositorioFavorito repoFavorito;
     private final RepositorioValoracion repoValoracion;
+    private final PasswordEncoder passwordEncoder;
 
     @PostConstruct
     @Transactional
@@ -48,10 +52,10 @@ class TestDataInitializer {
 
         repoCategoria.saveAll(List.of(catLibros, catElectronica, catRopa, catTransporte, catMuebles));
 
-        Usuario uAdmin = crearUsuario("Admin User", "admin@salesianos.edu", "1234", "admin_avatar.png", "Administrador del sistema y moderador.", 5.0);
-        Usuario uVendedor = crearUsuario("Carlos Vendedor", "carlos@salesianos.edu", "1234", "carlos.jpg", "Vendo todo lo que ya no uso del ciclo de DAM. ¡Precios negociables!", 4.8);
-        Usuario uComprador = crearUsuario("Laura Compradora", "laura@salesianos.edu", "1234", "laura.jpg", "Busco material para 1º de DAM.", 0.0);
-        Usuario uNuevo = crearUsuario("Pepe Novato", "pepe@salesianos.edu", "1234", null, "Nuevo en el campus.", 0.0);
+        Usuario uAdmin = crearUsuario("Admin User", "admin", "admin@salesianos.edu", "1234", "admin_avatar.png", "Administrador del sistema y moderador.", 5.0, RolUsuario.ADMIN);
+        Usuario uVendedor = crearUsuario("Carlos Vendedor", "carlos_v", "carlos@salesianos.edu", "1234", "carlos.jpg", "Vendo todo lo que ya no uso del ciclo de DAM. ¡Precios negociables!", 4.8, RolUsuario.ADMIN);
+        Usuario uComprador = crearUsuario("Laura Compradora", "laura_buyer", "laura@salesianos.edu", "1234", "laura.jpg", "Busco material para 1º de DAM.", 0.0, RolUsuario.USUARIO);
+        Usuario uNuevo = crearUsuario("Pepe Novato", "pepito", "pepe@salesianos.edu", "1234", null, "Nuevo en el campus.", 0.0, RolUsuario.ADMIN);
 
         List<Usuario> usuarios = repoUsuario.saveAll(List.of(uAdmin, uVendedor, uComprador, uNuevo));
         uAdmin = usuarios.get(0);
@@ -159,14 +163,16 @@ class TestDataInitializer {
         log.info("CARGA DE DATOS COMPLETADA: Usuarios, Anuncios, Favoritos, Mensajes y Valoraciones listos.");
     }
 
-    private Usuario crearUsuario(String nombre, String email, String pass, String foto, String desc, double reputacion) {
+    private Usuario crearUsuario(String nombre, String username, String email, String pass, String foto, String desc, double reputacion, RolUsuario rol) {
         return Usuario.builder()
                 .nombre(nombre)
+                .username(username) // Nuevo campo
                 .email(email)
-                .contrasena(pass)
+                .contrasena(passwordEncoder.encode(pass))
                 .fotoPerfil(foto)
                 .descripcion(desc)
                 .reputacionMedia(reputacion)
+                .roles(Set.of(rol)) // Asignación del rol
                 .enabled(true)
                 .fechaRegistro(LocalDateTime.now().minusMonths(1))
                 .build();

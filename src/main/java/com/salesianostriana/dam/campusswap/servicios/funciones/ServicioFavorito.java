@@ -23,29 +23,26 @@ public class ServicioFavorito {
     private final ServicioBaseFavorito servicioBaseFavorito;
 
 
-    public Favorito crearFavorito(Long anuncioId, String usuarioId) {
+    public Favorito crearFavorito(Long id, Usuario usuario) {
 
-        Usuario usuario = servicioBaseUsuario.buscarPorId(usuarioId);
-
-        Anuncio anuncio = servicioBaseAnuncio.buscarPorId(anuncioId);
+        Anuncio anuncio = servicioBaseAnuncio.buscarPorId(id);
 
         if (anuncio.getUsuario().equals(usuario))
             throw new IllegalArgumentException("No puedes marcar como favorito un anuncio que tú mismo has creado");
 
-        if (servicioBaseFavorito.existePorUsuarioIdYAnuncioId(UUID.fromString(usuarioId), anuncioId))
+        if (servicioBaseFavorito.existePorUsuarioIdYAnuncioId(usuario.getId(), id))
             throw new IllegalArgumentException("Ya has marcado este anuncio como favorito");
 
-        Favorito favorito = Favorito.builder()
+
+        return servicioBaseFavorito.guardar(Favorito.builder()
                 .usuario(usuario)
                 .anuncio(anuncio)
-                .build();
-
-        return servicioBaseFavorito.guardar(favorito);
+                .build());
     }
 
-    public void eliminarFavorito(Long id, String idUsuario) {
+    public void eliminarFavorito(Long id, Usuario usuario) {
         Favorito favorito = servicioBaseFavorito.buscarPorId(id);
-        if (!favorito.getUsuario().getId().equals(UUID.fromString(idUsuario)))
+        if (!favorito.getUsuario().equals(usuario))
             throw new NotOwnedException("No puedes eliminar un favorito que no es tuyo");
 
         servicioBaseFavorito.borrar(favorito);
