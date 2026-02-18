@@ -67,4 +67,8 @@ public class Usuario implements UserDetails {
     public @Nullable String getPassword() {
         return contrasena;
     }
+
+    public void addRol(RolUsuario rol) {
+        roles.add(rol);
+    }
 }
