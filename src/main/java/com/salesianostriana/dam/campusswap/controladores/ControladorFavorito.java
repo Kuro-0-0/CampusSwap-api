@@ -76,6 +76,46 @@ public class ControladorFavorito {
             )
     )
     @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado - El usuario no está autenticado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Full authentication is required to access this resource",
+                                                "instance": "/api/v1/favoritos",
+                                                "status": 401,
+                                                "title": "Unauthorized"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Prohibido - No se puede marcar como favorito un anuncio propio",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Access Denied",
+                                                "instance": "/api/v1/favoritos",
+                                                "status": 403,
+                                                "title": "Forbidden"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
             responseCode = "404",
             description = "Recurso no encontrado",
             content = @Content(
@@ -134,7 +174,26 @@ public class ControladorFavorito {
             responseCode = "204",
             description = "No Content - Favorito eliminado correctamente"
     )
-
+    @ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized - El usuario no está autenticado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Full authentication is required to access this resource",
+                                                "instance": "/api/v1/favoritos/1",
+                                                "status": 401,
+                                                "title": "Unauthorized"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
     @ApiResponse(
             responseCode = "403",
             description = "Forbidden - El usuario no es el propietario del favorito",
@@ -254,7 +313,26 @@ public class ControladorFavorito {
                     }
             )
     )
-
+    @ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized - El usuario no está autenticado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Full authentication is required to access this resource",
+                                                "instance": "/api/v1/favoritos",
+                                                "status": 401,
+                                                "title": "Unauthorized"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
     @ApiResponse(
             responseCode = "500",
             description = "Internal Server Error - Error al listar favoritos",
