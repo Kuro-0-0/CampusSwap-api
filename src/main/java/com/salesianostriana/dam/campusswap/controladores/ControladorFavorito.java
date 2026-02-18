@@ -18,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -117,6 +119,9 @@ public class ControladorFavorito {
             summary = "Crear un nuevo favorito",
             description = "Permite al usuario autenticado marcar un anuncio como favorito. En el cuerpo de la solicitud solo es necesario enviar el ID del anuncio; el usuario se obtiene a partir de la autenticación."
     )
+    @PreAuthorize(
+            "@comprobarAnuncio.esPropietario(#favoritoRequestDto.anuncioId, principal) == false"
+    )
     public ResponseEntity<FavoritoResponseDto> crearFavorito(
             @Valid @RequestBody FavoritoRequestDto favoritoRequestDto,
             @AuthenticationPrincipal Usuario usuario
@@ -192,6 +197,9 @@ public class ControladorFavorito {
     @Operation(
             summary = "Eliminar un favorito",
             description = "Elimina un favorito específico. Solo el usuario que creó el favorito puede eliminarlo."
+    )
+    @PreAuthorize(
+            "@comprobarFavorito.esPropietario(#id, principal)"
     )
     public ResponseEntity<?> eliminarFavorito(
             @Parameter(
