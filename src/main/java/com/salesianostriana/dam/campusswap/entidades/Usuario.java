@@ -54,22 +54,6 @@ public class Usuario implements UserDetails {
     @Builder.Default
     private boolean credentialsNonExpired = true;
 
-
-
-    @Builder.Default
-    @OneToMany(mappedBy = "usuario", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Anuncio> anuncios = new ArrayList<>();
-
-    public void agregarAnuncio(Anuncio anuncio) {
-        anuncios.add(anuncio);
-        anuncio.setUsuario(this);
-    }
-
-    public void borrarAnuncio(Anuncio anuncio){
-        anuncios.remove(anuncio);
-        anuncio.setUsuario(null);
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
