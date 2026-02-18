@@ -1,21 +1,16 @@
 package com.salesianostriana.dam.campusswap.servicios.funciones;
 
-import com.salesianostriana.dam.campusswap.entidades.Anuncio;
-import com.salesianostriana.dam.campusswap.entidades.Categoria;
-import com.salesianostriana.dam.campusswap.entidades.Reporte;
-import com.salesianostriana.dam.campusswap.entidades.Usuario;
+import com.salesianostriana.dam.campusswap.entidades.*;
 import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
 import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
-import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseAnuncio;
-import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseCategoria;
-import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseReporte;
-import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseUsuario;
+import com.salesianostriana.dam.campusswap.servicios.base.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Log
@@ -27,6 +22,8 @@ public class ServicioAnuncio {
     private final ServicioBaseCategoria servicioBaseCategoria;
     private final ServicioBaseAnuncio servicioBaseAnuncio;
     private final ServicioBaseReporte servicioBaseReporte;
+    private final ServicioBaseFavorito servicioBaseFavorito;
+    private final ServicioBaseMensaje servicioBaseMensaje;
 
     public Anuncio crearAnuncio(Anuncio anuncio, Usuario usuario) {
         Categoria categoria = servicioBaseCategoria.buscarPorId(anuncio.getCategoria().getId());
@@ -75,6 +72,15 @@ public class ServicioAnuncio {
 
     public void borrarAnuncio(Long id) {
         Anuncio anuncio = servicioBaseAnuncio.buscarPorId(id);
+        List<Favorito> favoritos = servicioBaseFavorito.buscarPorAnuncioId(anuncio.getId());
+        if(!favoritos.isEmpty()){
+            favoritos.forEach(servicioBaseFavorito::borrar);
+        }
+
+        Page<Mensaje> mensajes = servicioBaseMensaje.buscarTodosPorAnuncioId(anuncio.getId(), Pageable.unpaged());
+        if(mensajes.hasContent()){
+            mensajes.getContent().forEach(servicioBaseMensaje::borrar);
+        }
 
         servicioBaseAnuncio.borrar(anuncio);
     }
