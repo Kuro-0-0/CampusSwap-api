@@ -3,13 +3,11 @@ package com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje;
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Mensaje;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
-import com.salesianostriana.dam.campusswap.validacion.anotaciones.EmisorReceptorIguales;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-@EmisorReceptorIguales
 public record EnviarMensajeRequestDto(
         @NotBlank(message = "El contenido no puede estar vacío")
         String contenido,
