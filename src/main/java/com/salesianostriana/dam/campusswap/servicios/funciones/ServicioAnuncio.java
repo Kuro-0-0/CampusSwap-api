@@ -82,6 +82,11 @@ public class ServicioAnuncio {
             mensajes.getContent().forEach(servicioBaseMensaje::borrar);
         }
 
+        List<Reporte> reportes = servicioBaseReporte.BuscarPorAnuncioId(anuncio.getId());
+        if(!reportes.isEmpty()){
+            reportes.forEach(servicioBaseReporte::borrar);
+        }
+
         servicioBaseAnuncio.borrar(anuncio);
     }
 
