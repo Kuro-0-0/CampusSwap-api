@@ -1,8 +1,8 @@
 package com.salesianostriana.dam.campusswap.ficheros.logica.local;
 
-import com.example.demo.ficheros.general.excepciones.StorageException;
-import com.example.demo.ficheros.general.model.FileMetadata;
-import com.example.demo.ficheros.logica.StorageService;
+import com.salesianostriana.dam.campusswap.ficheros.general.excepciones.StorageException;
+import com.salesianostriana.dam.campusswap.ficheros.general.model.FileMetadata;
+import com.salesianostriana.dam.campusswap.ficheros.logica.StorageService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -21,9 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-//@Primary
 @Service
-//@ConditionalOnProperty(name = "storage.type", havingValue = "local", matchIfMissing = true)
 public class FileSystemStorageService implements StorageService {
 
     @Value("${storage.location}")
