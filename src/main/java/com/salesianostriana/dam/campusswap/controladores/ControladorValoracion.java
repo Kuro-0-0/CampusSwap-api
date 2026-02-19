@@ -35,7 +35,7 @@ public class ControladorValoracion {
 
     private final ServicioValoracion servicioValoracion;
 
-    @GetMapping
+    @GetMapping("media")
     @Operation(
             summary = "Obtener la media de valoraciones de un usuario",
             description = "Devuelve la media de las valoraciones recibidas por el usuario autenticado."
@@ -169,7 +169,7 @@ public class ControladorValoracion {
 
     }
 
-    @GetMapping("/media")
+    @GetMapping("")
     @ApiResponse(
             responseCode = "200",
             description = "Valoraciones obtenidas correctamente",

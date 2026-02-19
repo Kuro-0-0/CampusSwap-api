@@ -15,8 +15,7 @@ public class ServicioUsuario {
 
     private final ServicioBaseUsuario servicioBaseUsuario;
     private final StorageService storageService;
-
-
+    private final ServicioValoracion servicioValoracion;
 
     public Usuario actualizarFotoPerfil(Usuario usuarioAutenticado, MultipartFile file) {
 
@@ -35,4 +34,8 @@ public class ServicioUsuario {
     }
 
 
+    public Usuario obtenerDatosPerfil(Usuario usuario) {
+        servicioValoracion.calcularMediaValoraciones(usuario);
+        return usuario;
+    }
 }
