@@ -16,4 +16,6 @@ public interface RepositorioFavorito extends JpaRepository<Favorito, Long>, JpaS
     boolean existsByUsuarioIdAndAnuncioId(UUID usuarioId, Long anuncioId);
 
     List<Favorito> findByAnuncioId(Long anuncioId);
+
+    Page<Favorito> findAllByUsuarioId(Pageable pageable, UUID id);
 }

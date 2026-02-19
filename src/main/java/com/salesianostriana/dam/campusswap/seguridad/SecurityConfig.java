@@ -57,6 +57,10 @@ public class SecurityConfig {
                     cors.configurationSource(source);
                 })
 
+                .headers(headers -> {
+                    headers.frameOptions(frame -> frame.disable());
+                })
+
                 .exceptionHandling(excep -> excep
                         .accessDeniedHandler(jwtAccessDeniedHandler)
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)

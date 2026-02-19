@@ -12,7 +12,7 @@ public record UsuarioResponseDto(
         String id,
         String nombre,
         String email,
-        double reputacionMedia,
+        Double reputacionMedia,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime fechaRegistro,
         Set<String> roles

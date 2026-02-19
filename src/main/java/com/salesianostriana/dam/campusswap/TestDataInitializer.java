@@ -136,13 +136,13 @@ class TestDataInitializer {
         repoMensaje.saveAll(List.of(m1, m2));
 
         Favorito f1 = Favorito.builder()
-                .usuario(uNuevo)
+                .usuario(uComprador)
                 .anuncio(aBici)
                 .fecha(LocalDateTime.now())
                 .build();
 
         Favorito f2 = Favorito.builder()
-                .usuario(uNuevo)
+                .usuario(uComprador)
                 .anuncio(aPortatil)
                 .fecha(LocalDateTime.now())
                 .build();

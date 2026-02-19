@@ -27,8 +27,8 @@ public class ServicioValoracion {
 
         Double media = servicioBaseValoracion.calcularMediaValoracionesUsuario(usuario.getId());
 
-        if(media == null)
-            throw  new  IllegalStateException("El usuario no tiene valoraciones");
+//        if(media == null)
+//            throw  new  IllegalStateException("El usuario no tiene valoraciones");
 
         usuario.setReputacionMedia(media);
         servicioBaseUsuario.guardar(usuario);

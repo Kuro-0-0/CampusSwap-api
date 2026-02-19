@@ -42,4 +42,7 @@ public class ServicioBaseFavorito
         return repositorioFavorito.findByAnuncioId(anuncioId);
     }
 
+    public Page<Favorito> buscarPorUsuarioId(Pageable pageable, UUID id) {
+        return repositorioFavorito.findAllByUsuarioId(pageable, id);
+    }
 }

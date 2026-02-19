@@ -626,7 +626,7 @@ public class ControladorAnuncio {
                     "Solo el propietario del anuncio puede alternar su estado, y el anuncio no puede estar pausado."
     )
     @PreAuthorize(
-            "hasAnyRole('ADMIN', 'USUARIO') and @comprobarAnuncio.esPropietario(#id, principal)"
+            "hasAnyRole('ADMIN') or @comprobarAnuncio.esPropietario(#id, principal)"
     )
     public ResponseEntity<AnuncioResponseDto> alternarEstado(
             @Parameter(

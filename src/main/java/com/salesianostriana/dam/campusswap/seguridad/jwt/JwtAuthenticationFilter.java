@@ -21,6 +21,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Component
@@ -55,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
                 }, () -> {
-                    throw new EntityNotFoundException("User not found with id: " + userId);
+                    throw new NoSuchElementException("User not found with id: " + userId);
                 });
 
 
