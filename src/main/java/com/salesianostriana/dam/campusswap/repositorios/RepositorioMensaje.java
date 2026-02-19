@@ -1,11 +1,13 @@
 package com.salesianostriana.dam.campusswap.repositorios;
 
+import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Mensaje;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -36,5 +38,9 @@ public interface RepositorioMensaje extends JpaRepository<Mensaje, Long> {
             "SELECT m FROM Mensaje m WHERE m.anuncio.id = :idAnuncio AND (m.emisor.id = :idUsuario OR m.receptor.id = :idUsuario)"
     )
     List<Mensaje> findAllByAnuncioIdAndUsuarioId(Long idAnuncio, UUID idUsuario);
+
+
+
+
 }
 

@@ -3,9 +3,7 @@ package com.salesianostriana.dam.campusswap.servicios.funciones;
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Mensaje;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
-import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
-import com.salesianostriana.dam.campusswap.repositorios.RepositorioMensaje;
-import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
+
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseAnuncio;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseMensaje;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseUsuario;
@@ -14,6 +12,7 @@ import org.springframework.data.domain.Page;
 import lombok.extern.java.Log;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.util.NoSuchElementException;
 
 @Log
@@ -41,4 +40,7 @@ public class ServicioMensaje {
             throw new NoSuchElementException("No se ha encontrado el anuncio con id: " + idAnuncio);
         return servicioBaseMensaje.buscarTodosPorAnuncioId(idAnuncio, pageable);
     }
+
+
+
 }

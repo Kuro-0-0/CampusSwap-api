@@ -1,6 +1,5 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
-import com.salesianostriana.dam.campusswap.entidades.Mensaje;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.EnviarMensajeRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.MensajeResponseDto;
@@ -41,9 +40,7 @@ public class ControladorMensaje {
     private final ServicioMensaje servicio;
 
     @PostMapping
-    @PreAuthorize(
-        "#dto.receptorId != principal.id"
-    )
+    @PreAuthorize("!#dto.receptorId.equals(principal.id)")
     @ApiResponse(
             responseCode = "201",
             description = "Mensaje enviado correctamente",
@@ -285,5 +282,9 @@ public class ControladorMensaje {
     ) {
         return servicio.obtenerMensajes(idAnuncio, pageable).map(ListarMensajeResponseDto::of);
     }
+
+
+
+
 
 }
