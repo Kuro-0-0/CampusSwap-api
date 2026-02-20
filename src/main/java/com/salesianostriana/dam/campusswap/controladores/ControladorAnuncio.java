@@ -174,7 +174,7 @@ public class ControladorAnuncio {
     public ResponseEntity<AnuncioResponseDto> crearAnuncio(
 
         @Valid @RequestPart("data") AnuncioRequestDto dto,
-        @ValidImage @Valid @RequestPart("file") MultipartFile file,
+        @ValidImage @RequestPart("file") MultipartFile file,
         @AuthenticationPrincipal Usuario usuario) {
         Anuncio nuevoAnuncio = dto.toAnuncio();
 
