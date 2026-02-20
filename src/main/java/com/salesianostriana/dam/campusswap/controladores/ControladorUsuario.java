@@ -4,10 +4,12 @@ import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.usuario.UsuarioResponseDto;
 import com.salesianostriana.dam.campusswap.ficheros.general.utiles.MimeTypeDetector;
 import com.salesianostriana.dam.campusswap.servicios.funciones.ServicioUsuario;
+import com.salesianostriana.dam.campusswap.validacion.anotaciones.ValidImage;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
@@ -123,7 +125,7 @@ public class ControladorUsuario {
     )
     public ResponseEntity<UsuarioResponseDto> actualizarFotoPerfil(
             @AuthenticationPrincipal Usuario usuario,
-            @RequestPart("file") MultipartFile file
+            @ValidImage @RequestPart("file") MultipartFile file
     ){
         return ResponseEntity.ok(UsuarioResponseDto.of(servicioUsuario.actualizarFotoPerfil(usuario, file)));
     }
@@ -136,16 +138,6 @@ public class ControladorUsuario {
         return ResponseEntity.ok(UsuarioResponseDto.of(servicioUsuario.obtenerDatosPerfil(usuario)));
     }
 
-    @GetMapping("/imagen/{imageUrl}")
-    public ResponseEntity<Resource> obtenerFotoPerfil(@PathVariable String imageUrl) {
 
-        Resource imagen = servicioUsuario.obtenerFotoPerfil(imageUrl);
-        String mimeType = mimeTypeDetector.getMimeType(imagen);
-
-        return ResponseEntity.ok()
-
-                .header("Content-Type", mimeType)
-                .body(imagen);
-    }
 
 }
