@@ -6,6 +6,7 @@ import com.salesianostriana.dam.campusswap.entidades.Mensaje;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.ListarChatResponseDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.MensajeResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseAnuncio;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseMensaje;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseUsuario;
