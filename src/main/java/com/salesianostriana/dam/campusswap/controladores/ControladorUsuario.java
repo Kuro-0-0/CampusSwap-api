@@ -1,17 +1,22 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.usuario.UsuarioResponseDto;
 import com.salesianostriana.dam.campusswap.ficheros.general.utiles.MimeTypeDetector;
 import com.salesianostriana.dam.campusswap.servicios.funciones.ServicioUsuario;
 import com.salesianostriana.dam.campusswap.validacion.anotaciones.ValidImage;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -131,6 +136,94 @@ public class ControladorUsuario {
     }
 
 
+    @ApiResponse(
+            responseCode = "200",
+            description = "Usuario obtenido correctamente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = UsuarioResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "id": "a2067420-127d-4486-a266-33c9e4408d09",
+                                                "nombre": "Carlos Vendedor",
+                                                "email": "carlos@salesianos.edu",
+                                                "reputacionMedia": 5.0,
+                                                "imageUrl": null,
+                                                "fechaRegistro": "2026-02-20 14:20:27",
+                                                "roles": [
+                                                    "USUARIO"
+                                                ]
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado. Se requiere autenticación para acceder a este recurso.",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Acceso denegado. No se ha proporcionado un token de autenticación válido.",
+                                                "instance": "/api/v1/catalogo",
+                                                "status": 401,
+                                                "title": "No autorizado."
+                                            }
+                                            """
+                            )
+                    })
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Usuario no encontrado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se ha encontrado el usuario con id: 123e4567-e89b-12d3-a456-426614174000",
+                                                "instance": "/api/v1/anuncios/123e4567-e89b-12d3-a456-426614174000",
+                                                "status": 404,
+                                                "title": "Recurso no encontrado"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Ha ocurrido un error inesperado",
+                                                "instance": "/api/v1/anuncios/1",
+                                                "status": 500,
+                                                "title": "Error inesperado."
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @Operation(
+            summary = "Obtener los datos el usuario logueado",
+            description = "Permite obtener todos los datos del usuario logueado que emita la petición."
+    )
     @GetMapping()
     public ResponseEntity<UsuarioResponseDto> obtenerUsuarioLogueado(
             @AuthenticationPrincipal Usuario usuario
