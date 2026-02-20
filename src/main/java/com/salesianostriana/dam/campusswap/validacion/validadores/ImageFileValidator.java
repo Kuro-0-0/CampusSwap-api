@@ -9,12 +9,12 @@ public class ImageFileValidator implements ConstraintValidator<ValidImage, Multi
     @Override
     public boolean isValid(MultipartFile file, ConstraintValidatorContext context) {
         if (file == null || file.isEmpty()) {
-            return true; // Let @NotNull handle empty files
+            return true;
         }
 
-        System.out.println(file);
-
         String contentType = file.getContentType();
+
+        System.out.println(contentType);
 
         return contentType != null && contentType.startsWith("image/");
     }
