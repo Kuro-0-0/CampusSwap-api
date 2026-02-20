@@ -1,20 +1,19 @@
 package com.salesianostriana.dam.campusswap.servicios.funciones;
 
-import com.salesianostriana.dam.campusswap.controladores.ControladorMensaje;
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Mensaje;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 
-import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.ListarChatResponseDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.chat.AnuncioChatDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.chat.ListarChatResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.MensajeResponseDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.chat.UsuarioChatDto;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseAnuncio;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseMensaje;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseUsuario;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import lombok.extern.java.Log;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -52,12 +51,11 @@ public class ServicioMensaje {
         List<Mensaje> mensajes = servicioBaseMensaje.buscarTodosPorUsuarioId(usuario.getId());
         Map<Long, List<Mensaje>> mensajesPorAnuncio = new HashMap<>();
 
-        System.out.println("Iterando mensajes: ");
         for (Mensaje m : mensajes) {
-            Set<String> participantes = new HashSet<>();
-            participantes.add(m.getEmisor().getId().toString());
-            participantes.add(m.getReceptor().getId().toString());
-            ListarChatResponseDto chat = new ListarChatResponseDto(m.getAnuncio().getId(), participantes, MensajeResponseDto.of(m));
+            Set<UsuarioChatDto> participantes = new HashSet<>();
+            participantes.add(UsuarioChatDto.of(m.getEmisor(), m.getEmisor().getId().equals(usuario.getId())));
+            participantes.add(UsuarioChatDto.of(m.getReceptor(), m.getReceptor().getId().equals(usuario.getId())));
+            ListarChatResponseDto chat = new ListarChatResponseDto(AnuncioChatDto.of(m.getAnuncio()), participantes, MensajeResponseDto.of(m));
 
             if (!chatExiste(chats, chat)) {
                 chats.add(chat);
@@ -80,7 +78,10 @@ public class ServicioMensaje {
 
     public ListarChatResponseDto obtenerUltimoMensaje (ListarChatResponseDto chat, Usuario usuario) {
         System.out.println("Iterando chats para obtener el último mensaje: ");
-        List<Mensaje> mensajesChatActual = this.obtenerChatEspecifico(chat.idAnuncio(), chat.participantes().stream().filter(id -> !id.equals(usuario.getId().toString())).findFirst().orElseThrow(), usuario);
+        String idContrario = chat.participantes().stream().filter(
+                p -> !p.id().equals(usuario.getId().toString())
+        ).toList().getFirst().id();
+        List<Mensaje> mensajesChatActual = this.obtenerChatEspecifico(chat.anuncio().id(),idContrario , usuario);
         Mensaje ultimoMensaje = mensajesChatActual.getLast();
         for (Mensaje mensaje : mensajesChatActual) {
             if (mensaje.getFechaEnvio().isAfter(ultimoMensaje.getFechaEnvio())) {
@@ -92,7 +93,7 @@ public class ServicioMensaje {
 
     public boolean chatExiste(List<ListarChatResponseDto> listaChats, ListarChatResponseDto chatActual) {
         for (ListarChatResponseDto chat : listaChats) {
-            if (chat.idAnuncio().equals(chatActual.idAnuncio()) &&
+            if (chat.anuncio().id().equals(chatActual.anuncio().id()) &&
                     chat.participantes().equals(chatActual.participantes())) {
                 return true;
             }
@@ -102,8 +103,9 @@ public class ServicioMensaje {
 
     public Optional<ListarChatResponseDto> buscarChatEspecifico(List<ListarChatResponseDto> listaChats, Long idAnuncio, String idContrario, String idUsuario) {
         for (ListarChatResponseDto chat : listaChats) {
-            if (chat.idAnuncio().equals(idAnuncio) &&
-                    chat.participantes().contains(idContrario) && chat.participantes().contains(idUsuario)) {
+            if (chat.anuncio().id().equals(idAnuncio) &&
+                chat.participantes().stream().map(usuario -> usuario.id()).anyMatch(id -> id.equals(idContrario) || id.equals(idUsuario))
+            ) {
                 return Optional.of(chat);
             }
         }
