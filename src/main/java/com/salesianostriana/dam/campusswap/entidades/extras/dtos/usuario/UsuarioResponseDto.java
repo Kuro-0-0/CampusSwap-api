@@ -3,7 +3,6 @@ package com.salesianostriana.dam.campusswap.entidades.extras.dtos.usuario;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;

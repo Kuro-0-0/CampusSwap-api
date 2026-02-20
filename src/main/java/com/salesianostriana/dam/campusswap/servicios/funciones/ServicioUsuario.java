@@ -39,5 +39,4 @@ public class ServicioUsuario {
         servicioValoracion.calcularMediaValoraciones(usuario);
         return usuario;
     }
-
 }
