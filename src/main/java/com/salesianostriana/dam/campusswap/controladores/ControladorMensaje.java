@@ -24,12 +24,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
@@ -295,7 +290,7 @@ public class ControladorMensaje {
             description = "Obtiene una lista paginada de los chats en los que el usuario logueado está participando, mostrando el ID del anuncio relacionado y los IDs de los participantes."
     )
     public ResponseEntity<Page<ListarChatResponseDto>> obtenerChats(Pageable pageable, @AuthenticationPrincipal Usuario usuario) {
-        List<ListarChatResponseDto> chats = servicio.obtenerChats(usuario);
+        List<ListarChatResponseDto> chats = servicio.obtenerChatsConUltimoMensaje(usuario);
         Page<ListarChatResponseDto> paginado = new PageImpl<>(
                 chats,
                 pageable,
@@ -304,7 +299,7 @@ public class ControladorMensaje {
         return ResponseEntity.ok(paginado);
     }
 
-    @GetMapping("/chats/{idAnuncio}-{idContrario}")
+    @GetMapping("/{idAnuncio}/{idContrario}")
     @PreAuthorize("@comprobarMensaje.esParticipante(#idAnuncio, principal)")
     @Operation(
             summary = "Obtener chat específico por anuncio y participante",
@@ -315,16 +310,22 @@ public class ControladorMensaje {
                     description = "ID del anuncio relacionado con el chat",
                     example = "1",
                     required = true
-            ) @PathVariable Long idAnuncio,
+            ) @PathVariable(required = true) Long idAnuncio,
             @Parameter(
                     description = "ID del otro participante en el chat",
                     example = "78aff3fb-7752-44ae-9dcd-a9d57605fc68",
                     required = true
-            ) @PathVariable String idContrario,
+            ) @PathVariable(required = true) String idContrario,
             @AuthenticationPrincipal Usuario usuario,
             Pageable pageable
     ) {
-        return ResponseEntity.ok(servicio.obtenerChatEspecifico(idAnuncio, idContrario, usuario, pageable).map(ListarMensajeResponseDto::of));
+        List<Mensaje> mensajes = servicio.obtenerChatEspecifico(idAnuncio, idContrario, usuario);
+        Page<Mensaje> chats = new PageImpl<>(
+                mensajes,
+                pageable,
+                mensajes.size()
+        );
+        return ResponseEntity.ok(chats.map(ListarMensajeResponseDto::of));
     }
 
 }

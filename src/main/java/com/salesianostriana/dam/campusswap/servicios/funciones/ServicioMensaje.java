@@ -51,11 +51,12 @@ public class ServicioMensaje {
         List<Mensaje> mensajes = servicioBaseMensaje.buscarTodosPorUsuarioId(usuario.getId());
         Map<Long, List<Mensaje>> mensajesPorAnuncio = new HashMap<>();
 
+        System.out.println("Iterando mensajes: ");
         for (Mensaje m : mensajes) {
             Set<String> participantes = new HashSet<>();
             participantes.add(m.getEmisor().getId().toString());
             participantes.add(m.getReceptor().getId().toString());
-            ListarChatResponseDto chat = new ListarChatResponseDto(m.getAnuncio().getId(), participantes);
+            ListarChatResponseDto chat = new ListarChatResponseDto(m.getAnuncio().getId(), participantes, MensajeResponseDto.of(m));
 
             if (!chatExiste(chats, chat)) {
                 chats.add(chat);
@@ -63,6 +64,29 @@ public class ServicioMensaje {
         }
 
         return chats;
+    }
+
+    public List<ListarChatResponseDto> obtenerChatsConUltimoMensaje(Usuario usuario) {
+        List<ListarChatResponseDto> chats = obtenerChats(usuario);
+        List<ListarChatResponseDto> chatsConUltimoMensaje = new ArrayList<>();
+
+        for (ListarChatResponseDto chat : chats) {
+            chatsConUltimoMensaje.add(obtenerUltimoMensaje(chat, usuario));
+        }
+
+        return chatsConUltimoMensaje;
+    }
+
+    public ListarChatResponseDto obtenerUltimoMensaje (ListarChatResponseDto chat, Usuario usuario) {
+        System.out.println("Iterando chats para obtener el último mensaje: ");
+        List<Mensaje> mensajesChatActual = this.obtenerChatEspecifico(chat.idAnuncio(), chat.participantes().stream().filter(id -> !id.equals(usuario.getId().toString())).findFirst().orElseThrow(), usuario);
+        Mensaje ultimoMensaje = mensajesChatActual.getLast();
+        for (Mensaje mensaje : mensajesChatActual) {
+            if (mensaje.getFechaEnvio().isAfter(ultimoMensaje.getFechaEnvio())) {
+                ultimoMensaje = mensaje;
+            }
+        }
+        return ListarChatResponseDto.lastMensaje(chat, ultimoMensaje);
     }
 
     public boolean chatExiste(List<ListarChatResponseDto> listaChats, ListarChatResponseDto chatActual) {
@@ -85,12 +109,12 @@ public class ServicioMensaje {
         return Optional.empty();
     }
 
-    public Page<Mensaje> obtenerChatEspecifico(Long idAnuncio, String idContrario, Usuario usuario, Pageable pageable) {
+    public List<Mensaje> obtenerChatEspecifico(Long idAnuncio, String idContrario, Usuario usuario) {
         List<ListarChatResponseDto> chats = obtenerChats(usuario);
         ListarChatResponseDto chatEspecifico = buscarChatEspecifico(chats, idAnuncio, idContrario, usuario.getId().toString())
                 .orElseThrow(() -> new NoSuchElementException("No se ha encontrado el chat para el anuncio con id: " + idAnuncio + " y los participantes con id: " + idContrario + " y " + usuario.getId()));
 
-        return servicioBaseMensaje.buscarChatEspecifico(idAnuncio, idContrario, usuario.getId().toString(), pageable);
+        return servicioBaseMensaje.buscarChatEspecifico(idAnuncio, idContrario, usuario.getId().toString());
 
     }
 }

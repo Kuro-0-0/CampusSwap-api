@@ -38,7 +38,7 @@ public class ServicioBaseMensaje {
         return repositorioMensaje.findAllByUsuarioId(id);
     }
 
-    public Page<Mensaje> buscarChatEspecifico(Long idAnuncio, String idContrario, String idActual, Pageable pageable) {
-        return repositorioMensaje.findAllByAnuncioIdAndParticipantes(idAnuncio, idContrario, idActual, pageable);
+    public List<Mensaje> buscarChatEspecifico(Long idAnuncio, String idContrario, String idActual) {
+        return repositorioMensaje.findAllByAnuncioIdAndParticipantes(idAnuncio, UUID.fromString(idContrario), UUID.fromString(idActual));
     }
 }

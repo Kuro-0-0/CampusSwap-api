@@ -61,6 +61,6 @@ public interface RepositorioMensaje extends JpaRepository<Mensaje, Long> {
     @Query(
             "SELECT m FROM Mensaje m WHERE m.anuncio.id = :idAnuncio AND ((m.emisor.id = :idActual AND m.receptor.id = :idContrario) OR (m.emisor.id = :idContrario AND m.receptor.id = :idActual))"
     )
-    Page<Mensaje> findAllByAnuncioIdAndParticipantes(Long idAnuncio, String idContrario, String idActual, Pageable pageable);
+    List<Mensaje> findAllByAnuncioIdAndParticipantes(Long idAnuncio, UUID idContrario, UUID idActual);
 }
 
