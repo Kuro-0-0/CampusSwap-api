@@ -1,6 +1,6 @@
 package com.salesianostriana.dam.campusswap.errores;
 
-
+import com.salesianostriana.dam.campusswap.errores.custom.NonExistentImageException;
 import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
 import io.jsonwebtoken.JwtException;
 import jakarta.persistence.EntityNotFoundException;
@@ -141,6 +141,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 
         return response;
+    }
+
+    @ExceptionHandler(NonExistentImageException.class)
+    public ProblemDetail handleInexsistantImageException(NonExistentImageException ex, HttpServletRequest request) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        log.warning("Error class: " + ex.getClass() + ", Error message: " + ex.getMessage());
+        pd.setTitle("Imagen no encontrada.");
+        pd.setInstance(URI.create(request.getRequestURI()));
+        return pd;
     }
 
 }
