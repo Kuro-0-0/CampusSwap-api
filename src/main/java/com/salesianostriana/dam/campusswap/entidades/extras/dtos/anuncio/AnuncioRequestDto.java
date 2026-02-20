@@ -20,8 +20,6 @@ public record AnuncioRequestDto(
         String descripcion,
         @Positive(message = "El precio debe ser mayor que 0 para venta")
         Double precio,
-        @NotBlank(message = "La imagen no puede estar vacía")
-        String imagen,
         @NotNull(message = "El tipo de operación no puede ser nulo")
         TipoOperacion tipoOperacion,
         @NotNull(message = "La condición no puede ser nula")
@@ -35,7 +33,6 @@ public record AnuncioRequestDto(
                 .titulo(titulo)
                 .descripcion(descripcion)
                 .precio(precio)
-                .imagen(imagen)
                 .tipoOperacion(tipoOperacion)
                 .condicion(condicion)
                 .categoria(Categoria.builder().id(categoriaId).build())

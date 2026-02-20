@@ -52,9 +52,9 @@ class TestDataInitializer {
 
         repoCategoria.saveAll(List.of(catLibros, catElectronica, catRopa, catTransporte, catMuebles));
 
-        Usuario uAdmin = crearUsuario("Admin User", "admin", "admin@salesianos.edu", "1234", "admin_avatar.png", "Administrador del sistema y moderador.", 5.0, RolUsuario.ADMIN);
-        Usuario uVendedor = crearUsuario("Carlos Vendedor", "carlos_v", "carlos@salesianos.edu", "1234", "carlos.jpg", "Vendo todo lo que ya no uso del ciclo de DAM. ¡Precios negociables!", 4.8, RolUsuario.USUARIO);
-        Usuario uComprador = crearUsuario("Laura Compradora", "laura_buyer", "laura@salesianos.edu", "1234", "laura.jpg", "Busco material para 1º de DAM.", 0.0, RolUsuario.USUARIO);
+        Usuario uAdmin = crearUsuario("Admin User", "admin", "admin@salesianos.edu", "1234", null, "Administrador del sistema y moderador.", 5.0, RolUsuario.ADMIN);
+        Usuario uVendedor = crearUsuario("Carlos Vendedor", "carlos_v", "carlos@salesianos.edu", "1234", null, "Vendo todo lo que ya no uso del ciclo de DAM. ¡Precios negociables!", 4.8, RolUsuario.USUARIO);
+        Usuario uComprador = crearUsuario("Laura Compradora", "laura_buyer", "laura@salesianos.edu", "1234", null, "Busco material para 1º de DAM.", 0.0, RolUsuario.USUARIO);
         Usuario uNuevo = crearUsuario("Pepe Novato", "pepito", "pepe@salesianos.edu", "1234", null, "Nuevo en el campus.", 0.0, RolUsuario.ADMIN);
 
         List<Usuario> usuarios = repoUsuario.saveAll(List.of(uAdmin, uVendedor, uComprador, uNuevo));
