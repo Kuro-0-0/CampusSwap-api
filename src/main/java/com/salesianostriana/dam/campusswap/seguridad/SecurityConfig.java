@@ -67,6 +67,7 @@ public class SecurityConfig {
                 );
 
         http.authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/v1/usuarios/imagen/**").permitAll()
                 .requestMatchers("/api/v1/**").hasAnyRole("USUARIO", "ADMIN")
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()

@@ -11,11 +11,11 @@ public class ImageFileValidator implements ConstraintValidator<ValidImage, Multi
         if (file == null || file.isEmpty()) {
             return true; // Let @NotNull handle empty files
         }
+
+        System.out.println(file);
+
         String contentType = file.getContentType();
-        return contentType != null && (
-                contentType.equals("image/jpeg") ||
-                        contentType.equals("image/png") ||
-                        contentType.equals("image/gif")
-        );
+
+        return contentType != null && contentType.startsWith("image/");
     }
 }
