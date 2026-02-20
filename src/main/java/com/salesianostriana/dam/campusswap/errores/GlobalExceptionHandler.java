@@ -1,6 +1,5 @@
 package com.salesianostriana.dam.campusswap.errores;
 
-
 import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
 import io.jsonwebtoken.JwtException;
 import jakarta.persistence.EntityNotFoundException;

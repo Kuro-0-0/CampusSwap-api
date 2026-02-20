@@ -5,6 +5,7 @@ import com.salesianostriana.dam.campusswap.ficheros.general.model.FileMetadata;
 import com.salesianostriana.dam.campusswap.ficheros.logica.StorageService;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseUsuario;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,4 +39,5 @@ public class ServicioUsuario {
         servicioValoracion.calcularMediaValoraciones(usuario);
         return usuario;
     }
+
 }
