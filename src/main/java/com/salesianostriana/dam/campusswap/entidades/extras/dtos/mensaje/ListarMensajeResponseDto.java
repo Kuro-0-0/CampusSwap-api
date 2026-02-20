@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 
 public record ListarMensajeResponseDto(
         String idEmisor,
+        String nombreEmisor,
+        String fotoEmisor,
         String mensaje,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime fechaMensaje
@@ -15,6 +17,8 @@ public record ListarMensajeResponseDto(
         public static ListarMensajeResponseDto of(Mensaje mensaje) {
             return new ListarMensajeResponseDto(
                     mensaje.getEmisor().getId().toString(),
+                    mensaje.getEmisor().getNombre(),
+                    mensaje.getEmisor().getFotoPerfil(),
                     mensaje.getContenido(),
                     mensaje.getFechaEnvio());
         }

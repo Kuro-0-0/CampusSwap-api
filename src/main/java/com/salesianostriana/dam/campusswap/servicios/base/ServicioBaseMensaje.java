@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.campusswap.servicios.base;
 
+import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Mensaje;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioMensaje;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,14 @@ public class ServicioBaseMensaje {
     
     public List<Mensaje> buscarTodosPorAnuncioIdYUsuarioId(Long idAnuncio, UUID idUsuario) {
         return repositorioMensaje.findAllByAnuncioIdAndUsuarioId(idAnuncio, idUsuario);
+    }
+
+
+    public List<Mensaje> buscarTodosPorUsuarioId(UUID id) {
+        return repositorioMensaje.findAllByUsuarioId(id);
+    }
+
+    public List<Mensaje> buscarChatEspecifico(Long idAnuncio, String idContrario, String idActual) {
+        return repositorioMensaje.findAllByAnuncioIdAndParticipantes(idAnuncio, UUID.fromString(idContrario), UUID.fromString(idActual));
     }
 }

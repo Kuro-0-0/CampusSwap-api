@@ -3,6 +3,7 @@ package com.salesianostriana.dam.campusswap.controladores;
 import com.salesianostriana.dam.campusswap.entidades.Mensaje;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.EnviarMensajeRequestDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.ListarChatResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.MensajeResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.ListarMensajeResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.funciones.ServicioMensaje;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,12 +24,10 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,9 +41,7 @@ public class ControladorMensaje {
     private final ServicioMensaje servicio;
 
     @PostMapping
-    @PreAuthorize(
-        "#dto.receptorId != principal.id"
-    )
+    @PreAuthorize("!#dto.receptorId.equals(principal.id.toString())")
     @ApiResponse(
             responseCode = "201",
             description = "Mensaje enviado correctamente",
@@ -284,6 +282,243 @@ public class ControladorMensaje {
             Pageable pageable
     ) {
         return servicio.obtenerMensajes(idAnuncio, pageable).map(ListarMensajeResponseDto::of);
+    }
+
+    @GetMapping("/chats")
+    @Operation(
+            summary = "Obtener chats del usuario logueado",
+            description = "Obtiene una lista paginada de los chats en los que el usuario logueado está participando, mostrando el ID del anuncio relacionado y los IDs de los participantes."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Chats obtenidos correctamente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ListarChatResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "content": [
+                                                    {
+                                                        "idAnuncio": 1,
+                                                        "participantes": [
+                                                            "7e631478-7d11-48fd-9e4f-7d18a3bb753a",
+                                                            "e7c93db8-f0be-4692-9e55-68529a0533fd"
+                                                        ],
+                                                        "ultimoMensaje": {
+                                                            "id": 3,
+                                                            "contenido": "mensaje",
+                                                            "fechaEnvio": "2026-02-16T17:01:15.852592700",
+                                                            "anuncioId": 1,
+                                                            "emisorId": "7e631478-7d11-48fd-9e4f-7d18a3bb753a",
+                                                            "receptorId": "e7c93db8-f0be-4692-9e55-68529a0533fd"
+                                                        }
+                                                    }
+                                                ],
+                                                "page": {
+                                                    "size": 20,
+                                                    "number": 0,
+                                                    "totalElements": 1,
+                                                    "totalPages": 1
+                                                }
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se ha proporcionado un token de autenticación válido",
+                                                "instance": "/api/v1/mensajes/chats",
+                                                "status": 401,
+                                                "title": "No autorizado"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Prohibido",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No tienes permiso para acceder a los chats de este usuario",
+                                                "instance": "/api/v1/mensajes/chats",
+                                                "status": 403,
+                                                "title": "Prohibido"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Ha ocurrido un error inesperado",
+                                                "instance": "/api/v1/mensajes/chats",
+                                                "status": 500,
+                                                "title": "Error inesperado."
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    public ResponseEntity<Page<ListarChatResponseDto>> obtenerChats(Pageable pageable, @AuthenticationPrincipal Usuario usuario) {
+        List<ListarChatResponseDto> chats = servicio.obtenerChatsConUltimoMensaje(usuario);
+        Page<ListarChatResponseDto> paginado = new PageImpl<>(
+                chats,
+                pageable,
+                chats.size()
+        );
+        return ResponseEntity.ok(paginado);
+    }
+
+    @GetMapping("/{idAnuncio}/{idContrario}")
+    @PreAuthorize("@comprobarMensaje.esParticipante(#idAnuncio, principal)")
+    @Operation(
+            summary = "Obtener chat específico por anuncio y participante",
+            description = "Recibe el ID del anuncio y el ID del otro participante para obtener la conversación específica entre el usuario logueado y el otro participante relacionada con ese anuncio."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Chat obtenido correctamente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ListarMensajeResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "content": [
+                                                    {
+                                                        "idEmisor": "6537fd11-87ff-40ba-a85
+                                                        "mensaje": "Hola Carlos, ¿sigue disponible el portátil? ¿El precio es negociable?",
+                                                        "fechaMensaje": "2026-02-16 17:02:54"
+                                                    },
+                                                    {
+                                                        "idEmisor": "8dad8f34-1c09-4cef
+                                                        "mensaje": "Hola Laura, sí, sigue disponible. Podría bajarlo a 630€ si vienes hoy.",
+                                                        "fechaMensaje": "2026-02-16 17:02:54"
+                                                    }
+                                                ],
+                                                "page": {
+                                                    "size": 20,
+                                                    "number": 0,
+                                                    "totalElements": 2,
+                                                    "totalPages": 1
+                                                }
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se ha proporcionado un token de autenticación válido",
+                                                "instance": "/api/v1/mensajes/1/78aff3fb-7752-44ae-9dcd-a9d57605fc68",
+                                                "status": 401,
+                                                "title": "No autorizado"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Prohibido",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No tienes permiso para acceder a este chat",
+                                                "instance": "/api/v1/mensajes/1/78aff3fb-7752-44ae-9dcd-a9d57605fc68",
+                                                "status": 403,
+                                                "title": "Prohibido"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Ha ocurrido un error inesperado",
+                                                "instance": "/api/v1/mensajes/1/78aff3fb-7752-44ae-9dcd-a9d57605fc68",
+                                                "status": 500,
+                                                "title": "Error inesperado."
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    public ResponseEntity<Page<ListarMensajeResponseDto>> obtenerChatEspecifico(
+            @Parameter(
+                    description = "ID del anuncio relacionado con el chat",
+                    example = "1",
+                    required = true
+            ) @PathVariable(required = true) Long idAnuncio,
+            @Parameter(
+                    description = "ID del otro participante en el chat",
+                    example = "78aff3fb-7752-44ae-9dcd-a9d57605fc68",
+                    required = true
+            ) @PathVariable(required = true) String idContrario,
+            @AuthenticationPrincipal Usuario usuario,
+            Pageable pageable
+    ) {
+        List<Mensaje> mensajes = servicio.obtenerChatEspecifico(idAnuncio, idContrario, usuario);
+        Page<Mensaje> chats = new PageImpl<>(
+                mensajes,
+                pageable,
+                mensajes.size()
+        );
+        return ResponseEntity.ok(chats.map(ListarMensajeResponseDto::of));
     }
 
 }
