@@ -1,10 +1,13 @@
 package com.salesianostriana.dam.campusswap.servicios.funciones;
 
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
+import com.salesianostriana.dam.campusswap.errores.custom.NonExistentImageException;
 import com.salesianostriana.dam.campusswap.ficheros.general.model.FileMetadata;
 import com.salesianostriana.dam.campusswap.ficheros.logica.StorageService;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseUsuario;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,4 +41,12 @@ public class ServicioUsuario {
         servicioValoracion.calcularMediaValoraciones(usuario);
         return usuario;
     }
+
+    public Resource obtenerFotoPerfil(String imageUrl) {
+        if (imageUrl == null || imageUrl.isBlank()) {
+            throw new NonExistentImageException("El usuario no tiene una foto de perfil asignada");
+        }
+        return storageService.loadAsResource(imageUrl);
+    }
+
 }

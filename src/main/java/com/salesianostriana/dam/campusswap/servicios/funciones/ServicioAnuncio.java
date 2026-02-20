@@ -39,6 +39,8 @@ public class ServicioAnuncio {
         anuncio.setCategoria(categoria);
         anuncio.setImagen(fileMetadata.getFilename());
 
+        System.out.println("Anuncio: " + anuncio.getTitulo() + " Usuario: " + usuario.getUsername() + " Categoria: " + categoria.getNombre() + " Imagen: " + anuncio.getImagen());
+
         return servicioBaseAnuncio.guardar(anuncio);
     }
 
