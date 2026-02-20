@@ -34,4 +34,11 @@ public class ServicioBaseMensaje {
     }
 
 
+    public List<Mensaje> buscarTodosPorUsuarioId(UUID id) {
+        return repositorioMensaje.findAllByUsuarioId(id);
+    }
+
+    public Page<Mensaje> buscarChatEspecifico(Long idAnuncio, String idContrario, String idActual, Pageable pageable) {
+        return repositorioMensaje.findAllByAnuncioIdAndParticipantes(idAnuncio, idContrario, idActual, pageable);
+    }
 }

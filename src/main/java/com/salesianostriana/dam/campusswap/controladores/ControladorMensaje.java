@@ -1,7 +1,9 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
+import com.salesianostriana.dam.campusswap.entidades.Mensaje;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.EnviarMensajeRequestDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.ListarChatResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.MensajeResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.ListarMensajeResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.funciones.ServicioMensaje;
@@ -14,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +31,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Set;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/mensajes")
@@ -40,7 +46,7 @@ public class ControladorMensaje {
     private final ServicioMensaje servicio;
 
     @PostMapping
-    @PreAuthorize("!#dto.receptorId.equals(principal.id)")
+    @PreAuthorize("!#dto.receptorId.equals(principal.id.toString())")
     @ApiResponse(
             responseCode = "201",
             description = "Mensaje enviado correctamente",
@@ -283,8 +289,42 @@ public class ControladorMensaje {
         return servicio.obtenerMensajes(idAnuncio, pageable).map(ListarMensajeResponseDto::of);
     }
 
+    @GetMapping("/chats")
+    @Operation(
+            summary = "Obtener chats del usuario logueado",
+            description = "Obtiene una lista paginada de los chats en los que el usuario logueado está participando, mostrando el ID del anuncio relacionado y los IDs de los participantes."
+    )
+    public ResponseEntity<Page<ListarChatResponseDto>> obtenerChats(Pageable pageable, @AuthenticationPrincipal Usuario usuario) {
+        List<ListarChatResponseDto> chats = servicio.obtenerChats(usuario);
+        Page<ListarChatResponseDto> paginado = new PageImpl<>(
+                chats,
+                pageable,
+                chats.size()
+        );
+        return ResponseEntity.ok(paginado);
+    }
 
-
-
+    @GetMapping("/chats/{idAnuncio}-{idContrario}")
+    @PreAuthorize("@comprobarMensaje.esParticipante(#idAnuncio, principal)")
+    @Operation(
+            summary = "Obtener chat específico por anuncio y participante",
+            description = "Recibe el ID del anuncio y el ID del otro participante para obtener la conversación específica entre el usuario logueado y el otro participante relacionada con ese anuncio."
+    )
+    public ResponseEntity<Page<ListarMensajeResponseDto>> obtenerChatEspecifico(
+            @Parameter(
+                    description = "ID del anuncio relacionado con el chat",
+                    example = "1",
+                    required = true
+            ) @PathVariable Long idAnuncio,
+            @Parameter(
+                    description = "ID del otro participante en el chat",
+                    example = "78aff3fb-7752-44ae-9dcd-a9d57605fc68",
+                    required = true
+            ) @PathVariable String idContrario,
+            @AuthenticationPrincipal Usuario usuario,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(servicio.obtenerChatEspecifico(idAnuncio, idContrario, usuario, pageable).map(ListarMensajeResponseDto::of));
+    }
 
 }

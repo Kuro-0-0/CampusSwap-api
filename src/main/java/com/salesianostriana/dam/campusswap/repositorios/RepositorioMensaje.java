@@ -39,8 +39,28 @@ public interface RepositorioMensaje extends JpaRepository<Mensaje, Long> {
     )
     List<Mensaje> findAllByAnuncioIdAndUsuarioId(Long idAnuncio, UUID idUsuario);
 
+    @EntityGraph(
+            attributePaths = {
+                    "anuncio",
+                    "emisor",
+                    "receptor"
+            }
+    )
+    @Query(
+            "SELECT m FROM Mensaje m WHERE m.emisor.id = :id OR m.receptor.id = :id"
+    )
+    List<Mensaje> findAllByUsuarioId(UUID id);
 
-
-
+    @EntityGraph(
+            attributePaths = {
+                    "anuncio",
+                    "emisor",
+                    "receptor"
+            }
+    )
+    @Query(
+            "SELECT m FROM Mensaje m WHERE m.anuncio.id = :idAnuncio AND ((m.emisor.id = :idActual AND m.receptor.id = :idContrario) OR (m.emisor.id = :idContrario AND m.receptor.id = :idActual))"
+    )
+    Page<Mensaje> findAllByAnuncioIdAndParticipantes(Long idAnuncio, String idContrario, String idActual, Pageable pageable);
 }
 
