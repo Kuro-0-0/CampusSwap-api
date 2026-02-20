@@ -33,6 +33,105 @@ public class ControladorFavorito {
 
     private final ServicioFavorito servicioFavorito;
 
+    @GetMapping("/personal")
+    @PreAuthorize("hasAnyRole('USUARIO', 'ADMIN')")
+    @ApiResponse(
+            responseCode = "200",
+            description = "OK - Lista de favoritos del usuario obtenida correctamente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = FavoritoResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "content": [
+                                                    {
+                                                        "nombreUsuario": "Pepe Novato",
+                                                        "tituloAnuncio": "Bicicleta de montaña Rockrider",
+                                                        "fechaFavorito": "2026-02-16T13:25:19.473785"
+                                                    },
+                                                    {
+                                                        "nombreUsuario": "Pepe Novato",
+                                                        "tituloAnuncio": "Portátil HP Victus 16GB RAM",
+                                                        "fechaFavorito": "2026-02-16T13:25:19.475755"
+                                                    }
+                                                ],
+                                                "page": {
+                                                    "size": 20,
+                                                    "number": 0,
+                                                    "totalElements": 2,
+                                                    "totalPages": 1
+                                                }
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "401",
+            description = "Unauthorized - El usuario no está autenticado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Full authentication is required to access this resource",
+                                                "instance": "/api/v1/favoritos/personal",
+                                                "status": 401,
+                                                "title": "Unauthorized"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Forbidden - El usuario no tiene permisos para acceder a esta información",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Access Denied",
+                                                "instance": "/api/v1/favoritos/personal",
+                                                "status": 403,
+                                                "title": "Forbidden"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Internal Server Error - Error al listar favoritos del usuario",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Ha ocurrido un error inesperado", 
+                                                "instance": "/api/v1/favoritos/personal",
+                                                "tile": "Error interno del servidor",
+                                                "status": 500,
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    public ResponseEntity<Page<FavoritoResponseDto>> listarMisFavoritos(Pageable pageable, @AuthenticationPrincipal Usuario usuario) {
+        return ResponseEntity.ok(servicioFavorito.listarMisFavoritos(pageable, usuario).map(FavoritoResponseDto::of));
+    }
 
     @PostMapping()
     @ApiResponse(

@@ -33,7 +33,7 @@ public class Usuario implements UserDetails {
     private String email;
     private String fotoPerfil;
     private String descripcion;
-    private double reputacionMedia;
+    private Double reputacionMedia;
 
     @CreatedDate
     private LocalDateTime fechaRegistro;

@@ -76,10 +76,10 @@ public class ServicioAnuncio {
         if (anuncio.getUsuario() == null || !anuncio.getUsuario().equals(usuario))
             throw new NotOwnedException("No puedes modificar un anuncio que no es tuyo");
 
-        if (anuncio.getEstado().equals(Estado.CERRADO))
+        if (anuncio.getEstado().equals(Estado.PAUSADO))
             anuncio.setEstado(Estado.ACTIVO);
         else if (anuncio.getEstado().equals(Estado.ACTIVO))
-            anuncio.setEstado(Estado.CERRADO);
+            anuncio.setEstado(Estado.PAUSADO);
         else
             throw new IllegalStateException("No se pueden modificar anuncios con estado: " + anuncio.getEstado());
 

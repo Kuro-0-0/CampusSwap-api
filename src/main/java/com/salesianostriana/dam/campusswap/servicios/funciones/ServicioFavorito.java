@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ServicioFavorito {
@@ -46,5 +48,9 @@ public class ServicioFavorito {
 
     public Page<Favorito> listarFavoritos(Pageable pageable) {
         return servicioBaseFavorito.buscarTodos(pageable);
+    }
+
+    public Page<Favorito> listarMisFavoritos(Pageable pageable, Usuario usuario) {
+        return servicioBaseFavorito.buscarPorUsuarioId(pageable, usuario.getId());
     }
 }

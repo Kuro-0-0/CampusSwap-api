@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.campusswap.validacion.validadores.spel;
 
+import com.salesianostriana.dam.campusswap.entidades.Favorito;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseFavorito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ public class ComprobarFavorito {
     private ServicioBaseFavorito servicioBaseFavorito;
 
     public boolean esPropietario(Long id, Usuario usuario) {
+        Favorito f = servicioBaseFavorito.buscarPorId(id);
+        System.out.println(f.getUsuario().getId());
+        System.out.println(usuario.getId());
         return servicioBaseFavorito.buscarPorId(id).getUsuario().equals(usuario);
     }
 

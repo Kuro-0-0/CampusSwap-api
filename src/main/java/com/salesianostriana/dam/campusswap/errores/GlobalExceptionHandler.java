@@ -2,6 +2,8 @@ package com.salesianostriana.dam.campusswap.errores;
 
 
 import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
+import io.jsonwebtoken.JwtException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.java.Log;
 import org.springframework.security.access.AccessDeniedException;
@@ -104,6 +106,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
         log.warning("Error class: " + ex.getClass() + ", Error message: " + ex.getMessage());
         pd.setTitle("Error de solicitud.");
+        pd.setInstance(URI.create(request.getRequestURI()));
+        return pd;
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ProblemDetail handleJwtException(JwtException ex, HttpServletRequest request) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        log.warning("Error class: " + ex.getClass() + ", Error message: " + ex.getMessage());
+        pd.setTitle("Error de autenticación.");
+        pd.setInstance(URI.create(request.getRequestURI()));
+        return pd;
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ProblemDetail handleEntityNotFoundException(EntityNotFoundException ex, HttpServletRequest request) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        log.warning("Error class: " + ex.getClass() + ", Error message: " + ex.getMessage());
+        pd.setTitle("Entidad no encontrada.");
         pd.setInstance(URI.create(request.getRequestURI()));
         return pd;
     }
