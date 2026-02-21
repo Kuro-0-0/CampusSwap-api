@@ -6,6 +6,7 @@ import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
 import com.salesianostriana.dam.campusswap.ficheros.general.model.FileMetadata;
 import com.salesianostriana.dam.campusswap.ficheros.logica.StorageService;
 import com.salesianostriana.dam.campusswap.servicios.base.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,6 +45,7 @@ public class ServicioAnuncio {
         return servicioBaseAnuncio.guardar(anuncio);
     }
 
+    @Transactional
     public Anuncio editarAnuncio(Long id, Anuncio anuncio, Usuario usuario, MultipartFile file) {
         Anuncio original = servicioBaseAnuncio.buscarPorId(id);
         Categoria categoria = servicioBaseCategoria.buscarPorId(anuncio.getCategoria().getId());
