@@ -230,6 +230,100 @@ public class ControladorUsuario {
         return ResponseEntity.ok(UsuarioResponseDto.of(servicioUsuario.obtenerDatosPerfil(usuario)));
     }
 
+    @GetMapping("/{id}")
+    @Operation(
+            summary = "Obtener los datos de un usuario por su ID",
+            description = "Permite obtener todos los datos de un usuario específico utilizando su ID."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Usuario obtenido correctamente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = UsuarioResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "id": "a2067420-127d-4486-a266-33c9e4408d09",
+                                                "nombre": "Carlos Vendedor",
+                                                "email": "carlos@salesianos.edu",
+                                                "reputacionMedia": 5.0,
+                                                "imageUrl": null,
+                                                "fechaRegistro": "2026-02-20 14:20:27",
+                                                "roles": [
+                                                    "USUARIO"
+                                                ]
+                                            }
+                                            """                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado. Se requiere autenticación para acceder a este recurso.",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Acceso denegado. No se ha proporcionado un token de autenticación válido.",
+                                                "instance": "/api/v1/catalogo",
+                                                "status": 401,
+                                                "title": "No autorizado."
+                                            }
+                                            """
+                            )
+                    })
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Usuario no encontrado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se ha encontrado el usuario con id: 123e4567-e89b-12d3-a456-426614174000",
+                                                "instance": "/api/v1/anuncios/123e4567-e89b-12d3-a456-426614174000",
+                                                "status": 404,
+                                                "title": "Recurso no encontrado"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Ha ocurrido un error inesperado",
+                                                "instance": "/api/v1/anuncios/1",
+                                                "status": 500,
+                                                "title": "Error inesperado."
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    public ResponseEntity<UsuarioResponseDto> obtenerUsuarioPorId(
+            @PathVariable String id
+    ) {
+        return ResponseEntity.ok(UsuarioResponseDto.of(servicioUsuario.obtenerDatosPerfil(id)));
+    }
+
 
 
 }
