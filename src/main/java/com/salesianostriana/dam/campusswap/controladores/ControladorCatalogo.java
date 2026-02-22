@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
+import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
 import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioFiltroDto;
@@ -19,6 +20,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -187,12 +189,13 @@ public class ControladorCatalogo {
                                                                     @RequestParam(required = false) Double minPrecio,
                                                                     @RequestParam(required = false) Double maxPrecio,
                                                                     @RequestParam(required = false) TipoOperacion tipoOperacion,
-                                                                    @RequestParam(required = false) Estado estado
-    ){
+                                                                    @RequestParam(required = false) Estado estado,
+                                                                    @AuthenticationPrincipal Usuario usuario
+                                                                    ){
 
         AnuncioFiltroDto filtro = new AnuncioFiltroDto(q, categoriaId, minPrecio, maxPrecio, tipoOperacion, estado);
 
-        return ResponseEntity.ok(catalogoService.obtenerCatalogo(pageable, filtro).map(AnuncioResponseDto::of));
+        return ResponseEntity.ok(catalogoService.obtenerCatalogo(pageable, filtro, usuario).map(AnuncioResponseDto::of));
     }
 
 }

@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.campusswap.servicios.funciones;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
+import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioFiltroDto;
 import com.salesianostriana.dam.campusswap.especificaciones.AnuncioEspecificacion;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
@@ -17,14 +18,15 @@ public class ServicioCatalogo {
 
     private final ServicioBaseAnuncio servicioBaseAnuncio;
 
-    public Page<Anuncio> obtenerCatalogo(Pageable pageable, AnuncioFiltroDto filtro) {
+    public Page<Anuncio> obtenerCatalogo(Pageable pageable, AnuncioFiltroDto filtro, Usuario usuario) {
 
         PredicateSpecification<Anuncio> pred = PredicateSpecification.allOf(
                 AnuncioEspecificacion.buscarPorQuery(filtro.q()),
                 AnuncioEspecificacion.porCategoria(filtro.categoriaId()),
                 AnuncioEspecificacion.porPrecioRango(filtro.minPrecio(), filtro.maxPrecio()),
                 AnuncioEspecificacion.porTipoOperacion(filtro.tipoOperacion()),
-                AnuncioEspecificacion.porEstado(filtro.estado())
+                AnuncioEspecificacion.porEstado(filtro.estado()),
+                AnuncioEspecificacion.excluirPropios(usuario)
         );
 
         return servicioBaseAnuncio.buscarFiltradoPageado(pred, pageable);
