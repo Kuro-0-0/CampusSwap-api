@@ -2,6 +2,7 @@ package com.salesianostriana.dam.campusswap.servicios.base;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioAnuncio;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ public class ServicioBaseAnuncio {
         return repositorioAnuncio.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Anuncio con ID " + id + " no encontrado"));
     }
+
 
     public Anuncio guardar(Anuncio anuncio) {
         return repositorioAnuncio.save(anuncio);

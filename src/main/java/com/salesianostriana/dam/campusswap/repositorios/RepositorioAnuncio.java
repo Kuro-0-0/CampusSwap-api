@@ -26,8 +26,12 @@ public interface RepositorioAnuncio extends JpaRepository<Anuncio, Long>, JpaSpe
             Function<? super SpecificationFluentQuery<S>, R> queryFunction
     );
 
+    @Override
     @EntityGraph(
-            attributePaths = {"usuario"}
+            attributePaths = {
+                    "usuario",
+                    "categoria"
+            }
     )
     Optional<Anuncio> findById(Long id);
 }

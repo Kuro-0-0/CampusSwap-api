@@ -6,6 +6,7 @@ import com.salesianostriana.dam.campusswap.errores.custom.NotOwnedException;
 import com.salesianostriana.dam.campusswap.ficheros.general.model.FileMetadata;
 import com.salesianostriana.dam.campusswap.ficheros.logica.StorageService;
 import com.salesianostriana.dam.campusswap.servicios.base.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -72,6 +73,7 @@ public class ServicioAnuncio {
     }
 
 
+    @Transactional
     public Anuncio alternarEstado(Long id, Usuario usuario) {
         Anuncio anuncio = servicioBaseAnuncio.buscarPorId(id);
 
@@ -84,7 +86,6 @@ public class ServicioAnuncio {
             anuncio.setEstado(Estado.PAUSADO);
         else
             throw new IllegalStateException("No se pueden modificar anuncios con estado: " + anuncio.getEstado());
-
         return servicioBaseAnuncio.guardar(anuncio);
     }
 
@@ -140,4 +141,7 @@ public class ServicioAnuncio {
         return servicioBaseReporte.guardar(reporte);
     }
 
+    public Anuncio buscarPorId(Long id) {
+        return servicioBaseAnuncio.buscarPorId(id);
+    }
 }
