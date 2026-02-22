@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public record FavoritoResponseDto(
         Long id,
         String nombreUsuario,
-        String tituloAnuncio,
+        AnuncioFavoritoResponseDto anuncio,
         Double precio,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime fechaFavorito,
@@ -18,7 +18,7 @@ public record FavoritoResponseDto(
         return new FavoritoResponseDto(
                 favorito.getId(),
                 favorito.getUsuario().getNombre(),
-                favorito.getAnuncio().getTitulo(),
+                AnuncioFavoritoResponseDto.of(favorito.getAnuncio()),
                 favorito.getAnuncio().getPrecio(),
                 favorito.getFecha(),
                 favorito.getAnuncio().getImagen()
