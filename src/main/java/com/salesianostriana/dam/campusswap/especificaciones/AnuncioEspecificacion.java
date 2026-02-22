@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.campusswap.especificaciones;
 
 import com.salesianostriana.dam.campusswap.entidades.Anuncio;
+import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
 import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
 import org.springframework.data.jpa.domain.PredicateSpecification;
@@ -66,5 +67,14 @@ public class AnuncioEspecificacion {
             return builder.equal(from.get("estado"), estado);
         };
     }
+    public static PredicateSpecification<Anuncio> excluirPropios(Usuario usuario) {
+        return (root, builder) -> {
+            if (usuario == null) {
+                return builder.conjunction();
+            }
+            return builder.notEqual(root.get("usuario"), usuario);
+        };
+    }
+
 
 }
