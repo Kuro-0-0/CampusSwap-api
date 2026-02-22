@@ -90,21 +90,33 @@ public class ServicioAnuncio {
 
 
     public void borrarAnuncio(Long id) {
+        System.out.println("Obteniendo anuncio");
         Anuncio anuncio = servicioBaseAnuncio.buscarPorId(id);
+        System.out.println("Anuncio obtenido: " + anuncio.getTitulo());
+
+        System.out.println("Obteniendo favoritos...");
         List<Favorito> favoritos = servicioBaseFavorito.buscarPorAnuncioId(anuncio.getId());
+        System.out.println("Favoritos obtenidos: " + favoritos.size());
+
+        System.out.println("Borrando favoritos...");
         if(!favoritos.isEmpty()){
             favoritos.forEach(servicioBaseFavorito::borrar);
         }
+        System.out.println("favoritos borrados...");
 
+        System.out.println("Borrando mensajes...");
         Page<Mensaje> mensajes = servicioBaseMensaje.buscarTodosPorAnuncioId(anuncio.getId(), Pageable.unpaged());
         if(mensajes.hasContent()){
             mensajes.getContent().forEach(servicioBaseMensaje::borrar);
         }
+        System.out.println("mensajes borrados...");
 
+        System.out.println("Borrando reportes...");
         List<Reporte> reportes = servicioBaseReporte.BuscarPorAnuncioId(anuncio.getId());
         if(!reportes.isEmpty()){
             reportes.forEach(servicioBaseReporte::borrar);
         }
+        System.out.println("reportes borrados...");
 
         servicioBaseAnuncio.borrar(anuncio);
     }

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -24,4 +25,9 @@ public interface RepositorioAnuncio extends JpaRepository<Anuncio, Long>, JpaSpe
             Specification<Anuncio> spec,
             Function<? super SpecificationFluentQuery<S>, R> queryFunction
     );
+
+    @EntityGraph(
+            attributePaths = {"usuario"}
+    )
+    Optional<Anuncio> findById(Long id);
 }
