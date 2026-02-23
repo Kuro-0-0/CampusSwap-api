@@ -1,8 +1,13 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
+import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
+import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioFiltroDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.anuncio.AnuncioResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.categoria.CategoriaResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.usuario.UsuarioResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.funciones.ServicioAdministrador;
+import com.salesianostriana.dam.campusswap.servicios.funciones.ServicioCatalogo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,13 +17,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -26,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ControladorAdministrador {
 
     private final ServicioAdministrador servicioAdministrador;
+    private final ServicioCatalogo servicioCatalogo;
 
     @GetMapping("/usuarios")
     @Operation(
@@ -158,5 +163,23 @@ public class ControladorAdministrador {
     public ResponseEntity<Page<UsuarioResponseDto>> listarUsuarios(
             @Parameter(description = "Configuración de paginación (ej. ?page=0&size=10)") Pageable pageable) {
         return ResponseEntity.ok(servicioAdministrador.listarUsuarios(pageable).map(UsuarioResponseDto::of));
+    }
+
+    @GetMapping("/anuncios")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Obtener todos los anuncios",description = "Vista de administrador con todos los anuncios sin restrincciones")
+    public ResponseEntity<Page<AnuncioResponseDto>> obtenerTodosAdmin(
+            @PageableDefault(page = 0,size = 10,sort = "fechaPublicacion",direction = Sort.Direction.DESC)Pageable pageable,
+            @RequestParam (required = false) String q,
+            @RequestParam (required = false) Long categoriaId,
+            @RequestParam (required = false) Double minPrecio,
+            @RequestParam (required = false) Double maxPrecio,
+            @RequestParam (required = false) TipoOperacion tipoOperacion,
+            @RequestParam (required = false) Estado estado
+    ){
+        AnuncioFiltroDto filtro = new AnuncioFiltroDto(q, categoriaId, minPrecio, maxPrecio, tipoOperacion, estado);
+        return ResponseEntity.ok(
+                servicioCatalogo.obtenerTodosLosAnunciosAdmin(pageable,filtro).map(AnuncioResponseDto::of)
+        );
     }
 }

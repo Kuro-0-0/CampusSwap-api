@@ -31,4 +31,19 @@ public class ServicioCatalogo {
 
         return servicioBaseAnuncio.buscarFiltradoPageado(pred, pageable);
     }
+
+    public Page<Anuncio> obtenerTodosLosAnunciosAdmin(Pageable pageable, AnuncioFiltroDto filtro){
+
+        PredicateSpecification<Anuncio> pred = PredicateSpecification.allOf(
+                AnuncioEspecificacion.buscarPorQuery(filtro.q()),
+                AnuncioEspecificacion.porCategoria(filtro.categoriaId()),
+                AnuncioEspecificacion.porPrecioRango(filtro.minPrecio(), filtro.maxPrecio()),
+                AnuncioEspecificacion.porTipoOperacion(filtro.tipoOperacion()),
+                AnuncioEspecificacion.porEstado(filtro.estado())
+        );
+
+        return servicioBaseAnuncio.buscarFiltradoPageado(pred, pageable);
+
+    }
+
 }
