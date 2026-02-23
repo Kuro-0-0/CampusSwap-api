@@ -4,10 +4,12 @@ import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 import com.salesianostriana.dam.campusswap.entidades.Mensaje;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.MensajeFiltroDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.chat.AnuncioChatDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.chat.ListarChatResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.MensajeResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.chat.UsuarioChatDto;
+import com.salesianostriana.dam.campusswap.especificaciones.MensajeEspecification;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseAnuncio;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseMensaje;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseUsuario;
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import lombok.extern.java.Log;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -119,5 +122,16 @@ public class ServicioMensaje {
 
         return servicioBaseMensaje.buscarChatEspecifico(idAnuncio, idContrario, usuario.getId().toString());
 
+    }
+
+    public Page<Mensaje> buscarMensajes(MensajeFiltroDto filtro, Pageable pageable) {
+        return servicioBaseMensaje.buscarFiltradoPageado(
+                PredicateSpecification.allOf(
+                        MensajeEspecification.porTituloDeAnuncio(filtro.titulo()),
+                        MensajeEspecification.porNombreParticipante(filtro.nombre()),
+                        MensajeEspecification.porRangoFechas(filtro.desde(), filtro.hasta())
+                ),
+                pageable
+        );
     }
 }

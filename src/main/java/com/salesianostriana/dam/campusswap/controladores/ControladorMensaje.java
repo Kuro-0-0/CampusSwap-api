@@ -3,6 +3,7 @@ package com.salesianostriana.dam.campusswap.controladores;
 import com.salesianostriana.dam.campusswap.entidades.Mensaje;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.EnviarMensajeRequestDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.MensajeFiltroDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.chat.ListarChatResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.MensajeResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.mensaje.ListarMensajeResponseDto;
@@ -17,6 +18,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +30,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -518,6 +523,20 @@ public class ControladorMensaje {
                 mensajes.size()
         );
         return ResponseEntity.ok(chats.map(ListarMensajeResponseDto::of));
+    }
+    @GetMapping("/filtro")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
+    public ResponseEntity<Page<MensajeResponseDto>> listarMensajes (
+            @PageableDefault(page = 0,size = 10,sort = "fechaEnvio",direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(required = false) String titulo,
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)LocalDateTime desde,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime hasta
+            ){
+        MensajeFiltroDto filtroDto = new MensajeFiltroDto(titulo, nombre, desde, hasta);
+        return ResponseEntity.ok(
+                servicio.buscarMensajes(filtroDto, pageable).map(MensajeResponseDto::of)
+        );
     }
 
 }
