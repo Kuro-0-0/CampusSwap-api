@@ -6,10 +6,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,9 +22,29 @@ public class ControladorImagen {
     private final MimeTypeDetector mimeTypeDetector;
 
     @GetMapping("/{imageUrl}")
-    public ResponseEntity<Resource> obtenerFotoPerfil(@PathVariable String imageUrl) {
+    public ResponseEntity<Resource> obtenerImagen(@PathVariable String imageUrl, @RequestParam(value = "v", required = false) String version) {
 
-        Resource imagen = servicioImagen.obtenerImagen(imageUrl);
+        String imagenARescatar = imageUrl;
+
+        if(version != null && !version.isBlank()){
+            String extension = StringUtils.getFilenameExtension(imageUrl);
+
+            String baseName = imageUrl.replace("." + extension, "");
+
+            switch (version.toLowerCase()){
+                case "t":
+                    imagenARescatar = baseName + "_thumb." + extension;
+                    break;
+                case "m":
+                    imagenARescatar = baseName + "_mid." + extension;
+                    break;
+                case "h":
+                    imagenARescatar = baseName + "_high." + extension;
+                    break;
+            }
+        }
+
+        Resource imagen = servicioImagen.obtenerImagen(imagenARescatar);
         String mimeType = mimeTypeDetector.getMimeType(imagen);
 
         return ResponseEntity.ok()
