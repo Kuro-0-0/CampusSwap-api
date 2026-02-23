@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -49,7 +48,19 @@ public class FileSystemStorageService implements StorageService {
     public FileMetadata store(MultipartFile file)  {
         try {
             String filename =  store(file.getBytes(), file.getOriginalFilename(), file.getContentType());
+            Path originalPath = rootLocation.resolve(filename);
+            BufferedImage originalImage = javax.imageio.ImageIO.read(originalPath.toFile());
+
+            if(originalImage != null){
+                String extension = StringUtils.getFilenameExtension(filename);
+                String baseName = filename.replace("." + extension, "");
+
+                redimensionarImagen(originalImage, 256, 256, rootLocation.resolve(baseName + "_thumb." + extension), extension);
+                redimensionarImagen(originalImage, 800, -1, rootLocation.resolve(baseName + "_mid." + extension), extension);
+                redimensionarImagen(originalImage, 1280, -1, rootLocation.resolve(baseName + "_high." + extension), extension);
+            }
             return LocalFileMetadataImpl.of(filename);
+
         } catch (Exception ex) {
             throw new StorageException("Error storing file: " + file.getOriginalFilename(), ex);
         }
