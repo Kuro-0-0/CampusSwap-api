@@ -39,3 +39,6 @@ src/main/java/com/salesianostriana/dam/campusswap/auth/*
 src/main/java/com/salesianostriana/dam/campusswap/auth/*.*
 /src/main/java/com/salesianostriana/dam/campusswap/auth/
 /src/main/java/com/salesianostriana/dam/campusswap/auth/dto/
+
+/uploads
+/uploads/**
