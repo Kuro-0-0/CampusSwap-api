@@ -9,6 +9,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +36,15 @@ public class ServicioUsuario {
 
     }
 
+    public Usuario buscarUsuarioPorId(String id) {
+        return servicioBaseUsuario.buscarPorId(id);
+    }
+
+    public Usuario obtenerDatosPerfil(String id) {
+        Usuario usuario = servicioBaseUsuario.buscarPorId(id);
+        servicioValoracion.calcularMediaValoraciones(usuario);
+        return usuario;
+    }
 
     public Usuario obtenerDatosPerfil(Usuario usuario) {
         servicioValoracion.calcularMediaValoraciones(usuario);

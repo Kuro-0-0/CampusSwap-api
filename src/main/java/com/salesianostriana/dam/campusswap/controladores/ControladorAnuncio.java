@@ -910,4 +910,16 @@ public class ControladorAnuncio {
         Reporte nuevoReporte = ReporteRequestDto.toEntity(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(ReporteResponseDto.from(servicioAnuncio.reportarAnuncio(id ,nuevoReporte, usuario)));
     }
+
+    @GetMapping("/unique/{id}")
+    @Operation(
+            summary = "Obtener anuncio por ID",
+            description = "Permite obtener los detalles de un anuncio específico mediante su ID."
+    )
+   @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
+    public ResponseEntity<AnuncioResponseDto> obtenerAnuncioPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(AnuncioResponseDto.of(servicioAnuncio.buscarPorId(id)));
+    }
+
 }
+

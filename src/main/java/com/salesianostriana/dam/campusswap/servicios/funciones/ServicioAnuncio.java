@@ -74,6 +74,7 @@ public class ServicioAnuncio {
     }
 
 
+    @Transactional
     public Anuncio alternarEstado(Long id, Usuario usuario) {
         Anuncio anuncio = servicioBaseAnuncio.buscarPorId(id);
 
@@ -86,7 +87,6 @@ public class ServicioAnuncio {
             anuncio.setEstado(Estado.PAUSADO);
         else
             throw new IllegalStateException("No se pueden modificar anuncios con estado: " + anuncio.getEstado());
-
         return servicioBaseAnuncio.guardar(anuncio);
     }
 
@@ -142,4 +142,7 @@ public class ServicioAnuncio {
         return servicioBaseReporte.guardar(reporte);
     }
 
+    public Anuncio buscarPorId(Long id) {
+        return servicioBaseAnuncio.buscarPorId(id);
+    }
 }
