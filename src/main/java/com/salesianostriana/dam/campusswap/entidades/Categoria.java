@@ -24,4 +24,12 @@ public class Categoria {
 
     private String descripcion;
 
+    public Categoria modificar(Categoria categoria) {
+
+        this.nombre = categoria.getNombre();
+        this.descripcion = categoria.getDescripcion();
+
+        return this;
+    }
+
 }
