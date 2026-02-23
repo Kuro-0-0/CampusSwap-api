@@ -2,6 +2,7 @@ package com.salesianostriana.dam.campusswap.servicios.funciones;
 
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
+import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseAnuncio;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseUsuario;
 import com.salesianostriana.dam.campusswap.entidades.Categoria;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseCategoria;
@@ -16,8 +17,7 @@ import org.springframework.stereotype.Service;
 public class ServicioAdministrador {
 
     private final ServicioBaseUsuario servicioBaseUsuario;
-
-
+    private final ServicioBaseAnuncio servicioBaseAnuncio;
     private final ServicioBaseCategoria servicioBaseCategoria;
 
     public Categoria crearCategoria(Categoria categoria) {
@@ -39,6 +39,9 @@ public class ServicioAdministrador {
     }
 
     public void eliminarCategoria(Long id) {
+        if (servicioBaseAnuncio.existByCategoriaId(id))
+            throw new IllegalStateException("No se puede eliminar la categoría porque hay anuncios asociados a ella.");
+
         servicioBaseCategoria.borrar(servicioBaseCategoria.buscarPorId(id));
     }
 
