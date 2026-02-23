@@ -6,6 +6,7 @@ import com.salesianostriana.dam.campusswap.repositorios.RepositorioMensaje;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.PredicateSpecification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,5 +41,9 @@ public class ServicioBaseMensaje {
 
     public List<Mensaje> buscarChatEspecifico(Long idAnuncio, String idContrario, String idActual) {
         return repositorioMensaje.findAllByAnuncioIdAndParticipantes(idAnuncio, UUID.fromString(idContrario), UUID.fromString(idActual));
+    }
+
+    public Page<Mensaje> buscarFiltradoPageado(PredicateSpecification<Mensaje> spec, Pageable pageable) {
+        return repositorioMensaje.findBy(spec, q -> q.page(pageable));
     }
 }
