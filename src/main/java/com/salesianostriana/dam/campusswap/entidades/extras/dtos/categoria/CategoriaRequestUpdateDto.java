@@ -1,7 +1,6 @@
 package com.salesianostriana.dam.campusswap.entidades.extras.dtos.categoria;
 
 import com.salesianostriana.dam.campusswap.entidades.Categoria;
-import com.salesianostriana.dam.campusswap.validacion.anotaciones.UniqueNombreCategoria;
 import jakarta.validation.constraints.NotEmpty;
 
 public record CategoriaRequestUpdateDto(

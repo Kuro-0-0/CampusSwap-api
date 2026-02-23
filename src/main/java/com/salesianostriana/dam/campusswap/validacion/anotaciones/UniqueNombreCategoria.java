@@ -1,6 +1,5 @@
 package com.salesianostriana.dam.campusswap.validacion.anotaciones;
 
-import com.salesianostriana.dam.campusswap.validacion.validadores.ValidadorEmailUnico;
 import com.salesianostriana.dam.campusswap.validacion.validadores.ValidadorNombreCategoria;
 import jakarta.validation.Constraint;
 
