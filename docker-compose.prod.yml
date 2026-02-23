@@ -37,6 +37,8 @@ services:
       interval: 5s
       timeout: 3s
       retries: 20
-
+secrets:
+  db_password:
+    file: ./secrets/prod_db_password.txt
 volumes:
   pgdata:
