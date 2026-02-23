@@ -12,6 +12,9 @@ import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,6 +70,27 @@ public class FileSystemStorageService implements StorageService {
         } catch (MalformedURLException ex) {
             throw new StorageException("Could not read file: " + id);
         }
+    }
+
+    private void redimensionarImagen(BufferedImage originalImage, int targetWidth, int targetHeight, Path targetPath, String format) throws IOException {
+        int finalWidth = targetWidth;
+        int finalHeight = targetHeight;
+
+        if(targetHeight == -1){
+            double ratio = (double) targetWidth / originalImage.getWidth();
+            finalHeight = (int) (originalImage.getHeight() * ratio);
+        }
+
+        int type = (originalImage.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+
+        BufferedImage resizedImage = new BufferedImage(finalWidth, finalHeight, type);
+        Graphics2D g = resizedImage.createGraphics();
+
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.drawImage(originalImage, 0, 0, finalWidth, finalHeight, null);
+        g.dispose();
+
+        ImageIO.write(resizedImage, format != null ? format : "jpg", targetPath.toFile());
     }
 
     @Override
