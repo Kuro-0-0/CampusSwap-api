@@ -39,3 +39,4 @@ src/main/java/com/salesianostriana/dam/campusswap/auth/*
 src/main/java/com/salesianostriana/dam/campusswap/auth/*.*
 /src/main/java/com/salesianostriana/dam/campusswap/auth/
 /src/main/java/com/salesianostriana/dam/campusswap/auth/dto/
+/secrets/prod_db_password.txt
