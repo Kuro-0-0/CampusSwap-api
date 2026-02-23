@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class ServicioAdministrador {
@@ -16,6 +18,12 @@ public class ServicioAdministrador {
 
     public Page<Usuario> listarUsuarios(Pageable pageable) {
         return servicioBaseUsuario.listarUsuarios(pageable);
+    }
+
+    public Usuario bloquearUsuario(UUID id){
+        Usuario usuario = servicioBaseUsuario.buscarPorId(id);
+        usuario.setAccountNonLocked(!usuario.isAccountNonLocked());
+        return servicioBaseUsuario.guardar(usuario);
     }
 
 }

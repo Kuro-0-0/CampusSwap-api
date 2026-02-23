@@ -15,10 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -158,5 +157,17 @@ public class ControladorAdministrador {
     public ResponseEntity<Page<UsuarioResponseDto>> listarUsuarios(
             @Parameter(description = "Configuración de paginación (ej. ?page=0&size=10)") Pageable pageable) {
         return ResponseEntity.ok(servicioAdministrador.listarUsuarios(pageable).map(UsuarioResponseDto::of));
+    }
+
+
+    @PatchMapping("/usuarios/{id}/bloquear")
+    public ResponseEntity<UsuarioResponseDto> bloquearUsuario(
+            @PathVariable UUID id
+            ){
+        return ResponseEntity.ok(
+                UsuarioResponseDto.of(
+                        servicioAdministrador.bloquearUsuario(id)
+                )
+        );
     }
 }
