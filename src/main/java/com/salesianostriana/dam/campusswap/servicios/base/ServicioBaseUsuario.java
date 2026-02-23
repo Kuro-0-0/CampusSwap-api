@@ -3,6 +3,8 @@ package com.salesianostriana.dam.campusswap.servicios.base;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
@@ -28,5 +30,9 @@ public class ServicioBaseUsuario
 
     public Usuario guardar(Usuario usuario) {
         return repositorioUsuario.save(usuario);
+    }
+
+    public Page<Usuario> listarUsuarios(Pageable pageable) {
+        return repositorioUsuario.findAll(pageable);
     }
 }

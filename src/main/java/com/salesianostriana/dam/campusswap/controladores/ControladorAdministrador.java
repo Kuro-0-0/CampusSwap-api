@@ -3,8 +3,11 @@ package com.salesianostriana.dam.campusswap.controladores;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.categoria.CategoriaRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.categoria.CategoriaRequestUpdateDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.categoria.CategoriaResponseDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.usuario.UsuarioResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.funciones.ServicioAdministrador;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,6 +20,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -31,34 +39,34 @@ public class ControladorAdministrador {
 
     @PostMapping("/categorias")
     @ApiResponse(
-        responseCode = "201",
-        description = "Categoría creada exitosamente",
-        content = @io.swagger.v3.oas.annotations.media.Content(
-                mediaType = "application/json",
-                schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = CategoriaResponseDto.class),
-                examples = {
-                        @ExampleObject(
-                                value = """
+            responseCode = "201",
+            description = "Categoría creada exitosamente",
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                    mediaType = "application/json",
+                    schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = CategoriaResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
                                         {
                                             "id": 1,
                                             "nombre": "Libros",
                                             "descripcion": "Categoría para libros de texto y literatura"
                                         }
                                         """
-                        )
-                }
-        )
+                            )
+                    }
+            )
     )
     @ApiResponse(
-        responseCode = "400",
-        description = "Solicitud inválida, por ejemplo, si el nombre de la categoría ya existe o si faltan campos obligatorios",
+            responseCode = "400",
+            description = "Solicitud inválida, por ejemplo, si el nombre de la categoría ya existe o si faltan campos obligatorios",
 
-        content = @io.swagger.v3.oas.annotations.media.Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = ProblemDetail.class),
-                examples = {
-                        @ExampleObject(
-                                value = """
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
                                         {
                                             "timestamp": "2024-06-01T12:00:00Z",
                                             "status": 400,
@@ -67,19 +75,19 @@ public class ControladorAdministrador {
                                             "path": "/api/v1/admin/categorias"
                                         }
                                         """
-                        )
-                }
-        )
+                            )
+                    }
+            )
     )
     @ApiResponse(
-        responseCode = "401",
-        description = "No autorizado, el usuario no tiene permisos de administrador",
-        content = @io.swagger.v3.oas.annotations.media.Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = ProblemDetail.class),
-                examples = {
-                        @ExampleObject(
-                                value = """
+            responseCode = "401",
+            description = "No autorizado, el usuario no tiene permisos de administrador",
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
                                         {
                                             "timestamp": "2024-06-01T12:00:00Z",
                                             "status": 401,
@@ -88,19 +96,19 @@ public class ControladorAdministrador {
                                             "path": "/api/v1/admin/categorias"
                                         }
                                         """
-                        )
-                }
-        )
+                            )
+                    }
+            )
     )
     @ApiResponse(
-        responseCode = "403",
-        description = "Prohibido, el usuario no tiene permisos de administrador",
-        content = @io.swagger.v3.oas.annotations.media.Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = ProblemDetail.class),
-                examples = {
-                        @ExampleObject(
-                                value = """
+            responseCode = "403",
+            description = "Prohibido, el usuario no tiene permisos de administrador",
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
                                         {
                                             "timestamp": "2024-06-01T12:00:00Z",
                                             "status": 403,
@@ -109,19 +117,19 @@ public class ControladorAdministrador {
                                             "path": "/api/v1/admin/categorias"
                                         }
                                         """
-                        )
-                }
-        )
+                            )
+                    }
+            )
     )
     @ApiResponse(
-        responseCode = "500",
-        description = "Error interno del servidor",
-        content = @io.swagger.v3.oas.annotations.media.Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = ProblemDetail.class),
-                examples = {
-                        @ExampleObject(
-                                value = """
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
                                         {
                                             "timestamp": "2024-06-01T12:00:00Z",
                                             "status": 500,
@@ -130,13 +138,13 @@ public class ControladorAdministrador {
                                             "path": "/api/v1/admin/categorias"
                                         }
                                         """
-                        )
-                }
-        )
+                            )
+                    }
+            )
     )
     @Operation(
-        summary = "Crear una nueva categoría",
-        description = "Permite a un administrador crear una nueva categoría para clasificar los anuncios."
+            summary = "Crear una nueva categoría",
+            description = "Permite a un administrador crear una nueva categoría para clasificar los anuncios."
     )
     public ResponseEntity<CategoriaResponseDto> crearCategoria(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -161,30 +169,30 @@ public class ControladorAdministrador {
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 CategoriaResponseDto.of(
-                    servicioAdministrador.crearCategoria(categoriaRequestDto.toCategoria())
+                        servicioAdministrador.crearCategoria(categoriaRequestDto.toCategoria())
                 )
         );
     }
 
     @GetMapping("/categorias/{id}")
     @ApiResponse(
-        responseCode = "200",
-        description = "Categoría obtenida exitosamente",
-        content = @io.swagger.v3.oas.annotations.media.Content(
-                mediaType = "application/json",
-                schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = CategoriaResponseDto.class),
-                examples = {
-                        @ExampleObject(
-                                value = """
+            responseCode = "200",
+            description = "Categoría obtenida exitosamente",
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                    mediaType = "application/json",
+                    schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = CategoriaResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
                                         {
                                             "id": 1,
                                             "nombre": "Libros",
                                             "descripcion": "Categoría para libros de texto y literatura"
                                         }
                                         """
-                        )
-                }
-        )
+                            )
+                    }
+            )
     )
     @ApiResponse(
             responseCode = "401",
@@ -229,14 +237,14 @@ public class ControladorAdministrador {
             )
     )
     @ApiResponse(
-        responseCode = "404",
-        description = "Categoría no encontrada, el ID proporcionado no corresponde a ninguna categoría existente",
-        content = @io.swagger.v3.oas.annotations.media.Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = ProblemDetail.class),
-                examples = {
-                        @ExampleObject(
-                                value = """
+            responseCode = "404",
+            description = "Categoría no encontrada, el ID proporcionado no corresponde a ninguna categoría existente",
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
                                         {
                                             "timestamp": "2024-06-01T12:00:00Z",
                                             "status": 404,
@@ -245,19 +253,19 @@ public class ControladorAdministrador {
                                             "path": "/api/v1/admin/categorias/1"
                                         }
                                         """
-                        )
-                }
-        )
+                            )
+                    }
+            )
     )
     @ApiResponse(
-        responseCode = "500",
-        description = "Error interno del servidor",
-        content = @io.swagger.v3.oas.annotations.media.Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = ProblemDetail.class),
-                examples = {
-                        @ExampleObject(
-                                value = """
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
                                         {
                                             "timestamp": "2024-06-01T12:00:00Z",
                                             "status": 500,
@@ -266,11 +274,11 @@ public class ControladorAdministrador {
                                             "path": "/api/v1/admin/categorias/1"
                                         }
                                         """
-                        )
-                }
-        )
+                            )
+                    }
+            )
     )
-     @Operation(
+    @Operation(
             summary = "Obtener una categoría por ID",
             description = "Permite a un administrador obtener los detalles de una categoría específica utilizando su ID."
     )
@@ -397,9 +405,9 @@ public class ControladorAdministrador {
             @Valid @RequestBody CategoriaRequestUpdateDto categoriaRequestDto
     ) {
         return ResponseEntity.ok().body(
-            CategoriaResponseDto.of(
-                    servicioAdministrador.actualizarCategoria(id, categoriaRequestDto.toCategoria())
-            )
+                CategoriaResponseDto.of(
+                        servicioAdministrador.actualizarCategoria(id, categoriaRequestDto.toCategoria())
+                )
         );
     }
 
@@ -603,7 +611,7 @@ public class ControladorAdministrador {
                     }
             )
     )
-     @Operation(
+    @Operation(
             summary = "Listar categorías con paginación y filtrado opcional por nombre",
             description = """
                     Permite a un administrador obtener una lista paginada de categorías, con la opción de filtrar por nombre. 
@@ -616,11 +624,140 @@ public class ControladorAdministrador {
             Pageable pageable
     ) {
         return ResponseEntity.ok().body(
-            servicioAdministrador.listarCategorias(nombre,pageable).map(CategoriaResponseDto::of)
+                servicioAdministrador.listarCategorias(nombre,pageable).map(CategoriaResponseDto::of)
         );
     }
 
-
-
-
-}
+    @GetMapping("/usuarios")
+    @Operation(
+            summary = "Obtener todos los usuarios",
+            description = "Permite obtener una lista paginada de todos los usuarios registrados en el sistema. Este endpoint es de uso exclusivo para administradores."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Usuarios obtenidos correctamente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = UsuarioResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "content": [
+                                                    {
+                                                        "id": "a89f6904-4624-47bf-9967-be2e66aff7a2",
+                                                        "nombre": "Admin CampusSwap",
+                                                        "email": "admin@campusswap.com",
+                                                        "reputacionMedia": 5.0,
+                                                        "imageUrl": "https://ejemplo.com/admin.jpg",
+                                                        "fechaRegistro": "2023-10-15T10:30:00",
+                                                        "roles": ["USUARIO", "ADMIN"]
+                                                    },
+                                                    {
+                                                        "id": "68b56db5-159a-4232-82d7-ef92c96368fa",
+                                                        "nombre": "Juan Pérez",
+                                                        "email": "juan@campusswap.com",
+                                                        "reputacionMedia": 4.2,
+                                                        "imageUrl": "https://ejemplo.com/juan.jpg",
+                                                        "fechaRegistro": "2023-11-01T12:00:00",
+                                                        "roles": ["USUARIO"]
+                                                    }
+                                                ],
+                                                "empty": false,
+                                                "first": true,
+                                                "last": true,
+                                                "number": 0,
+                                                "numberOfElements": 2,
+                                                "pageable": {
+                                                    "offset": 0,
+                                                    "pageNumber": 0,
+                                                    "pageSize": 20,
+                                                    "paged": true,
+                                                    "sort": {
+                                                        "empty": true,
+                                                        "sorted": false,
+                                                        "unsorted": true
+                                                    },
+                                                    "unpaged": false
+                                                },
+                                                "size": 20,
+                                                "sort": {
+                                                    "empty": true,
+                                                    "sorted": false,
+                                                    "unsorted": true
+                                                },
+                                                "totalElements": 2,
+                                                "totalPages": 1
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado. Se requiere autenticación para acceder a este recurso.",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Acceso denegado. No se ha proporcionado un token de autenticación válido.",
+                                                "instance": "/api/v1/admin/usuarios",
+                                                "status": 401,
+                                                "title": "No autorizado."
+                                            }
+                                            """
+                            )
+                    })
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Solicitud prohibida",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Acceso denegado. No tienes permisos de administrador para acceder a este recurso.",
+                                                "instance": "/api/v1/admin/usuarios",
+                                                "status": 403,
+                                                "title": "Recurso no perteneciente al usuario"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Ha ocurrido un error inesperado al procesar la solicitud",
+                                                "instance": "/api/v1/admin/usuarios",
+                                                "status": 500,
+                                                "title": "Error interno del servidor"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @PreAuthorize(
+            "hasRole('ADMIN')"
+    )
+    public ResponseEntity<Page<UsuarioResponseDto>> listarUsuarios(
+            @Parameter(description = "Configuración de paginación (ej. ?page=0&size=10)") Pageable pageable) {
+        return ResponseEntity.ok(servicioAdministrador.listarUsuarios(pageable).map(UsuarioResponseDto::of));
+    }
+    }

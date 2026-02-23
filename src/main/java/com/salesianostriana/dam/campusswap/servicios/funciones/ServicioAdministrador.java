@@ -1,5 +1,8 @@
 package com.salesianostriana.dam.campusswap.servicios.funciones;
 
+import com.salesianostriana.dam.campusswap.entidades.Usuario;
+import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
+import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseUsuario;
 import com.salesianostriana.dam.campusswap.entidades.Categoria;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseCategoria;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +14,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ServicioAdministrador {
+
+    private final ServicioBaseUsuario servicioBaseUsuario;
+
 
     private final ServicioBaseCategoria servicioBaseCategoria;
 
@@ -38,10 +44,15 @@ public class ServicioAdministrador {
 
     public Page<Categoria> listarCategorias(String nombre, Pageable pageable) {
         PredicateSpecification<Categoria> spec = (from, builder) ->
-            (nombre != null && !nombre.isEmpty())
-                    ? builder.like(builder.lower(from.get("nombre")), "%" + nombre.toLowerCase() + "%")
-                    : builder.and();
+                (nombre != null && !nombre.isEmpty())
+                        ? builder.like(builder.lower(from.get("nombre")), "%" + nombre.toLowerCase() + "%")
+                        : builder.and();
 
         return servicioBaseCategoria.buscarTodos(spec, pageable);
     }
+
+    public Page<Usuario> listarUsuarios(Pageable pageable) {
+        return servicioBaseUsuario.listarUsuarios(pageable);
+    }
+
 }
