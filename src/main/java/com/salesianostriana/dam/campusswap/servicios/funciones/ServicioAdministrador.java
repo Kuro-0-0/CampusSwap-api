@@ -1,8 +1,11 @@
 package com.salesianostriana.dam.campusswap.servicios.funciones;
 
+import com.salesianostriana.dam.campusswap.entidades.Reporte;
+import com.salesianostriana.dam.campusswap.entidades.Reporte;
 import com.salesianostriana.dam.campusswap.entidades.Usuario;
 import com.salesianostriana.dam.campusswap.repositorios.RepositorioUsuario;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseAnuncio;
+import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseReporte;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseUsuario;
 import com.salesianostriana.dam.campusswap.entidades.Categoria;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseCategoria;
@@ -22,6 +25,7 @@ public class ServicioAdministrador {
     private final ServicioBaseAnuncio servicioBaseAnuncio;
     private final ServicioAnuncio servicioAnuncio;
     private final ServicioBaseCategoria servicioBaseCategoria;
+    private final ServicioBaseReporte servicioBaseReporte;
 
     public Categoria crearCategoria(Categoria categoria) {
         return servicioBaseCategoria.guardar(categoria);
@@ -69,5 +73,12 @@ public class ServicioAdministrador {
 
     public void eliminarAnuncio(Long id) {
         servicioAnuncio.borrarAnuncio(id);
+    }
+    public Page<Reporte> listarReportes(Pageable pageable) {
+        return servicioBaseReporte.buscarTodos(pageable);
+    }
+
+    public void borrarReportes(Long id) {
+        servicioBaseReporte.BorrarPorAnuncioId(id);
     }
 }

@@ -739,7 +739,7 @@ public class ControladorAnuncio {
             )
     )
     @PreAuthorize(
-            "hasAnyRole('ADMIN', 'USUARIO') and @comprobarAnuncio.esPropietario(#id, principal)"
+            "hasRole('ADMIN') or (hasRole('USUARIO') and @comprobarAnuncio.esPropietario(#id, principal))"
     )
     public ResponseEntity<?> eliminarAnuncio(
                                              @Parameter(
@@ -748,7 +748,6 @@ public class ControladorAnuncio {
                                                      required = true
                                              )
                                              @PathVariable Long id){
-        System.out.println("ELIMINAR ANUNCIO VAS A ENTRAR O QUEEEEEEE");
         servicioAnuncio.borrarAnuncio(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -908,7 +907,7 @@ public class ControladorAnuncio {
             @AuthenticationPrincipal Usuario usuario
     ){
         Reporte nuevoReporte = ReporteRequestDto.toEntity(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ReporteResponseDto.from(servicioAnuncio.reportarAnuncio(id ,nuevoReporte, usuario)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ReporteResponseDto.from(servicioAnuncio.reportarAnuncio(id ,nuevoReporte, usuario),1L));
     }
 
     @GetMapping("/unique/{id}")
