@@ -748,7 +748,6 @@ public class ControladorAnuncio {
                                                      required = true
                                              )
                                              @PathVariable Long id){
-        System.out.println("ELIMINAR ANUNCIO VAS A ENTRAR O QUEEEEEEE");
         servicioAnuncio.borrarAnuncio(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
