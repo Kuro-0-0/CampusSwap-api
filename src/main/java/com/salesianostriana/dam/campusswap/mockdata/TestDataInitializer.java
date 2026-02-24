@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.campusswap;
+package com.salesianostriana.dam.campusswap.mockdata;
 
 import com.salesianostriana.dam.campusswap.entidades.*;
 import com.salesianostriana.dam.campusswap.entidades.extras.*;
