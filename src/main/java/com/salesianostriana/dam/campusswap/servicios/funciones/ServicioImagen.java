@@ -14,4 +14,8 @@ public class ServicioImagen {
     public Resource obtenerImagen(String imageUrl) {
         return storageService.loadAsResource(imageUrl);
     }
+
+    public void eliminarImagen(String imageUrl) {
+        storageService.deleteFile(imageUrl);
+    }
 }
