@@ -3,16 +3,19 @@ package com.salesianostriana.dam.campusswap.seguridad;
 
 import com.salesianostriana.dam.campusswap.seguridad.error.JwtAccessDeniedHandler;
 import com.salesianostriana.dam.campusswap.seguridad.error.JwtAuthenticationEntryPoint;
+import com.salesianostriana.dam.campusswap.seguridad.extras.CustomUserDetailsService;
 import com.salesianostriana.dam.campusswap.seguridad.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -28,8 +31,17 @@ public class SecurityConfig {
 
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final CustomUserDetailsService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+        return authProvider;
+    }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -45,6 +57,7 @@ public class SecurityConfig {
                 .formLogin(form -> form.disable())
 
                 .logout(logout -> logout.disable())
+
 
                 .cors(cors -> {
                     CorsConfiguration configuration = new CorsConfiguration();
@@ -66,6 +79,7 @@ public class SecurityConfig {
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 );
 
+        http.authenticationProvider(authenticationProvider());
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/v1/usuarios/imagen/**").permitAll()
                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
@@ -80,9 +94,14 @@ public class SecurityConfig {
         return http.build();
     }
 
+
+
+
+
+
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
 }
