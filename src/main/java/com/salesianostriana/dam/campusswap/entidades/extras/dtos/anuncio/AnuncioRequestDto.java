@@ -12,19 +12,19 @@ import java.util.UUID;
 
 @PrecioSegunTipoOperacion
 public record AnuncioRequestDto(
-        @NotBlank(message = "El título no puede estar vacío")
-        @Size(min = 3, max = 100, message = "El título debe tener entre 3 y 100 caracteres")
+        @NotBlank(message = "{anuncio.titulo.notblank}")
+        @Size(min = 3, max = 100, message = "{anuncio.titulo.size}")
         String titulo,
-        @NotBlank(message = "La descripción no puede estar vacía")
-        @Size(min = 10, max = 500, message = "La descripción debe tener entre 10 y 1000 caracteres")
+        @NotBlank(message = "{anuncio.descripcion.notblank}")
+        @Size(min = 10, max = 500, message = "{anuncio.descripcion.size}")
         String descripcion,
-        @Positive(message = "El precio debe ser mayor que 0 para venta")
+        @Positive(message = "{anuncio.precio.positive}")
         Double precio,
-        @NotNull(message = "El tipo de operación no puede ser nulo")
+        @NotNull(message = "{anuncio.tipoOperacion.notnull}")
         TipoOperacion tipoOperacion,
-        @NotNull(message = "La condición no puede ser nula")
+        @NotNull(message = "{anuncio.condicion.notnull}")
         Condicion condicion,
-        @NotNull(message = "La categoría no puede ser nula")
+        @NotNull(message = "{anuncio.categoria.notnull}")
         Long categoriaId
 ) {
 

@@ -9,11 +9,11 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record EnviarMensajeRequestDto(
-        @NotBlank(message = "El contenido no puede estar vacío")
+        @NotBlank(message = "{mensaje.contenido.notblank}")
         String contenido,
-        @NotNull(message = "El ID del anuncio no puede ser nulo")
+        @NotNull(message = "{mensaje.anuncioId.notnull}")
         Long anuncioId,
-        @NotBlank(message = "El ID del receptor no puede estar vacío")
+        @NotBlank(message = "{mensaje.receptorId.notblank}")
         String receptorId) {
 
      public static Mensaje from(EnviarMensajeRequestDto dto) {
