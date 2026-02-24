@@ -8,6 +8,7 @@ import lombok.extern.java.Log;
 import org.springframework.security.access.AccessDeniedException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.*;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -126,6 +127,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         pd.setInstance(URI.create(request.getRequestURI()));
         return pd;
     }
+    @ExceptionHandler(LockedException.class)
+    public ProblemDetail handleLockedException(LockedException ex, HttpServletRequest request) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
+        log.warning("Error class: " + ex.getClass() + ", Error message: " + ex.getMessage());
+        pd.setTitle("Cuenta bloqueada.");
+        pd.setInstance(URI.create(request.getRequestURI()));
+        return pd;
+    }
+
 
     @ExceptionHandler(AuthenticationException.class)
     public ErrorResponse handleAuthenticationException(AuthenticationException ex) {

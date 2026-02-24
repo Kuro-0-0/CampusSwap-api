@@ -22,7 +22,7 @@ public class ServicioAdministrador {
 
     public Usuario bloquearUsuario(UUID id){
         Usuario usuario = servicioBaseUsuario.buscarPorId(id);
-        usuario.setAccountNonLocked(!usuario.isAccountNonLocked());
+        usuario.setAccountNonLocked(false);
         return servicioBaseUsuario.guardar(usuario);
     }
 
