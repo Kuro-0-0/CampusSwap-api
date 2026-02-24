@@ -54,12 +54,12 @@ public class ControladorAdministrador {
                     examples = {
                             @ExampleObject(
                                     value = """
-                                        {
-                                            "id": 1,
-                                            "nombre": "Libros",
-                                            "descripcion": "Categoría para libros de texto y literatura"
-                                        }
-                                        """
+                                            {
+                                                "id": 1,
+                                                "nombre": "Libros",
+                                                "descripcion": "Categoría para libros de texto y literatura"
+                                            }
+                                            """
                             )
                     }
             )
@@ -74,14 +74,14 @@ public class ControladorAdministrador {
                     examples = {
                             @ExampleObject(
                                     value = """
-                                        {
-                                            "timestamp": "2024-06-01T12:00:00Z",
-                                            "status": 400,
-                                            "error": "Bad Request",
-                                            "message": "El nombre de la categoría ya existe",
-                                            "path": "/api/v1/admin/categorias"
-                                        }
-                                        """
+                                            {
+                                                "timestamp": "2024-06-01T12:00:00Z",
+                                                "status": 400,
+                                                "error": "Bad Request",
+                                                "message": "El nombre de la categoría ya existe",
+                                                "path": "/api/v1/admin/categorias"
+                                            }
+                                            """
                             )
                     }
             )
@@ -95,14 +95,14 @@ public class ControladorAdministrador {
                     examples = {
                             @ExampleObject(
                                     value = """
-                                        {
-                                            "timestamp": "2024-06-01T12:00:00Z",
-                                            "status": 401,
-                                            "error": "Unauthorized",
-                                            "message": "No autorizado, se requieren permisos de administrador",
-                                            "path": "/api/v1/admin/categorias"
-                                        }
-                                        """
+                                            {
+                                                "timestamp": "2024-06-01T12:00:00Z",
+                                                "status": 401,
+                                                "error": "Unauthorized",
+                                                "message": "No autorizado, se requieren permisos de administrador",
+                                                "path": "/api/v1/admin/categorias"
+                                            }
+                                            """
                             )
                     }
             )
@@ -116,14 +116,14 @@ public class ControladorAdministrador {
                     examples = {
                             @ExampleObject(
                                     value = """
-                                        {
-                                            "timestamp": "2024-06-01T12:00:00Z",
-                                            "status": 403,
-                                            "error": "Forbidden",
-                                            "message": "Prohibido, se requieren permisos de administrador",
-                                            "path": "/api/v1/admin/categorias"
-                                        }
-                                        """
+                                            {
+                                                "timestamp": "2024-06-01T12:00:00Z",
+                                                "status": 403,
+                                                "error": "Forbidden",
+                                                "message": "Prohibido, se requieren permisos de administrador",
+                                                "path": "/api/v1/admin/categorias"
+                                            }
+                                            """
                             )
                     }
             )
@@ -137,14 +137,14 @@ public class ControladorAdministrador {
                     examples = {
                             @ExampleObject(
                                     value = """
-                                        {
-                                            "timestamp": "2024-06-01T12:00:00Z",
-                                            "status": 500,
-                                            "error": "Internal Server Error",
-                                            "message": "Ocurrió un error inesperado al procesar la solicitud",
-                                            "path": "/api/v1/admin/categorias"
-                                        }
-                                        """
+                                            {
+                                                "timestamp": "2024-06-01T12:00:00Z",
+                                                "status": 500,
+                                                "error": "Internal Server Error",
+                                                "message": "Ocurrió un error inesperado al procesar la solicitud",
+                                                "path": "/api/v1/admin/categorias"
+                                            }
+                                            """
                             )
                     }
             )
@@ -191,12 +191,12 @@ public class ControladorAdministrador {
                     examples = {
                             @ExampleObject(
                                     value = """
-                                        {
-                                            "id": 1,
-                                            "nombre": "Libros",
-                                            "descripcion": "Categoría para libros de texto y literatura"
-                                        }
-                                        """
+                                            {
+                                                "id": 1,
+                                                "nombre": "Libros",
+                                                "descripcion": "Categoría para libros de texto y literatura"
+                                            }
+                                            """
                             )
                     }
             )
@@ -252,14 +252,14 @@ public class ControladorAdministrador {
                     examples = {
                             @ExampleObject(
                                     value = """
-                                        {
-                                            "timestamp": "2024-06-01T12:00:00Z",
-                                            "status": 404,
-                                            "error": "Not Found",
-                                            "message": "Categoría con ID 1 no encontrada",
-                                            "path": "/api/v1/admin/categorias/1"
-                                        }
-                                        """
+                                            {
+                                                "timestamp": "2024-06-01T12:00:00Z",
+                                                "status": 404,
+                                                "error": "Not Found",
+                                                "message": "Categoría con ID 1 no encontrada",
+                                                "path": "/api/v1/admin/categorias/1"
+                                            }
+                                            """
                             )
                     }
             )
@@ -273,14 +273,14 @@ public class ControladorAdministrador {
                     examples = {
                             @ExampleObject(
                                     value = """
-                                        {
-                                            "timestamp": "2024-06-01T12:00:00Z",
-                                            "status": 500,
-                                            "error": "Internal Server Error",
-                                            "message": "Ocurrió un error inesperado al procesar la solicitud",
-                                            "path": "/api/v1/admin/categorias/1"
-                                        }
-                                        """
+                                            {
+                                                "timestamp": "2024-06-01T12:00:00Z",
+                                                "status": 500,
+                                                "error": "Internal Server Error",
+                                                "message": "Ocurrió un error inesperado al procesar la solicitud",
+                                                "path": "/api/v1/admin/categorias/1"
+                                            }
+                                            """
                             )
                     }
             )
@@ -621,17 +621,17 @@ public class ControladorAdministrador {
     @Operation(
             summary = "Listar categorías con paginación y filtrado opcional por nombre",
             description = """
-                    Permite a un administrador obtener una lista paginada de categorías, con la opción de filtrar por nombre. 
-                    Si se proporciona el parámetro 'nombre', se devolverán solo las categorías cuyo nombre contenga el valor especificado (sin distinguir mayúsculas/minúsculas). 
-                    Si no se proporciona el parámetro 'nombre', se devolverán todas las categorías paginadas.
-            """
+                            Permite a un administrador obtener una lista paginada de categorías, con la opción de filtrar por nombre. 
+                            Si se proporciona el parámetro 'nombre', se devolverán solo las categorías cuyo nombre contenga el valor especificado (sin distinguir mayúsculas/minúsculas). 
+                            Si no se proporciona el parámetro 'nombre', se devolverán todas las categorías paginadas.
+                    """
     )
     public ResponseEntity<Page<CategoriaResponseDto>> listarCategorias(
             @RequestParam(required = false) String nombre,
             Pageable pageable
     ) {
         return ResponseEntity.ok().body(
-                servicioAdministrador.listarCategorias(nombre,pageable).map(CategoriaResponseDto::of)
+                servicioAdministrador.listarCategorias(nombre, pageable).map(CategoriaResponseDto::of)
         );
     }
 
@@ -768,6 +768,101 @@ public class ControladorAdministrador {
         return ResponseEntity.ok(servicioAdministrador.listarUsuarios(pageable).map(UsuarioResponseDto::of));
     }
 
+    @DeleteMapping("/anuncios/{id}")
+    @PreAuthorize(
+            "hasRole('ADMIN')"
+    )
+    @ApiResponse(
+            responseCode = "204",
+            description = "Anuncio eliminado exitosamente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Void.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado, el usuario no tiene permisos de administrador",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = @ExampleObject(
+                            value = """
+                                    {
+                                        "timestamp": "2024-06-01T12:00:00Z",
+                                        "status": 401,
+                                        "error": "Unauthorized",
+                                        "message": "No autorizado, se requieren permisos de administrador",
+                                        "path": "/api/v1/admin/anuncios/1"
+                                    }
+                                    """)
+            )
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Prohibido, el usuario no tiene permisos de administrador",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = @ExampleObject(
+                            value = """
+                                    {
+                                        "timestamp": "2024-06-01T12:00:00Z",
+                                        "status": 403,
+                                        "error": "Forbidden",
+                                        "message": "Prohibido, se requieren permisos de administrador",
+                                        "path": "/api/v1/admin/anuncios/1"
+                                    }
+                                    """)
+            )
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Anuncio no encontrado, el ID proporcionado no corresponde a ningún anuncio existente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = @ExampleObject(
+                            value = """
+                                    {
+                                        "timestamp": "2024-06-01T12:00:00Z",
+                                        "status": 404,
+                                        "error": "Not Found",
+                                        "message": "Anuncio con ID 1 no encontrado",
+                                        "path": "/api/v1/admin/anuncios/1"
+                                    }
+                                    """)
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = @ExampleObject(
+                            value = """
+                                    {
+                                        "timestamp": "2024-06-01T12:00:00Z",
+                                        "status": 500,
+                                        "error": "Internal Server Error",
+                                        "message": "Ocurrió un error inesperado al procesar la solicitud",
+                                        "path": "/api/v1/admin/anuncios/1"
+                                    }
+                                    """)
+            )
+    )
+    @Operation(
+            summary = "Eliminar un anuncio por ID",
+            description = "Permite a un administrador eliminar un anuncio específico utilizando su ID."
+    )
+    public ResponseEntity<Void> eliminarAnuncio(
+            @PathVariable Long id
+    ) {
+        servicioAdministrador.eliminarAnuncio(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/reportes")
     public ResponseEntity<Page<ReporteResponseDto>> listarReportes(
 
@@ -786,5 +881,4 @@ public class ControladorAdministrador {
             return ReporteResponseDto.from(reporte, conteoReportes);
         }));
     }
-
 }

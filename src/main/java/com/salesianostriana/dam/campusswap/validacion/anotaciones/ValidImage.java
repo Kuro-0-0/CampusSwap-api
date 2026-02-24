@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = ImageFileValidator.class)
 public @interface ValidImage {
-    String message() default "Invalid image file";
+    String message() default "{validacion.imagen.invalida}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

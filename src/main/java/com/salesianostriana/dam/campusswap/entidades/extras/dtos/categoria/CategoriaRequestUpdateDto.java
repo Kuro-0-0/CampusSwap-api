@@ -4,9 +4,9 @@ import com.salesianostriana.dam.campusswap.entidades.Categoria;
 import jakarta.validation.constraints.NotEmpty;
 
 public record CategoriaRequestUpdateDto(
-        @NotEmpty(message = "El nombre de la categoría no puede estar vacío")
+        @NotEmpty(message = "{categoria.nombre.notempty}")
         String nombre,
-        @NotEmpty(message = "La descripción de la categoría no puede estar vacía")
+        @NotEmpty(message = "{categoria.descripcion.notempty}")
         String descripcion
 ) {
 

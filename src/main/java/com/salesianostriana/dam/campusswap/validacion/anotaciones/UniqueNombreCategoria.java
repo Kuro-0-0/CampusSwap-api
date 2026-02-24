@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface UniqueNombreCategoria {
 
-    String message() default "El nombre de la categoría ya existe";
+    String message() default "{validacion.categoria.nombreunico}";
     Class<?>[] groups() default {};
     Class<? extends jakarta.validation.Payload>[] payload() default {};
 

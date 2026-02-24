@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface CheckExistenciaAnuncio {
 
-    String message() default "El anuncio con el ID proporcionado no existe";
+    String message() default "{validacion.anuncio.existe}";
     Class<?>[] groups() default {};
     Class<? extends jakarta.validation.Payload>[] payload() default {};
 

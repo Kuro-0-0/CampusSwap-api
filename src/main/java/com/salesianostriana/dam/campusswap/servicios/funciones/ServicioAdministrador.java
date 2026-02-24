@@ -22,6 +22,7 @@ public class ServicioAdministrador {
 
     private final ServicioBaseUsuario servicioBaseUsuario;
     private final ServicioBaseAnuncio servicioBaseAnuncio;
+    private final ServicioAnuncio servicioAnuncio;
     private final ServicioBaseCategoria servicioBaseCategoria;
     private final ServicioBaseReporte servicioBaseReporte;
 
@@ -63,6 +64,9 @@ public class ServicioAdministrador {
         return servicioBaseUsuario.listarUsuarios(pageable);
     }
 
+    public void eliminarAnuncio(Long id) {
+        servicioAnuncio.borrarAnuncio(id);
+    }
     public Page<Reporte> listarReportes(Pageable pageable) {
         return servicioBaseReporte.buscarTodos(pageable);
     }

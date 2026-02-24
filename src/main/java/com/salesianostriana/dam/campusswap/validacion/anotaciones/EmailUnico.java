@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = ValidadorEmailUnico.class)
 @Documented
 public @interface EmailUnico {
-    String message() default "El email ya está registrado";
+    String message() default "{validacion.email.unico}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

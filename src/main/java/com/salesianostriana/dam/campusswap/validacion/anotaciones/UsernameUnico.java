@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = ValidadorUsernameUnico.class)
 @Documented
 public @interface UsernameUnico {
-    String message() default "El username ya está en uso";
+    String message() default "{validacion.username.unico}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
