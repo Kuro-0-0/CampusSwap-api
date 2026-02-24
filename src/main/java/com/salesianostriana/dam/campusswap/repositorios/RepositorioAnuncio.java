@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -34,4 +35,16 @@ public interface RepositorioAnuncio extends JpaRepository<Anuncio, Long>, JpaSpe
             }
     )
     Optional<Anuncio> findById(Long id);
+
+    @EntityGraph(
+            attributePaths = {
+                    "categoria"
+            }
+    )
+    @Query(
+            "SELECT CASE WHEN COUNT(a) > 0 THEN true ELSE false END " +
+            "FROM Anuncio a " +
+            "WHERE a.categoria.id = :id"
+    )
+    boolean existByCategoriaId(Long id);
 }
