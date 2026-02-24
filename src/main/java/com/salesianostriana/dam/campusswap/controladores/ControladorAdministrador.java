@@ -991,6 +991,117 @@ public class ControladorAdministrador {
         return ResponseEntity.noContent().build();
     }
 
+    @ApiResponse(
+            responseCode = "200",
+            description = "Lista de reportes obtenida exitosamente",
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                    mediaType = "application/json",
+                    schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = Page.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "content": [
+                                                    {
+                                                        "id": 1,
+                                                        "motivo": "Spam",
+                                                        "anuncio": {
+                                                            "id": 1,
+                                                            "titulo": "Portátil HP Victus 16GB RAM",
+                                                            "autor": "Carlos Vendedor"
+                                                        },
+                                                        "cantidad": 1
+                                                    },
+                                                    {
+                                                        "id": 2,
+                                                        "motivo": "Contenido inapropiado",
+                                                        "anuncio": {
+                                                            "id": 2,
+                                                            "titulo": "Bicicleta de montaña Rockrider",
+                                                            "autor": "Carlos Vendedor"
+                                                        },
+                                                        "cantidad": 1
+                                                    }
+                                                ],
+                                                "page": {
+                                                    "size": 20,
+                                                    "number": 0,
+                                                    "totalElements": 2,
+                                                    "totalPages": 1
+                                                }
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado, el usuario no tiene permisos de administrador",
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "timestamp": "2024-06-01T12:00:00Z",
+                                                "status": 401,
+                                                "error": "Unauthorized",
+                                                "message": "No autorizado, se requieren permisos de administrador",
+                                                "path": "/api/v1/admin/reportes"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Prohibido, el usuario no tiene permisos de administrador",
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "timestamp": "2024-06-01T12:00:00Z",
+                                                "status": 403,
+                                                "error": "Forbidden",
+                                                "message": "Prohibido, se requieren permisos de administrador",
+                                                "path": "/api/v1/admin/reportes"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "timestamp": "2024-06-01T12:00:00Z",
+                                                "status": 500,
+                                                "error": "Internal Server Error",
+                                                "message": "Ocurrió un error inesperado al procesar la solicitud",
+                                                "path": "/api/v1/admin/reportes"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @Operation(
+            summary = "Listar reportes de anuncios",
+            description = "Permite a un administrador obtener una lista paginada de los reportes realizados por los usuarios sobre anuncios específicos. Cada reporte incluye el motivo del reporte, información básica del anuncio reportado (ID, título y autor) y la cantidad total de reportes que ha recibido ese anuncio."
+    )
     @GetMapping("/reportes")
     public ResponseEntity<Page<ReporteResponseDto>> listarReportes(
 
@@ -1010,6 +1121,98 @@ public class ControladorAdministrador {
         }));
     }
 
+    @ApiResponse(
+            responseCode = "204",
+            description = "Reportes eliminados exitosamente",
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                    mediaType = "application/json",
+                    schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = Void.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado, el usuario no tiene permisos de administrador",
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "timestamp": "2024-06-01T12:00:00Z",
+                                                "status": 401,
+                                                "error": "Unauthorized",
+                                                "message": "No autorizado, se requieren permisos de administrador",
+                                                "path": "/api/v1/admin/reportes/{id}"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Prohibido, el usuario no tiene permisos de administrador",
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "timestamp": "2024-06-01T12:00:00Z",
+                                                "status": 403,
+                                                "error": "Forbidden",
+                                                "message": "Prohibido, se requieren permisos de administrador",
+                                                "path": "/api/v1/admin/reportes/{id}"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Anuncio no encontrado, el ID proporcionado no corresponde a ningún anuncio existente",
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "timestamp": "2024-06-01T12:00:00Z",
+                                                "status": 404,
+                                                "error": "Not Found",
+                                                "message": "Anuncio con ID {id} no encontrado",
+                                                "path": "/api/v1/admin/reportes/{id}"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "timestamp": "2024-06-01T12:00:00Z",
+                                                "status": 500,
+                                                "error": "Internal Server Error",
+                                                "message": "Ocurrió un error inesperado al procesar la solicitud",
+                                                "path": "/api/v1/admin/reportes/{id}"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
     @DeleteMapping("/reportes/{id}")
     public ResponseEntity<?> borrarReportes (
             @PathVariable Long id
