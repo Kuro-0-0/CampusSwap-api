@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface CheckExistenciaUsuario {
 
-    String message() default "El usuario con el ID proporcionado no existe";
+    String message() default "{validacion.usuario.existe}";
     Class<?>[] groups() default {};
     Class<? extends jakarta.validation.Payload>[] payload() default {};
 

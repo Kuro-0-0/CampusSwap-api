@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ContrasenaNoCoincide {
-    String message() default "Las contraseñas no coinciden";
+    String message() default "{validacion.contrasena.nocoincide}";
     Class<?>[] groups() default {};
     Class<? extends jakarta.validation.Payload>[] payload() default {};
 }
