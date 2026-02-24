@@ -28,6 +28,7 @@ public class ServicioAnuncio {
     private final ServicioBaseReporte servicioBaseReporte;
     private final ServicioBaseFavorito servicioBaseFavorito;
     private final ServicioBaseMensaje servicioBaseMensaje;
+    private final ServicioImagen servicioImagen;
     private final StorageService storageService;
 
 
@@ -114,6 +115,11 @@ public class ServicioAnuncio {
         List<Reporte> reportes = servicioBaseReporte.BuscarPorAnuncioId(anuncio.getId());
         if(!reportes.isEmpty()){
             reportes.forEach(servicioBaseReporte::borrar);
+        }
+
+        String imagen = anuncio.getImagen();
+        if (imagen != null && !imagen.isBlank()) {
+            servicioImagen.eliminarImagen(imagen);
         }
 
         servicioBaseAnuncio.borrar(anuncio);
