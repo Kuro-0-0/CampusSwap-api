@@ -36,4 +36,8 @@ public class ServicioBaseReporte {
     public Page<Reporte> buscarTodos(Pageable pageable) {
         return repositorioReporte.findAll(pageable);
     }
+
+    public void BorrarPorAnuncioId(Long id) {
+        repositorioReporte.deleteByAnuncioId(id);
+    }
 }

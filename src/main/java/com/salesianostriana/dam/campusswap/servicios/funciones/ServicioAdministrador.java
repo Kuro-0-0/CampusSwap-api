@@ -77,4 +77,8 @@ public class ServicioAdministrador {
     public Page<Reporte> listarReportes(Pageable pageable) {
         return servicioBaseReporte.buscarTodos(pageable);
     }
+
+    public void borrarReportes(Long id) {
+        servicioBaseReporte.BorrarPorAnuncioId(id);
+    }
 }

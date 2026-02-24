@@ -1009,4 +1009,12 @@ public class ControladorAdministrador {
             return ReporteResponseDto.from(reporte, conteoReportes);
         }));
     }
+
+    @DeleteMapping("/reportes/{id}")
+    public ResponseEntity<?> borrarReportes (
+            @PathVariable Long id
+    ) {
+        servicioAdministrador.borrarReportes(id);
+        return ResponseEntity.noContent().build();
+    }
 }
