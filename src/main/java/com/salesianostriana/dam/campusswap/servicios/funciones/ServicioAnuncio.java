@@ -72,7 +72,7 @@ public class ServicioAnuncio {
             original.setImagen(imagenAntigua);
         }
 
-        return servicioBaseAnuncio.guardar(original.modificar(anuncio));
+        return servicioBaseAnuncio.guardar(original);
     }
 
     public Page<Anuncio> obtenerAnuncios(Pageable pageable, String idUsuario) {
