@@ -56,6 +56,10 @@ public class ServicioAnuncio {
         if (original.getEstado().equals(Estado.CERRADO))
             throw new IllegalStateException("No se pueden modificar anuncios cerrados");
 
+        String imagenAntigua = original.getImagen();
+        original = original.modificar(anuncio);
+        original.setCategoria(categoria);
+
         if (file != null) {
             String oldFilename = original.getImagen();
             FileMetadata fileMetadata = storageService.store(file);
@@ -63,6 +67,8 @@ public class ServicioAnuncio {
                 storageService.deleteFile(oldFilename);
             }
             original.setImagen(fileMetadata.getFilename());
+        }else{
+            original.setImagen(imagenAntigua);
         }
 
         return servicioBaseAnuncio.guardar(original.modificar(anuncio));
