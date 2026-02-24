@@ -760,4 +760,99 @@ public class ControladorAdministrador {
             @Parameter(description = "Configuración de paginación (ej. ?page=0&size=10)") Pageable pageable) {
         return ResponseEntity.ok(servicioAdministrador.listarUsuarios(pageable).map(UsuarioResponseDto::of));
     }
+
+    @DeleteMapping("/anuncios/{id}")
+    @PreAuthorize(
+            "hasRole('ADMIN')"
+    )
+    @ApiResponse(
+            responseCode = "204",
+            description = "Anuncio eliminado exitosamente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Void.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado, el usuario no tiene permisos de administrador",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = @ExampleObject(
+                            value = """
+                                    {
+                                        "timestamp": "2024-06-01T12:00:00Z",
+                                        "status": 401,
+                                        "error": "Unauthorized",
+                                        "message": "No autorizado, se requieren permisos de administrador",
+                                        "path": "/api/v1/admin/anuncios/1"
+                                    }
+                                    """                    )
+            )
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Prohibido, el usuario no tiene permisos de administrador",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = @ExampleObject(
+                            value = """
+                                    {
+                                        "timestamp": "2024-06-01T12:00:00Z",
+                                        "status": 403,
+                                        "error": "Forbidden",
+                                        "message": "Prohibido, se requieren permisos de administrador",
+                                        "path": "/api/v1/admin/anuncios/1"
+                                    }
+                                    """                    )
+            )
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Anuncio no encontrado, el ID proporcionado no corresponde a ningún anuncio existente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = @ExampleObject(
+                            value = """
+                                    {
+                                        "timestamp": "2024-06-01T12:00:00Z",
+                                        "status": 404,
+                                        "error": "Not Found",
+                                        "message": "Anuncio con ID 1 no encontrado",
+                                        "path": "/api/v1/admin/anuncios/1"
+                                    }
+                                    """                    )
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = @ExampleObject(
+                            value = """
+                                    {
+                                        "timestamp": "2024-06-01T12:00:00Z",
+                                        "status": 500,
+                                        "error": "Internal Server Error",
+                                        "message": "Ocurrió un error inesperado al procesar la solicitud",
+                                        "path": "/api/v1/admin/anuncios/1"
+                                    }
+                                    """                    )
+            )
+    )
+    @Operation(
+            summary = "Eliminar un anuncio por ID",
+            description = "Permite a un administrador eliminar un anuncio específico utilizando su ID."
+    )
+    public ResponseEntity<Void> eliminarAnuncio(
+            @PathVariable Long id
+    ) {
+        servicioAdministrador.eliminarAnuncio(id);
+        return ResponseEntity.noContent().build();
     }
+}
