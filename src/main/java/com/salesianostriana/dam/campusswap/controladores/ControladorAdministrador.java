@@ -1,8 +1,11 @@
 package com.salesianostriana.dam.campusswap.controladores;
 
+import com.salesianostriana.dam.campusswap.entidades.Anuncio;
+import com.salesianostriana.dam.campusswap.entidades.Reporte;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.categoria.CategoriaRequestDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.categoria.CategoriaRequestUpdateDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.categoria.CategoriaResponseDto;
+import com.salesianostriana.dam.campusswap.entidades.extras.dtos.reporte.ReporteResponseDto;
 import com.salesianostriana.dam.campusswap.entidades.extras.dtos.usuario.UsuarioResponseDto;
 import com.salesianostriana.dam.campusswap.servicios.funciones.ServicioAdministrador;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +28,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -760,4 +767,24 @@ public class ControladorAdministrador {
             @Parameter(description = "Configuración de paginación (ej. ?page=0&size=10)") Pageable pageable) {
         return ResponseEntity.ok(servicioAdministrador.listarUsuarios(pageable).map(UsuarioResponseDto::of));
     }
+
+    @GetMapping("/reportes")
+    public ResponseEntity<Page<ReporteResponseDto>> listarReportes(
+
+            Pageable pageable
+
+    ) {
+
+        Page<Reporte> reportePage = servicioAdministrador.listarReportes(pageable);
+
+        Map<Long, Long> conteoReportesPorAnuncio = reportePage.getContent().stream().map(Reporte::getAnuncio)
+                .collect(Collectors.groupingBy(Anuncio::getId, Collectors.counting()));
+
+
+        return ResponseEntity.ok(reportePage.map(reporte -> {
+            Long conteoReportes = conteoReportesPorAnuncio.getOrDefault(reporte.getAnuncio().getId(), 0L);
+            return ReporteResponseDto.from(reporte, conteoReportes);
+        }));
     }
+
+}

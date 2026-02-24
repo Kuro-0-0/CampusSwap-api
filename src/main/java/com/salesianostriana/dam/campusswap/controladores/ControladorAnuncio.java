@@ -908,7 +908,7 @@ public class ControladorAnuncio {
             @AuthenticationPrincipal Usuario usuario
     ){
         Reporte nuevoReporte = ReporteRequestDto.toEntity(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ReporteResponseDto.from(servicioAnuncio.reportarAnuncio(id ,nuevoReporte, usuario)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ReporteResponseDto.from(servicioAnuncio.reportarAnuncio(id ,nuevoReporte, usuario),1L));
     }
 
     @GetMapping("/unique/{id}")

@@ -1,10 +1,7 @@
 package com.salesianostriana.dam.campusswap;
 
 import com.salesianostriana.dam.campusswap.entidades.*;
-import com.salesianostriana.dam.campusswap.entidades.extras.Condicion;
-import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
-import com.salesianostriana.dam.campusswap.entidades.extras.RolUsuario;
-import com.salesianostriana.dam.campusswap.entidades.extras.TipoOperacion;
+import com.salesianostriana.dam.campusswap.entidades.extras.*;
 import com.salesianostriana.dam.campusswap.repositorios.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +27,7 @@ class TestDataInitializer {
     private final RepositorioMensaje repoMensaje;
     private final RepositorioFavorito repoFavorito;
     private final RepositorioValoracion repoValoracion;
+    private final RepositorioReporte repoReporte;
     private final PasswordEncoder passwordEncoder;
 
     @PostConstruct
@@ -159,6 +157,19 @@ class TestDataInitializer {
                 .build();
 
         repoValoracion.save(val1);
+
+        Reporte r1 = Reporte.builder()
+                .motivo(Motivo.SPAM) // Use an appropriate enum value from your Motivo.java
+                .anuncio(aPortatil)
+                .usuario(uComprador)
+                .build();
+
+        Reporte r2 = Reporte.builder()
+                .motivo(Motivo.CONTENIDO_INAPROPIADO)
+                .anuncio(aBici)
+                .usuario(uNuevo)
+                .build();
+        repoReporte.saveAll(List.of(r1, r2));
 
         log.info("CARGA DE DATOS COMPLETADA: Usuarios, Anuncios, Favoritos, Mensajes y Valoraciones listos.");
     }
