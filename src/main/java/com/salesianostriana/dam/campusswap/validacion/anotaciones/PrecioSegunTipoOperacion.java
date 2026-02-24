@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PrecioSegunTipoOperacion {
-    String message() default "El precio debe ser nulo para cesión e intercambio, y mayor que 0 para venta";
+    String message() default "{validacion.precio.tipooperacion}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

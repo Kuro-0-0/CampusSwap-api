@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record ReporteRequestDto(
-        @NotNull(message = "El motivo no puede ser nulo")
+        @NotNull(message = "{reporte.motivo.notnull}")
         Motivo motivo
 
 ) {

@@ -5,10 +5,10 @@ import com.salesianostriana.dam.campusswap.validacion.anotaciones.UniqueNombreCa
 import jakarta.validation.constraints.NotEmpty;
 
 public record CategoriaRequestDto(
-        @NotEmpty(message = "El nombre de la categoría no puede estar vacío")
+        @NotEmpty(message = "{categoria.nombre.notempty}")
         @UniqueNombreCategoria(message = "El nombre de la categoría ya existe")
         String nombre,
-        @NotEmpty(message = "La descripción de la categoría no puede estar vacía")
+        @NotEmpty(message = "{categoria.descripcion.notempty}")
         String descripcion
 ) {
 
