@@ -19,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +29,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Tag(
         name = "Administrador",
-        description = "Operaciones de administración para gestionar categorías"
+        description = "Operaciones de administración para gestionar categorías, usuarios y anuncios"
 )
 public class ControladorAdministrador {
 
@@ -557,7 +556,7 @@ public class ControladorAdministrador {
                             @ExampleObject(
                                     value = """
                                             {
-                                                "timestamp": "2024-06-01T12:00:00Z",
+                                            "timestamp": "2024-06-01T12:00:00Z",
                                                 "status": 401,
                                                 "error": "Unauthorized",
                                                 "message": "No autorizado, se requieren permisos de administrador",
@@ -759,8 +758,6 @@ public class ControladorAdministrador {
             @Parameter(description = "Configuración de paginación (ej. ?page=0&size=10)") Pageable pageable) {
         return ResponseEntity.ok(servicioAdministrador.listarUsuarios(pageable).map(UsuarioResponseDto::of));
     }
-<<<<<<< F11.3
-
 
     @PutMapping("/usuarios/{id}/bloquear")
     @PreAuthorize("hasRole('ADMIN')")
@@ -792,7 +789,6 @@ public class ControladorAdministrador {
                                             """
                             )
                     }
-
             )
     )
     @ApiResponse(
@@ -813,7 +809,7 @@ public class ControladorAdministrador {
                                             """
                             )
                     }
-    )
+            )
     )
     @ApiResponse(
             responseCode = "403",
@@ -874,7 +870,6 @@ public class ControladorAdministrador {
                             )
                     }
             )
-
     )
     public ResponseEntity<UsuarioResponseDto> bloquearUsuario(
             @Parameter(
@@ -882,14 +877,108 @@ public class ControladorAdministrador {
                     required = true,
                     example = "d929fd8f-5f07-4365-90d1-d775dc34f11a")
             @PathVariable UUID id
-            ){
+    ) {
         return ResponseEntity.ok(
                 UsuarioResponseDto.of(
                         servicioAdministrador.bloquearUsuario(id)
                 )
         );
     }
-}
-=======
+
+    @DeleteMapping("/anuncios/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(
+            summary = "Eliminar un anuncio por ID",
+            description = "Permite a un administrador eliminar un anuncio específico utilizando su ID."
+    )
+    @ApiResponse(
+            responseCode = "204",
+            description = "Anuncio eliminado exitosamente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Void.class)
+            )
+    )
+    @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado, el usuario no tiene permisos de administrador",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = @ExampleObject(
+                            value = """
+                                    {
+                                        "timestamp": "2024-06-01T12:00:00Z",
+                                        "status": 401,
+                                        "error": "Unauthorized",
+                                        "message": "No autorizado, se requieren permisos de administrador",
+                                        "path": "/api/v1/admin/anuncios/1"
+                                    }
+                                    """
+                    )
+            )
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Prohibido, el usuario no tiene permisos de administrador",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = @ExampleObject(
+                            value = """
+                                    {
+                                        "timestamp": "2024-06-01T12:00:00Z",
+                                        "status": 403,
+                                        "error": "Forbidden",
+                                        "message": "Prohibido, se requieren permisos de administrador",
+                                        "path": "/api/v1/admin/anuncios/1"
+                                    }
+                                    """
+                    )
+            )
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Anuncio no encontrado, el ID proporcionado no corresponde a ningún anuncio existente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = @ExampleObject(
+                            value = """
+                                    {
+                                        "timestamp": "2024-06-01T12:00:00Z",
+                                        "status": 404,
+                                        "error": "Not Found",
+                                        "message": "Anuncio con ID 1 no encontrado",
+                                        "path": "/api/v1/admin/anuncios/1"
+                                    }
+                                    """
+                    )
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = @ExampleObject(
+                            value = """
+                                    {
+                                        "timestamp": "2024-06-01T12:00:00Z",
+                                        "status": 500,
+                                        "error": "Internal Server Error",
+                                        "message": "Ocurrió un error inesperado al procesar la solicitud",
+                                        "path": "/api/v1/admin/anuncios/1"
+                                    }
+                                    """
+                    )
+            )
+    )
+    public ResponseEntity<Void> eliminarAnuncio(
+            @PathVariable Long id
+    ) {
+        servicioAdministrador.eliminarAnuncio(id);
+        return ResponseEntity.noContent().build();
     }
->>>>>>> main
+}

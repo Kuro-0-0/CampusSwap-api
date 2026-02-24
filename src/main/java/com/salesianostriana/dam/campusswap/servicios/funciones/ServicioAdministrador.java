@@ -20,6 +20,7 @@ public class ServicioAdministrador {
 
     private final ServicioBaseUsuario servicioBaseUsuario;
     private final ServicioBaseAnuncio servicioBaseAnuncio;
+    private final ServicioAnuncio servicioAnuncio;
     private final ServicioBaseCategoria servicioBaseCategoria;
 
     public Categoria crearCategoria(Categoria categoria) {
@@ -66,4 +67,7 @@ public class ServicioAdministrador {
         return servicioBaseUsuario.guardar(usuario);
     }
 
+    public void eliminarAnuncio(Long id) {
+        servicioAnuncio.borrarAnuncio(id);
+    }
 }
