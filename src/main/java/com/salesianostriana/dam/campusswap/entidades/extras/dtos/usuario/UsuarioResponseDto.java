@@ -15,7 +15,8 @@ public record UsuarioResponseDto(
         String imageUrl,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime fechaRegistro,
-        Set<String> roles
+        Set<String> roles,
+        boolean bloqueado
 
 ) {
 
@@ -27,7 +28,8 @@ public record UsuarioResponseDto(
                 usuario.getReputacionMedia(),
                 usuario.getFotoPerfil(),
                 usuario.getFechaRegistro(),
-                usuario.getRoles().stream().map(r -> r.name()).collect(Collectors.toSet())
+                usuario.getRoles().stream().map(r -> r.name()).collect(Collectors.toSet()),
+                !usuario.isAccountNonLocked()
         );
     }
 
