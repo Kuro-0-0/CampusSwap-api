@@ -10,20 +10,20 @@ import jakarta.validation.constraints.Size;
 
 @ContrasenaNoCoincide
 public record RegisterRequest(
-        @NotBlank(message = "El nombre no puede estar vacío")
-        @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres")
+        @NotBlank(message = "{registro.nombre.notblank}")
+        @Size(min = 2, max = 100, message = "{registro.nombre.size}")
         String nombre,
-        @NotBlank(message = "El username no puede estar vacío")
-        @Size(min = 3, max = 50, message = "El username debe tener entre 3 y 50 caracteres")
+        @NotBlank(message = "{registro.username.notblank}")
+        @Size(min = 3, max = 50, message = "{registro.username.size}")
         @UsernameUnico
         String username,
-        @NotBlank(message = "La contraseña no puede estar vacía")
-        @Size(min = 8, max = 255, message = "La contraseña debe tener al menos 8 caracteres")
+        @NotBlank(message = "{registro.password.notblank}")
+        @Size(min = 8, max = 255, message = "{registro.password.size}")
         String password,
-        @NotBlank(message = "Debe confirmar la contraseña")
+        @NotBlank(message = "{registro.repeatpassword.notblank}")
         String repeatPassword,
-        @NotBlank(message = "El email no puede estar vacío")
-        @Email(message = "El email debe ser válido")
+        @NotBlank(message = "{registro.email.notblank}")
+        @Email(message = "{registro.email.valid}")
         @EmailUnico
         String email
 ) {
