@@ -4,11 +4,12 @@ import com.salesianostriana.dam.campusswap.entidades.Anuncio;
 
 public record AnuncioFavoritoResponseDto(
         Long id,
-        String titulo
+        String titulo,
+        String imagen
 ) {
 
     public static AnuncioFavoritoResponseDto of(Anuncio anuncio) {
-        return new AnuncioFavoritoResponseDto(anuncio.getId(), anuncio.getTitulo());
+        return new AnuncioFavoritoResponseDto(anuncio.getId(), anuncio.getTitulo(), anuncio.getImagen());
     }
 
 }

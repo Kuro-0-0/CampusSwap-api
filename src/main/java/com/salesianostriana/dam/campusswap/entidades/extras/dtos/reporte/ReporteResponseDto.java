@@ -2,14 +2,19 @@ package com.salesianostriana.dam.campusswap.entidades.extras.dtos.reporte;
 
 import com.salesianostriana.dam.campusswap.entidades.Reporte;
 
-public record ReporteResponseDto(Long id, String motivo, Long anuncioId, String usuarioId) {
+public record ReporteResponseDto(
+        Long id,
+        String motivo,
+        AnuncioReporteResponseDto anuncio,
+        Long cantidad
+) {
 
-    public static ReporteResponseDto from(Reporte reporte) {
+    public static ReporteResponseDto from(Reporte reporte, Long conteo) {
         return new ReporteResponseDto(
                 reporte.getId(),
                 reporte.getMotivo().getDescripcion(),
-                reporte.getAnuncio().getId(),
-                reporte.getUsuario().getId().toString()
+                AnuncioReporteResponseDto.from(reporte.getAnuncio()),
+                conteo
         );
     }
 }
