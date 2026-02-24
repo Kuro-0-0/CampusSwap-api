@@ -3,8 +3,6 @@ package com.salesianostriana.dam.campusswap.entidades;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.ArrayList;
-import java.util.List;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,5 +21,13 @@ public class Categoria {
     private String nombre;
 
     private String descripcion;
+
+    public Categoria modificar(Categoria categoria) {
+
+        this.nombre = categoria.getNombre();
+        this.descripcion = categoria.getDescripcion();
+
+        return this;
+    }
 
 }

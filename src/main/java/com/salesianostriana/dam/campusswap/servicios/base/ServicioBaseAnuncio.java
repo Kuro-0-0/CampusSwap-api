@@ -48,4 +48,8 @@ public class ServicioBaseAnuncio {
     public boolean existePorId(Long idAnuncio) {
         return repositorioAnuncio.existsById(idAnuncio);
     }
+
+    public boolean existByCategoriaId(Long id) {
+        return repositorioAnuncio.existByCategoriaId(id);
+    }
 }
