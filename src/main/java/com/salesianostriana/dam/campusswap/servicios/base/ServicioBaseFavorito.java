@@ -45,4 +45,8 @@ public class ServicioBaseFavorito
     public Page<Favorito> buscarPorUsuarioId(Pageable pageable, UUID id) {
         return repositorioFavorito.findAllByUsuarioId(pageable, id);
     }
+
+    public Boolean existePorAnuncioId(Long anuncioId) {
+        return repositorioFavorito.existsByAnuncioId(anuncioId);
+    }
 }

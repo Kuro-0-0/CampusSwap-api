@@ -1055,5 +1055,13 @@ public class ControladorAnuncio {
         return ResponseEntity.ok(AnuncioResponseDto.of(anuncio));
     }
 
+    @GetMapping("/{id}/comprobar-comprador")
+    public ResponseEntity<Boolean> comprobarComprador(
+            @PathVariable Long id,
+            @AuthenticationPrincipal Usuario usuario
+    ) {
+        return ResponseEntity.ok(servicioAnuncio.comprobarCompador(id, usuario));
+    }
+
 }
 

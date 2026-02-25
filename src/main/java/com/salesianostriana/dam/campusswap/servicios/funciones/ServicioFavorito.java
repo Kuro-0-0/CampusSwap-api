@@ -53,4 +53,8 @@ public class ServicioFavorito {
     public Page<Favorito> listarMisFavoritos(Pageable pageable, Usuario usuario) {
         return servicioBaseFavorito.buscarPorUsuarioId(pageable, usuario.getId());
     }
+
+    public Boolean checkFavorito(Long anuncioId) {
+        return servicioBaseFavorito.existePorAnuncioId(anuncioId);
+    }
 }

@@ -29,4 +29,9 @@ public interface RepositorioFavorito extends JpaRepository<Favorito, Long>, JpaS
             attributePaths = {"usuario"}
     )
     Optional<Favorito> findById(Long id);
+
+    @EntityGraph(
+            attributePaths = {"anuncio"}
+    )
+    Boolean existsByAnuncioId(Long anuncioId);
 }

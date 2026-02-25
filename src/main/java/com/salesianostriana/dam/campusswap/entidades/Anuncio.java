@@ -41,6 +41,11 @@ public class Anuncio {
     private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @Builder.Default
+    @JoinColumn(name = "comprador_id")
+    private Usuario comprador = null;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 

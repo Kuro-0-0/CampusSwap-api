@@ -21,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -524,6 +525,12 @@ public class ControladorValoracion {
                         servicioValoracion.crearValoracion(valoracionRequestDto.to(), usuario)
                 )
         );
+    }
+
+    @GetMapping("/check/{anuncioId}")
+    @PreAuthorize("hasAnyRole('USUARIO', 'ADMIN')")
+    public ResponseEntity<Boolean> checkValoracion(@PathVariable Long anuncioId) {
+        return ResponseEntity.ok(servicioValoracion.checkValoracion(anuncioId));
     }
 
 

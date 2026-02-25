@@ -163,7 +163,14 @@ public class ServicioAnuncio {
         }
 
         anuncio.setEstado(Estado.CERRADO);
+        anuncio.setComprador(comprador);
 
         return servicioBaseAnuncio.guardar(anuncio);
+    }
+
+    @Transactional
+    public Boolean comprobarCompador(Long id, Usuario usuario) {
+        Anuncio anuncio = servicioBaseAnuncio.buscarPorId(id);
+        return anuncio.getComprador() != null && anuncio.getComprador().equals(usuario);
     }
 }
