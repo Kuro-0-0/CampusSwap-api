@@ -45,6 +45,13 @@ public class ServicioValoracion {
         if (!anuncio.getEstado().equals(Estado.CERRADO))
             throw new IllegalStateException("Solo se pueden valorar anuncios cerrados");
 
+
+        if (anuncio.getComprador() == null)
+            throw new IllegalStateException("No se puede valorar un anuncio que no ha sido comprado");
+
+        if (!anuncio.getComprador().equals(evaluador))
+            throw new IllegalStateException("Solo el comprador del anuncio puede valorarlo");
+
         Usuario evaluado = anuncio.getUsuario();
 
         if (evaluado.equals(evaluador))
@@ -62,5 +69,9 @@ public class ServicioValoracion {
         Usuario usuario = servicioBaseUsuario.buscarPorId(UUID.fromString(usuarioId));
 
         return servicioBaseValoracion.buscarPorEvaluadoId(usuario.getId(),pageable);
+    }
+
+    public Boolean checkValoracion(Long anuncioId) {
+        return servicioBaseValoracion.existePorAnuncioId(anuncioId);
     }
 }

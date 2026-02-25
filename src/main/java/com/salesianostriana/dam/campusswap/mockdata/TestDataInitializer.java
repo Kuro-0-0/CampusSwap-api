@@ -54,12 +54,14 @@ class TestDataInitializer {
         Usuario uVendedor = crearUsuario("Carlos Vendedor", "carlos_v", "carlos@salesianos.edu", "1234", null, "Vendo todo lo que ya no uso del ciclo de DAM. ¡Precios negociables!", 4.8, RolUsuario.USUARIO);
         Usuario uComprador = crearUsuario("Laura Compradora", "laura_buyer", "laura@salesianos.edu", "1234", null, "Busco material para 1º de DAM.", 0.0, RolUsuario.USUARIO);
         Usuario uNuevo = crearUsuario("Pepe Novato", "pepito", "pepe@salesianos.edu", "1234", null, "Nuevo en el campus.", 0.0, RolUsuario.ADMIN);
+        Usuario uJuan = crearUsuario("Juan Perez", "juanp", "juan@salesianos.edu","1234", null, "Usuario nuevo sin anuncios ni interacciones.", 0.0, RolUsuario.USUARIO);
 
-        List<Usuario> usuarios = repoUsuario.saveAll(List.of(uAdmin, uVendedor, uComprador, uNuevo));
+        List<Usuario> usuarios = repoUsuario.saveAll(List.of(uAdmin, uVendedor, uComprador, uNuevo, uJuan));
         uAdmin = usuarios.get(0);
         uVendedor = usuarios.get(1);
         uComprador = usuarios.get(2);
         uNuevo = usuarios.get(3);
+        uJuan = usuarios.get(4);
 
         Anuncio aPortatil = Anuncio.builder()
                 .titulo("Portátil HP Victus 16GB RAM")
@@ -131,7 +133,40 @@ class TestDataInitializer {
                 .anuncio(aPortatil)
                 .build();
 
-        repoMensaje.saveAll(List.of(m1, m2));
+
+        Mensaje m3 = Mensaje.builder()
+                .contenido("Hola, estoy interesado en la bici. ¿Podrías decirme qué terrenos cubre?")
+                .fechaEnvio(LocalDateTime.now().minusHours(2))
+                .anuncio(aBici)
+                .emisor(uJuan)
+                .receptor(uVendedor)
+                .build();
+
+        Mensaje m4 = Mensaje.builder()
+                .contenido("Hola Juan, la bici es para uso urbano principalmente, aunque aguanta algún camino de tierra sin problemas.")
+                .fechaEnvio(LocalDateTime.now().minusHours(1))
+                .anuncio(aBici)
+                .emisor(uVendedor)
+                .receptor(uJuan)
+                .build();
+
+        Mensaje m5 = Mensaje.builder()
+                .contenido("Hola, me gustaría intercambiar mi patinete Xiaomi por tu bici. ¿Qué te parece la idea?")
+                .fechaEnvio(LocalDateTime.now().minusHours(3))
+                .anuncio(aBici)
+                .emisor(uComprador)
+                .receptor(uVendedor)
+                .build();
+
+        Mensaje m6 = Mensaje.builder()
+                .contenido("Hola Laura, la idea del intercambio me parece bien. ¿Podrías enviarme fotos del patinete?")
+                .fechaEnvio(LocalDateTime.now().minusHours(3))
+                .anuncio(aBici)
+                .emisor(uVendedor)
+                .receptor(uComprador)
+                .build();
+
+        repoMensaje.saveAll(List.of(m1, m2, m3, m4, m5, m6));
 
         Favorito f1 = Favorito.builder()
                 .usuario(uComprador)
