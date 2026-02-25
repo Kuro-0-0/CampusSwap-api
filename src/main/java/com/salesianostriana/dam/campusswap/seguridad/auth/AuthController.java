@@ -123,7 +123,7 @@ public class AuthController {
             )
     })
     public ResponseEntity<LoginResponse> doLogin(@Valid @RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.ok()
+        return ResponseEntity.status(HttpStatus.CREATED)
                 .body(authService.doLogin(loginRequest));
 
     }
