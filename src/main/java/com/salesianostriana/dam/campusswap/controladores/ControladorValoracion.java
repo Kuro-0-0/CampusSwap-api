@@ -35,7 +35,7 @@ public class ControladorValoracion {
 
     private final ServicioValoracion servicioValoracion;
 
-    @GetMapping("media")
+    @GetMapping("/media")
     @Operation(
             summary = "Obtener la media de valoraciones de un usuario",
             description = "Devuelve la media de las valoraciones recibidas por el usuario autenticado."
@@ -169,7 +169,7 @@ public class ControladorValoracion {
 
     }
 
-    @GetMapping("")
+    @GetMapping("/{id}")
     @ApiResponse(
             responseCode = "200",
             description = "Valoraciones obtenidas correctamente",
@@ -297,11 +297,11 @@ public class ControladorValoracion {
             description = "Devuelve una lista paginada de las valoraciones recibidas por el usuario autenticado, ordenadas por fecha de creación."
     )
     public ResponseEntity<Page<ValoracionResponseDto>> obtenerValoraciones(
-                                                                           @AuthenticationPrincipal Usuario usuario,
+                                                                           @PathVariable("id") String idUsuario,
                                                                            @Parameter(description = "Parámetros de paginación y ordenación")
                                                                            @PageableDefault(size = 10,sort = "fecha",direction = Sort.Direction.DESC)
                                                                            Pageable pageable){
-        return ResponseEntity.ok(servicioValoracion.obtenerValoraciones(pageable,usuario).map(ValoracionResponseDto::of));
+        return ResponseEntity.ok(servicioValoracion.obtenerValoraciones(pageable,idUsuario).map(ValoracionResponseDto::of));
     }
 
     @PostMapping

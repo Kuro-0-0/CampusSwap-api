@@ -58,7 +58,8 @@ public class ServicioValoracion {
         return v;
     }
 
-    public Page<Valoracion> obtenerValoraciones(Pageable pageable, Usuario usuario) {
+    public Page<Valoracion> obtenerValoraciones(Pageable pageable, String usuarioId) {
+        Usuario usuario = servicioBaseUsuario.buscarPorId(UUID.fromString(usuarioId));
 
         return servicioBaseValoracion.buscarPorEvaluadoId(usuario.getId(),pageable);
     }
