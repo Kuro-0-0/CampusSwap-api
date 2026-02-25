@@ -141,7 +141,6 @@ public class ControladorCategoria {
                     }
             )
     )
-    @PreAuthorize("hasAnyRole('ADMIN', 'USUARIO')")
     public ResponseEntity<List<CategoriaResponseDto>> obtenerTodas() {
         return ResponseEntity.ok(servicioCategoria.obtenerTodas().stream().map(CategoriaResponseDto::of).toList());
     }
