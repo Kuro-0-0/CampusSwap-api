@@ -147,4 +147,23 @@ public class ServicioAnuncio {
     public Anuncio buscarPorId(Long id) {
         return servicioBaseAnuncio.buscarPorId(id);
     }
+
+    @Transactional
+    public Anuncio comprarAnuncio(Long id, Usuario comprador) {
+        Anuncio anuncio = servicioBaseAnuncio.buscarPorId(id);
+
+        if (anuncio.getUsuario().getId().equals(comprador.getId())) {
+            throw new IllegalStateException("No puedes comprar tu propio anuncio");
+        }
+        if (anuncio.getEstado() == Estado.CERRADO) {
+            throw new IllegalStateException("Este anuncio ya ha sido vendido o cerrado");
+        }
+        if (anuncio.getEstado() == Estado.PAUSADO) {
+            throw new IllegalStateException("Este anuncio está pausado y no se puede comprar en este momento");
+        }
+
+        anuncio.setEstado(Estado.CERRADO);
+
+        return servicioBaseAnuncio.guardar(anuncio);
+    }
 }

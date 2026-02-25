@@ -920,5 +920,140 @@ public class ControladorAnuncio {
         return ResponseEntity.ok(AnuncioResponseDto.of(servicioAnuncio.buscarPorId(id)));
     }
 
+    @PutMapping("/{id}/comprar")
+    @Operation(summary = "Comprar un anuncio", description = "Marca un anuncio como cerrado tras realizar la compra en el chat.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "Anuncio comprado correctamente",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = AnuncioResponseDto.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "id": 1,
+                                                "titulo": "Producto de Prueba2",
+                                                "descripcion": "Una descripción detallada del producto",
+                                                "precio": 25.5,
+                                                "categoria": "sin categoria",
+                                                "imagen": "producto.jpg",
+                                                "tipoOperacion": "VENTA",
+                                                "estado": "CERRADO",
+                                                "condicion": "NUEVO",
+                                                "usuarioId": "6e44a229-0400-4903-9f58-11c63a1dc31a"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "401",
+            description = "No autorizado. Se requiere autenticación para acceder a este recurso.",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Acceso denegado. No se ha proporcionado un token de autenticación válido.",
+                                                "instance": "/api/v1/catalogo",
+                                                "status": 401,
+                                                "title": "No autorizado."
+                                            }
+                                            """
+                            )
+                    })
+    )
+    @ApiResponse(
+            responseCode = "403",
+            description = "Solicitud prohibida",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No puedes comprar tu propio anuncio",
+                                                "instance": "/api/v1/anuncios/1/comprar",
+                                                "status": 403,
+                                                "title": "Recurso perteneciente al usuario"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Recurso no encontrado",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "No se ha encontrado el anuncio con id: 1",
+                                                "instance": "/api/v1/anuncios/1/comprar",
+                                                "status": 404,
+                                                "title": "Recurso no encontrado"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "409",
+            description = "Conflicto",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Este anuncio ya ha sido vendido o cerrado",
+                                                "instance": "/api/v1/anuncios/1/comprar",
+                                                "status": 409,
+                                                "title": "Estado no válido"
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    @ApiResponse(
+            responseCode = "500",
+            description = "Error interno del servidor",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ProblemDetail.class),
+                    examples = {
+                            @ExampleObject(
+                                    value = """
+                                            {
+                                                "detail": "Ha ocurrido un error inesperado",
+                                                "instance": "/api/v1/anuncios/1/comprar",
+                                                "status": 500,
+                                                "title": "Error inesperado."
+                                            }
+                                            """
+                            )
+                    }
+            )
+    )
+    public ResponseEntity<AnuncioResponseDto> comprarAnuncio(
+            @PathVariable Long id,
+            @AuthenticationPrincipal Usuario usuario) {
+
+        Anuncio anuncio = servicioAnuncio.comprarAnuncio(id, usuario);
+        return ResponseEntity.ok(AnuncioResponseDto.of(anuncio));
+    }
+
 }
 
