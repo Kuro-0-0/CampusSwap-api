@@ -83,7 +83,7 @@ public class SecurityConfig {
         http.authenticationProvider(authenticationProvider());
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/v1/imagen/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/catalogo/**", "/api/v1/categorias/**", "/api/v1/anuncios/**", "/api/v1/usuarios/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/catalogo/**", "/api/v1/categorias/**", "/api/v1/anuncios/**", "/api/v1/usuarios/**", "/api/v1/valoraciones/**").permitAll()
                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/v1/**").hasAnyRole("USUARIO", "ADMIN")
                 .requestMatchers("/auth/**").permitAll()
