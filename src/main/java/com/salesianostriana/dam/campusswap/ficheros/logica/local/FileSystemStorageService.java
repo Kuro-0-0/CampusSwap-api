@@ -107,13 +107,17 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public void deleteFile(String filename) {
         try {
-            Files.delete(load(filename));
-            String extension = StringUtils.getFilenameExtension(filename);
-            String baseName = filename.replace("." + extension, "");
 
-            Files.delete(load(baseName + "_thumb." + extension));
-            Files.delete(load(baseName + "_mid." + extension));
-            Files.delete(load(baseName + "_high." + extension));
+            if (Files.exists(Path.of(filename))) {
+                Files.delete(load(filename));
+                String extension = StringUtils.getFilenameExtension(filename);
+                String baseName = filename.replace("." + extension, "");
+
+                Files.delete(load(baseName + "_thumb." + extension));
+                Files.delete(load(baseName + "_mid." + extension));
+                Files.delete(load(baseName + "_high." + extension));
+            }
+
         } catch (IOException e) {
             throw new StorageException("Could not delete file:" + filename);
         }
