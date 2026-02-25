@@ -65,9 +65,9 @@ public class ServicioAdministrador {
         return servicioBaseUsuario.listarUsuarios(pageable);
     }
 
-    public Usuario bloquearUsuario(UUID id){
+    public Usuario cambiarEstadoBloqueo(UUID id){
         Usuario usuario = servicioBaseUsuario.buscarPorId(id);
-        usuario.setAccountNonLocked(false);
+        usuario.setAccountNonLocked(!usuario.isAccountNonLocked());
         return servicioBaseUsuario.guardar(usuario);
     }
 
