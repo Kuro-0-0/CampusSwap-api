@@ -49,7 +49,7 @@ public class AuthController {
                                     value = """
                             {
                                 "email": "antonio@campusswap.com",
-                                "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbnRvbmlvQGNhbXB1c3N3YXAuY29tIiwiaWF0IjoxNzA5MDAwMDAwLCJleHAiOjE3MDkwODY0MDB9.xxxx"
+                                "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbnRvbmlvQGNhbXB1c3N3YXAuY29tIiwiaWF0IjoxNzA5MDAwMDAwLCJleHAiOjE3MDkwODY0MDB9.xxxx"
                             }
                             """
                             )
