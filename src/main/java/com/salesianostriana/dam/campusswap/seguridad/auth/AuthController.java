@@ -39,7 +39,7 @@ public class AuthController {
     )
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "201",
+                    responseCode = "200",
                     description = "Login exitoso. Se devuelve el email y el token JWT.",
                     content = @Content(
                             mediaType = "application/json",
