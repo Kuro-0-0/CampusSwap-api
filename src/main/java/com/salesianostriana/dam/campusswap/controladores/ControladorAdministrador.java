@@ -889,7 +889,7 @@ public class ControladorAdministrador {
     ) {
         return ResponseEntity.ok(
                 UsuarioResponseDto.of(
-                        servicioAdministrador.bloquearUsuario(id)
+                        servicioAdministrador.cambiarEstadoBloqueo(id)
                 )
         );
     }
