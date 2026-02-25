@@ -487,9 +487,6 @@ public class ControladorAnuncio {
             summary = "Obtener anuncios de un usuario",
             description = "Permite obtener una lista paginada de los anuncios publicados por un usuario específico."
     )
-    @PreAuthorize(
-            "hasAnyRole('ADMIN', 'USUARIO')"
-    )
     public ResponseEntity<Page<AnuncioResponseDto>> obtenerAnuncios(@PathVariable String usuarioId, Pageable pageable) {
         return ResponseEntity.ok(servicioAnuncio.obtenerAnuncios(pageable,usuarioId).map(AnuncioResponseDto::of));
     }
