@@ -82,11 +82,21 @@ public class AuthController {
                                     name = "Ejemplo de respuesta de solicitud inválida",
                                     value = """
                             {
-                                "timestamp": "2024-06-01T12:00:00.000+00:00",
+                                "type": "about:blank",
+                                "title": "Bad Request",
                                 "status": 400,
-                                "error": "Bad Request",
-                                "message": "El campo 'email' es obligatorio.",
-                                "path": "/auth/login"
+                                "detail": "Error de validación en el cuerpo de la petición.",
+                                "instance": "/auth/login",
+                                "invalid-params": [
+                                    {
+                                        "name": "email",
+                                        "reason": "must not be blank"
+                                    },
+                                    {
+                                        "name": "password",
+                                        "reason": "size must be between 8 and 64"
+                                    }
+                                ]
                             }
                             """
                             )
