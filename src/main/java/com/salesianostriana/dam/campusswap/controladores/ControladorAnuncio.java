@@ -920,5 +920,15 @@ public class ControladorAnuncio {
         return ResponseEntity.ok(AnuncioResponseDto.of(servicioAnuncio.buscarPorId(id)));
     }
 
+    @PutMapping("/{id}/comprar")
+    @Operation(summary = "Comprar un anuncio", description = "Marca un anuncio como cerrado tras realizar la compra en el chat.")
+    public ResponseEntity<AnuncioResponseDto> comprarAnuncio(
+            @PathVariable Long id,
+            @AuthenticationPrincipal Usuario usuario) {
+
+        Anuncio anuncio = servicioAnuncio.comprarAnuncio(id, usuario);
+        return ResponseEntity.ok(AnuncioResponseDto.of(anuncio));
+    }
+
 }
 
