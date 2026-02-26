@@ -27,7 +27,7 @@ services:
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      POSTGRES_PASSWORD_FILE: /run/secretos/db_password
     volumes:
       - pgdata:/var/lib/postgresql/data
     secrets:
@@ -39,6 +39,6 @@ services:
       retries: 20
 secrets:
   db_password:
-    file: ./secrets/prod_db_password.txt
+    file: ./secretos/prod_db_password.txt
 volumes:
   pgdata:
