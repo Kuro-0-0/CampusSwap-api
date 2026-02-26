@@ -42,3 +42,4 @@ secrets:
     file: ./secretos/prod_db_password.txt
 volumes:
   pgdata:
+
