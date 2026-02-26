@@ -1,0 +1,863 @@
+{
+  "info": {
+    "_postman_id": "015ea5fb-3590-479c-ad17-fbbd4bacb68a",
+    "name": "CampusSwap",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "42129065",
+    "_collection_link": "https://go.postman.co/collection/42129065-015ea5fb-3590-479c-ad17-fbbd4bacb68a?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Anuncios",
+      "item": [
+        {
+          "name": "Editar",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"Producto de Prueba2\",\r\n    \"descripcion\": \"Una descripción detallada del producto\",\r\n    \"precio\": \"\",\r\n    \"imagen\": \"producto.jpg\",\r\n    \"tipoOperacion\": \"INTERCAMBIO\",\r\n    \"condicion\": \"NUEVO\",\r\n    \"categoriaId\": \"1\",\r\n    \"usuarioId\":\"fd41eb4e-c412-4f38-bd8a-378bf5fcb701\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/v1/anuncios/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "anuncios",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Alternar estado",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "localhost:8080/api/v1/anuncios/3/alternar-estado",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "anuncios",
+                "3",
+                "alternar-estado"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "data",
+                  "value": "{\n    \"titulo\": \"Producto de Prueba2\",\n    \"descripcion\": \"Una descripción detallada del producto\",\n    \"precio\": 25.5,\n    \"tipoOperacion\": \"VENTA\",\n    \"condicion\": \"NUEVO\",\n    \"categoriaId\": 1\n}",
+                  "type": "text",
+                  "uuid": "dcb13f88-fae1-4a52-b4f1-1530e3e2fdfc",
+                  "contentType": "application/json"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "6fdefcce-5c7e-4435-9782-29fb0521e4a3",
+                  "contentType": "image/png",
+                  "src": "postman-cloud:///1f10bf27-1370-4b60-8ee7-19c0585db2d6"
+                }
+              ]
+            },
+            "url": {
+              "raw": "localhost:8080/api/v1/anuncios",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "anuncios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener por usuarioId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/v1/anuncios/b1acd729-96ab-409f-876d-0fc56ae2f5ee",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "anuncios",
+                "b1acd729-96ab-409f-876d-0fc56ae2f5ee"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Favoritos",
+      "item": [
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"anuncioId\": \"1\" \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/v1/favoritos",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "favoritos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Borrar",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/v1/favoritos/1",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "favoritos",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/v1/favoritos",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "favoritos"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Catalogo",
+      "item": [
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/v1/catalogo",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "catalogo"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Mensajes",
+      "item": [
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/v1/mensajes/1231234",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "mensajes",
+                "1231234"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Enviar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"contenido\": \"Hola, soy Jose Manuel, el hermano de Carlos. ¿Sigue a la venta el artículo?\",\r\n  \"anuncioId\": 1,\r\n  \"receptorId\": \"f4883647-86e0-435e-ac39-e2d21cef8af7\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/v1/mensajes",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "mensajes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar chats usuario logueado",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/v1/mensajes/chats",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "mensajes",
+                "chats"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar mensajes por chat",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/v1/mensajes/1/",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "mensajes",
+                "1",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar por filtrado",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Valoraciones",
+      "item": [
+        {
+          "name": "Obtener media",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/v1/valoraciones/139bde66-460d-4fa1-a660-7d40ffb4fb6c",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "valoraciones",
+                "139bde66-460d-4fa1-a660-7d40ffb4fb6c"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"puntuacion\" : \"2\",\r\n    \"comentario\": \"Bastante desagradable el vendedor...\",\r\n    \"idAnuncio\": \"4\",\r\n    \"idEvaluador\": \"3af7164f-b2b4-45e7-a9e8-fd7e09f34e68\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/api/v1/valoraciones",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "valoraciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener valoraciones",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Usuario",
+      "item": [
+        {
+          "name": "Datos usuario logueado",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/v1/usuarios",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Editar foto perfil",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "3c63fa5a-52b9-4a36-a900-babb70fe5cb8",
+                  "src": "postman-cloud:///1f10bf27-1370-4b60-8ee7-19c0585db2d6"
+                }
+              ]
+            },
+            "url": {
+              "raw": "localhost:8080/api/v1/usuarios/foto-perfil",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "usuarios",
+                "foto-perfil"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener foto perfil",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/v1/usuarios/imagen/ganadero_366448",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "usuarios",
+                "imagen",
+                "ganadero_366448"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar todos los usuarios",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"admin@salesianos.edu\",\r\n    \"password\":\"1234\"\r\n}"
+            },
+            "url": {
+              "raw": "localhost:8080/api/v1/admin/usuarios",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Seguridad",
+      "item": [
+        {
+          "name": "LogIn USER - Comprador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. Convertir la respuesta JSON en un objeto manejable\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "// 2. Extraer el valor del accessToken\r",
+                  "const token = response.accessToken;\r",
+                  "\r",
+                  "// 3. Almacenarlo en una variable de colección\r",
+                  "pm.collectionVariables.set(\"access_token\", token);\r",
+                  "\r",
+                  "// Opcional: Log para verificar en la consola (Ctrl + Alt + C)\r",
+                  "console.log(\"Token guardado con éxito: \" + token);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"laura@salesianos.edu\",\r\n    \"password\":\"1234\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/auth/login",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "LogIn USER - Vendedor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. Convertir la respuesta JSON en un objeto manejable\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "// 2. Extraer el valor del accessToken\r",
+                  "const token = response.accessToken;\r",
+                  "\r",
+                  "// 3. Almacenarlo en una variable de colección\r",
+                  "pm.collectionVariables.set(\"access_token\", token);\r",
+                  "\r",
+                  "// Opcional: Log para verificar en la consola (Ctrl + Alt + C)\r",
+                  "console.log(\"Token guardado con éxito: \" + token);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"carlos@salesianos.edu\",\r\n    \"password\":\"1234\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/auth/login",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register USER",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"nombre prueba\",\r\n    \"username\": \"usernameprueba\",\r\n    \"email\": \"emailprueba@gmail.com\",\r\n    \"password\": \"password123\",\r\n    \"repeatPassword\": \"password123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/auth/register",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login ADMIN",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. Convertir la respuesta JSON en un objeto manejable\r",
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "// 2. Extraer el valor del accessToken\r",
+                  "const token = response.accessToken;\r",
+                  "\r",
+                  "// 3. Almacenarlo en una variable de colección\r",
+                  "pm.collectionVariables.set(\"access_token\", token);\r",
+                  "\r",
+                  "// Opcional: Log para verificar en la consola (Ctrl + Alt + C)\r",
+                  "console.log(\"Token guardado con éxito: \" + token);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"admin@salesianos.edu\",\r\n    \"password\":\"1234\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/auth/login",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categorías",
+      "item": [
+        {
+          "name": "Obtener todas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/v1/categorias",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "categorias"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Imagenes",
+      "item": [
+        {
+          "name": "Obtener imagen",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:8080/api/v1/imagen/tux_896255.jpg?v=h",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "imagen",
+                "tux_896255.jpg"
+              ],
+              "query": [
+                {
+                  "key": "v",
+                  "value": "h"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Administrador",
+      "item": [
+        {
+          "name": "REPORTES",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"carlos@salesianos.edu\",\r\n    \"password\":\"1234\"\r\n}"
+            },
+            "url": {
+              "raw": "localhost:8080/api/v1/admin/reportes",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "reportes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Bloquear usuario",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/admin/usuarios/ID/bloquear",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "usuarios",
+                "ID",
+                "bloquear"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "access_token",
+      "value": ""
+    }
+  ]
+}
