@@ -7,6 +7,7 @@ import com.salesianostriana.dam.campusswap.entidades.extras.Estado;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseAnuncio;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseUsuario;
 import com.salesianostriana.dam.campusswap.servicios.base.ServicioBaseValoracion;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +37,7 @@ public class ServicioValoracion {
 
     }
 
+    @Transactional
     public Valoracion crearValoracion(Valoracion valoracion, Usuario evaluador) {
         Anuncio anuncio = servicioBaseAnuncio.buscarPorId(valoracion.getAnuncio().getId());
 
